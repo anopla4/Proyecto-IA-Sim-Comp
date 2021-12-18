@@ -3,5 +3,5 @@ class State(object):
         pass
 
     def IsTerminal(self):
-        #return -1 if lose, 0 if not end state, 1 if win
+        #return -1 if not end, 0 if lose, 1 if win
         return 1     
