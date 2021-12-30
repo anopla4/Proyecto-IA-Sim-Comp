@@ -3,27 +3,42 @@ from .non_terminal import NonTerminal
 from .terminal import Terminal
 
 
-def symbol_first(alph_sym, productions, firsts):
-    if firsts[alph_sym]:
-        return
-    for p in productions[alph_sym]:
-        new_symbol = p.right_side[0]
-        if isinstance(new_symbol, Terminal) or isinstance(new_symbol, Epsilon):
-            firsts[alph_sym].append(new_symbol)
-        elif isinstance(new_symbol, NonTerminal):
-            symbol_first(new_symbol, productions, firsts)
-            firsts[alph_sym] += firsts[new_symbol]
-            if (
-                len(list(filter(lambda x: isinstance(x, Epsilon), firsts[alph_sym])))
-                > 0
-            ):
-                new_symbol = p.right_side[1]
-                symbol_first(new_symbol, productions, firsts)
-                firsts[alph_sym] += firsts[new_symbol]
+def symbol_first(productions, firsts):
+    changed = True
+    while changed:
+        changed = False
+        all_productions = [i for i in productions.values()]
+        _productions = []
+        for p in all_productions:
+            _productions += p
+
+        for p in _productions:
+            x = p.left_side
+            w = p.right_side[0]
+            if isinstance(w, Terminal) or isinstance(w, Epsilon):
+                if w not in firsts[x]:
+                    firsts[x].append(w)
+                    changed = True
+            elif isinstance(w, NonTerminal):
+                for item in firsts[w]:
+                    if item in firsts[x]:
+                        continue
+                    firsts[x].append(item)
+                    changed = True
+
+                if (
+                    len(list(filter(lambda x: isinstance(x, Epsilon), firsts[x]))) > 0
+                    and len(p.right_side) > 0
+                ):
+                    z = p.right_side[1]
+                    for item in firsts[z]:
+                        if item in firsts[x]:
+                            continue
+                        firsts[x].append(item)
+                        changed = True
 
 
 def first(symbols, productions):
     res = {item: [] for item in symbols}
-    for s in symbols:
-        symbol_first(s, productions, res)
+    symbol_first(productions, res)
     return res
