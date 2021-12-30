@@ -1,6 +1,6 @@
-from epsilon import Epsilon
-from non_terminal import NonTerminal
-from terminal import Terminal
+from .epsilon import Epsilon
+from .non_terminal import NonTerminal
+from .terminal import Terminal
 
 
 def symbol_first(alph_sym, productions, firsts):
@@ -26,4 +26,4 @@ def first(symbols, productions):
     res = {item: [] for item in symbols}
     for s in symbols:
         symbol_first(s, productions, res)
-    return {i.symbol: [j.symbol for j in res[i]] for i in res}
+    return res

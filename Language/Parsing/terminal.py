@@ -1,4 +1,4 @@
-from alphabet_symbol import AlphabetSymbol
+from .alphabet_symbol import AlphabetSymbol
 
 
 class Terminal(AlphabetSymbol):
