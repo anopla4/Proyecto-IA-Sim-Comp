@@ -1,16 +1,14 @@
 from .epsilon import Epsilon
 from .non_terminal import NonTerminal
 from .terminal import Terminal
+from ..utils import all_productions
 
 
 def symbol_first(productions, firsts):
     changed = True
     while changed:
         changed = False
-        all_productions = [i for i in productions.values()]
-        _productions = []
-        for p in all_productions:
-            _productions += p
+        _productions = all_productions(productions)
 
         for p in _productions:
             x = p.left_side
@@ -38,7 +36,8 @@ def symbol_first(productions, firsts):
                         changed = True
 
 
-def first(symbols, productions):
+def first(symbols, productions, terminals):
     res = {item: [] for item in symbols}
+    res = dict(list(res.items()) + [(item, [item]) for item in terminals])
     symbol_first(productions, res)
     return res
