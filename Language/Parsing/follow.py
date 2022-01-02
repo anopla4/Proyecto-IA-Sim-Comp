@@ -1,22 +1,21 @@
 from .epsilon import Epsilon
 from .non_terminal import NonTerminal
-from .terminal import Terminal
 from .dollar import Dollar
+from ..utils import all_productions
 
 
 def symbol_follow(productions, follows, first):
     changed = True
     while changed:
         changed = False
-        all_productions = [i for i in productions.values()]
-        _productions = []
-        for p in all_productions:
-            _productions += p
+        _productions = all_productions(productions)
         for p in _productions:
-            non_terminals = [i for i in p.right_side if isinstance(i, NonTerminal)]
-            for i in range(len(non_terminals) - 1):
-                a = non_terminals[i]
-                z = non_terminals[i + 1]
+            rs = p.right_side
+            for i in range(len(rs) - 1):
+                a = rs[i]
+                if not isinstance(a, NonTerminal):
+                    continue
+                z = rs[i + 1]
                 x = p.left_side
                 add_to_follow = [
                     item for item in first[z] if not isinstance(item, Epsilon)
@@ -29,6 +28,11 @@ def symbol_follow(productions, follows, first):
                     for item in follows[x]:
                         if item not in follows[a]:
                             follows[a].append(item)
+                            changed = True
+                if i + 1 == len(rs) - 1 and isinstance(z, NonTerminal):
+                    for item in follows[x]:
+                        if item not in follows[z]:
+                            follows[z].append(item)
                             changed = True
 
 
