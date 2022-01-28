@@ -45,6 +45,6 @@ def build_cst(ll_table, s, symbol):
                     i += 1
                 elif not isinstance(children[j], Epsilon) and children[j].symbol != ")":
                     stack.append(new_child)
-        print(f"{node.value.symbol} -> {[a.value.symbol for a in node.children]}")
+        # print(f"{node.value.symbol} -> {[a.value.symbol for a in node.children]}")
 
     return cst
