@@ -11,7 +11,6 @@ def build_ll_table(productions, non_terminals, terminals, symbol):
     for nt in non_terminals:
         if nt in productions:
             for p in productions[nt]:
-                print(p.left_side.symbol, "->", [i.symbol for i in p.right_side])
                 w = p.right_side[0]
                 if not isinstance(w, Epsilon):
                     if isinstance(w, Terminal):
