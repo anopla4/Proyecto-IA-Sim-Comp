@@ -6,10 +6,9 @@ from ..utils import all_productions
 
 def symbol_first(productions, firsts):
     changed = True
+    _productions = all_productions(productions)
     while changed:
         changed = False
-        _productions = all_productions(productions)
-
         for p in _productions:
             x = p.left_side
             w = p.right_side[0]
@@ -40,4 +39,5 @@ def first(symbols, productions, terminals):
     res = {item: [] for item in symbols}
     res = dict(list(res.items()) + [(item, [item]) for item in terminals])
     symbol_first(productions, res)
+
     return res

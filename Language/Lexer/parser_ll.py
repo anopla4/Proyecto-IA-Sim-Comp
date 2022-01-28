@@ -9,21 +9,23 @@ def build_ll_table(productions, non_terminals, terminals, symbol):
     _follow = follow(symbol, non_terminals, productions, _first)
     ll_table = {nt: {t: None for t in terminals} for nt in non_terminals}
     for nt in non_terminals:
-        for p in productions[nt]:
-            w = p.right_side[0]
-            if not isinstance(w, Epsilon):
-                if isinstance(w, Terminal):
-                    if ll_table[nt][w] != None:
-                        raise Exception("Ambiguity")
-                    ll_table[nt][w] = p
+        if nt in productions:
+            for p in productions[nt]:
+                print(p.left_side.symbol, "->", [i.symbol for i in p.right_side])
+                w = p.right_side[0]
+                if not isinstance(w, Epsilon):
+                    if isinstance(w, Terminal):
+                        if ll_table[nt][w] != None:
+                            raise Exception("Ambiguity")
+                        ll_table[nt][w] = p
+                    else:
+                        for t in _first[w]:
+                            if ll_table[nt][t] != None:
+                                raise Exception("Ambiguity")
+                            ll_table[nt][t] = p
                 else:
-                    for t in _first[w]:
+                    for t in _follow[nt]:
                         if ll_table[nt][t] != None:
                             raise Exception("Ambiguity")
                         ll_table[nt][t] = p
-            else:
-                for t in _follow[nt]:
-                    if ll_table[nt][t] != None:
-                        raise Exception("Ambiguity")
-                    ll_table[nt][t] = p
     return ll_table
