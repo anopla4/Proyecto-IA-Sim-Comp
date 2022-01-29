@@ -1,6 +1,20 @@
 from .binary_expression import BinaryExpression
-
+from Language.Automaton.state import State
+from Language.Automaton.automaton import Automaton
 
 class Concat(BinaryExpression):
     def __init__(self, left_expr, right_expr) -> None:
         super().__init__("U", 2, left_expr, right_expr)
+
+    def build_automaton(self, left_automaton, right_automaton):
+        init_state = left_automaton.initial_state
+        final_state = right_automaton.final_state
+        states = left_automaton.states + right_automaton.states
+        characters = ["epsilon"] + left_automaton.characters + right_automaton.characters
+        characters = list(set(characters))
+        transition_function = dict(left_automaton.transition_function.items() + right_automaton.transition_function.items())
+        final_state_left = left_automaton.f
+        initial_state_right = right_automaton.initial_state
+        transition_function[(final_state_left, "epsilon")] = [initial_state_right]
+
+        return Automaton(states, init_state, characters, final_state, transition_function)

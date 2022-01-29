@@ -1,4 +1,4 @@
-from State import State
+from state import State
 
 def goto(q_p: set(State), transition: str, transition_function: dict):
     go = set()

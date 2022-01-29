@@ -6,3 +6,6 @@ class BinaryExpression(Expression):
         super().__init__(regex, priority)
         self.left_expr = left_expr
         self.right_expr = right_expr
+
+    def build_automaton(self, left_automaton, right_automaton):
+        pass

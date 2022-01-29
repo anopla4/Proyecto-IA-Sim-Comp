@@ -5,3 +5,6 @@ class Expression:
 
     def evaluate():
         pass
+
+    def build_automaton(self, *args, **kwargs):
+        pass
