@@ -9,11 +9,12 @@ class Star(Expression):
 
     def build_automaton(self, _automaton):
         init_state = _automaton.initial_state
-        final_state = _automaton.final_state
+        final_states = _automaton.final_state
         states = _automaton.states
         characters = ["epsilon"] + _automaton.characters
         characters = list(set(characters))
         transition_function = dict(_automaton.transition_function.items())
-        transition_function[(final_state, "epsilon")] = [init_state]
+        for fs in final_states:
+            transition_function[(fs, "epsilon")] = [init_state]
 
-        return Automaton(states, init_state, characters, final_state, transition_function)
+        return Automaton(states, init_state, characters, final_states, transition_function)

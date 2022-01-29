@@ -12,12 +12,11 @@ class Word(Expression):
         last_state = initial_state
         characters = list(self.regex)
         transition_function = {}
-        automaton = Automaton()
         states = [last_state]
         for i in self.regex:
             st = State()
             states.append(st)
             transition_function[(last_state, i)] = st
             last_state = st
-        return Automaton(states, initial_state, characters, last_state, transition_function)
+        return Automaton(states, initial_state, characters, [last_state], transition_function)
 

@@ -13,8 +13,9 @@ class Concat(BinaryExpression):
         characters = ["epsilon"] + left_automaton.characters + right_automaton.characters
         characters = list(set(characters))
         transition_function = dict(left_automaton.transition_function.items() + right_automaton.transition_function.items())
-        final_state_left = left_automaton.f
+        final_states_left = left_automaton.f
         initial_state_right = right_automaton.initial_state
-        transition_function[(final_state_left, "epsilon")] = [initial_state_right]
+        for fs in final_states_left:
+            transition_function[(fs, "epsilon")] = [initial_state_right]
 
         return Automaton(states, init_state, characters, final_state, transition_function)
