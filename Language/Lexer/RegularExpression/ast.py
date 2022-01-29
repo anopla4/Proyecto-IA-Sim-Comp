@@ -8,7 +8,7 @@ from Language.Parsing.terminal import Terminal
 
 class Node:
     def __init__(
-        self, alphabet_symbol, ast=None, tmp=None, children: list = []
+        self, alphabet_symbol, ast=None, tmp=None, children: list = [], symbol=None
     ) -> None:
         self.alphabet_symbol = alphabet_symbol
         self.ast = ast
@@ -33,8 +33,9 @@ def build_ast(ll_table, s, sym, rules=None):
         node, children_nodes = stack[-1]
         if (
             isinstance(node.alphabet_symbol, Terminal)
-            and s[i] == node.alphabet_symbol.symbol
+            and s[i].type == node.alphabet_symbol
         ):
+            node.symbol = s[i].expression
             i += 1
             stack.pop(-1)
         node, children_nodes = stack[-1]
@@ -86,7 +87,7 @@ def build_ast(ll_table, s, sym, rules=None):
                 p = [
                     ll_table[nt][terminal]
                     for terminal in ll_table[nt]
-                    if s[i] == terminal.symbol and ll_table[nt][terminal] != None
+                    if s[i].type == terminal and ll_table[nt][terminal] != None
                 ]
                 if p:
                     p = p[0]
