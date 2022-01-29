@@ -1,1 +1,0 @@
-# Proyecto-IA-Sim-Comp
