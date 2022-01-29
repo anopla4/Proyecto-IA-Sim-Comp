@@ -15,14 +15,14 @@ class Or(BinaryExpression):
         characters = list(set(characters))
         transition_function = dict(left_automaton.transition_function.items() + right_automaton.transition_function.items())
         initial_state_left = left_automaton.initial_state
-        final_state_left = left_automaton.f
+        final_states_left = left_automaton.f
         initial_state_right = right_automaton.initial_state
-        final_state_right = right_automaton.f
+        final_states_right = right_automaton.f
         init_state.next_states = [initial_state_left, initial_state_right]
         transition_function[(init_state, "epsilon")] = [initial_state_left, initial_state_right]
-        final_state_left.next_states.append(final_state)
-        transition_function[(final_state_left, "epsilon")] = [final_state]
-        final_state_right.next_states.append(final_state)
-        transition_function[(final_state_right, "epsilon")] = [final_state]
+        for fs in final_states_left:
+            transition_function[(fs, "epsilon")] = final_state
+        for fs in final_states_right:
+            transition_function[(fs, "epsilon")] = final_state
 
-        return Automaton(states, init_state, characters, final_state, transition_function)
+        return Automaton(states, init_state, characters, [final_state], transition_function)
