@@ -45,6 +45,7 @@ def build_entire_automaton(ll_table, s, sym, expressions, rules=None):
         automatons.append(_aut)
     init_state = State()
     states.append(init_state)
+    transition_function[(init_state, "epsilon")] = []
     for a in automatons:
-        transition_function.append(((init_state, "epsilon"), a.initial_state))
-    return Automaton(states, init_state, characters, final_states, transition_function)
+        transition_function[(init_state, "epsilon")].append(a.initial_state)
+    return Automaton(states, init_state, characters, final_states, dict(transition_function))
