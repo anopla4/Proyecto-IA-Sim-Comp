@@ -21,8 +21,8 @@ class Or(BinaryExpression):
         init_state.next_states = [initial_state_left, initial_state_right]
         transition_function[(init_state, "epsilon")] = [initial_state_left, initial_state_right]
         for fs in final_states_left:
-            transition_function[(fs, "epsilon")] = final_state
+            transition_function[(fs, "epsilon")] = [final_state]
         for fs in final_states_right:
-            transition_function[(fs, "epsilon")] = final_state
+            transition_function[(fs, "epsilon")] = [final_state]
 
         return Automaton(states, init_state, characters, [final_state], transition_function)

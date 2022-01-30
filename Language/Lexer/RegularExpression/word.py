@@ -16,7 +16,7 @@ class Word(Expression):
         for i in self.regex:
             st = State()
             states.append(st)
-            transition_function[(last_state, i)] = st
+            transition_function[(last_state, i)] = [st]
             last_state = st
         return Automaton(states, initial_state, characters, [last_state], transition_function)
 
