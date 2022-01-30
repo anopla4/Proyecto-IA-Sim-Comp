@@ -1,5 +1,6 @@
 from Item import Item
-
+from Language.Automaton.automaton import Automaton
+from Language.Automaton.nfa_to_dfa import transform_nfa_to_dfa
 def build_lr0_automaton(self,G):
     assert len([production for production in G.productions if production.left_side == G.start_symbol]) == 1, "The grammar must be augmented"
 
@@ -33,4 +34,4 @@ def build_lr0_automaton(self,G):
                     next_state = Item(production,0)
                     transitions[(state, 'epsilon')].append(next_state)    
                     stack.append(next_state)
-    return list(states),initial_state,characters,list(states),transitions
+    return transform_nfa_to_dfa(Autmaton(list(states),initial_state,characters,list(states),transitions))
