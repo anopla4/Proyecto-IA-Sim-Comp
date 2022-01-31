@@ -45,6 +45,7 @@ class ShiftReduceParser:
     def __call__(self, w):
         stack = [0,]
         result = []
+        actions = []
         index = 0
 
         while True:
@@ -58,15 +59,17 @@ class ShiftReduceParser:
 
             if action ==  ShiftReduceParser.SHIFT:
                 stack.append(tag)
+                actions.append(action)
                 cursor += 1
             elif action == ShiftReduceParser.REDUCE:
                 for _ in range(len(tag.right_side)):
                     stack.pop()
                 stack.append(self.goto[stack[-1],tag.left_side])
+                actions.append(action)
                 result.append(tag)
             elif action == ShiftReduceParser.OK:
-                return result
+                return result,actions
             else:
                 return ValueError("Not valid action")
-            
-            
+
+                
