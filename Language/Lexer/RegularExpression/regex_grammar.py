@@ -1,5 +1,4 @@
 from ...Parsing.non_terminal import (
-    NonTerminal,
     ENonTerminal,
     XNonTerminal,
     TNonTerminal,
