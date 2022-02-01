@@ -18,5 +18,6 @@ class Word(Expression):
             states.append(st)
             transition_function[(last_state, i)] = [st]
             last_state = st
-        return Automaton(states, initial_state, characters, [last_state], transition_function)
+        a = Automaton(states, initial_state, characters, [last_state], transition_function)
+        return a
 
