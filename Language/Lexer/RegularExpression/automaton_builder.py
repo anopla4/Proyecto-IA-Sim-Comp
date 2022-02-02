@@ -8,6 +8,7 @@ from Language.Lexer.RegularExpression._star import Star
 from .ast import build_ast
 from ..tokenizer import tokenize
 
+
 def build_automaton_(ast):
     if ast == None:
         return
@@ -26,6 +27,7 @@ def build_automaton_(ast):
         return ast.build_automaton(left, right)
     return
 
+
 def build_automaton_expression(ast, t):
     aut = build_automaton_(ast)
     transition_function = {}
@@ -33,7 +35,8 @@ def build_automaton_expression(ast, t):
     new_states = {st: None for st in aut.states}
     for i in aut.states:
         if i in aut.f:
-            new_final_state = FinalState(t)
+            new_final_state = FinalState()
+            new_final_state.type.append(t)
             f.append(new_final_state)
             new_states[i] = new_final_state
         else:
@@ -47,6 +50,7 @@ def build_automaton_expression(ast, t):
     aut.states = new_states.values()
     aut.initial_state = new_states[aut.initial_state]
     return aut
+
 
 def build_entire_automaton(ll_table, sym, expressions, word_type, types, rules=None):
     automatons = []

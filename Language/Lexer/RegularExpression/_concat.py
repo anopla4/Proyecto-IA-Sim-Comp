@@ -1,5 +1,4 @@
 from .binary_expression import BinaryExpression
-from Language.Automaton.state import State
 from Language.Automaton.automaton import Automaton
 
 

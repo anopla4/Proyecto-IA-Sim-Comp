@@ -2,6 +2,6 @@ from .state import State
 
 
 class FinalState(State):
-    def __init__(self, t):
+    def __init__(self):
         super().__init__()
-        self.type = t
+        self.type = []
