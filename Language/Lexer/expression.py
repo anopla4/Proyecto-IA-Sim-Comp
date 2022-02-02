@@ -3,8 +3,5 @@ class Expression:
         self.regex = regex
         self.priority = priority
 
-    def evaluate():
-        pass
-
     def build_automaton(self, *args, **kwargs):
         pass
