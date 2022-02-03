@@ -3,12 +3,18 @@ import networkx as nx
 import random
 from .node import Node
 
-def create_graph(G:nx.Graph,nodes:list[Node],n):
-    if n==0 or len(nodes) == 0:
+def create_branch(G:nx.Graph, nodes:list[Node]):
+    for i in range(len(nodes)):
+        G.add_node(nodes[i].name)
+        if i > 0:
+            G.add_edge(nodes[i].name, nodes[i-1].name)
+
+def create_graph(G:nx.Graph,nodes:list[Node]):
+    if len(nodes) == 0:
         return
     for node in nodes:
         if node is not None:
-            val = node.name ##node.value + ":" + str(n)
+            val = node.name
             G.add_node(val)
             if node.parent != None:
                 G.add_edge(node.parent.name, val)
@@ -16,7 +22,7 @@ def create_graph(G:nx.Graph,nodes:list[Node],n):
     for node in nodes:
         if node is not None:
             childrens.extend(node._children)
-    create_graph(G, childrens, n-1)
+    create_graph(G, childrens)
 
 def hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5):
     '''
@@ -75,9 +81,18 @@ def hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, xcenter 
 
     return _hierarchy_pos(G, root, width, vert_gap, vert_loc, xcenter)
 
-def print_graph(root, levels):
+def visualize_graph(root:Node):
     G = nx.Graph()
-    create_graph(G, [root], levels)
+    create_graph(G, [root])
+    pos = hierarchy_pos(G,f"-1 :0")    
+    nx.draw(G, pos=pos, with_labels=True, font_weight='bold')
+    #plt.figure(figsize=(16,16))
+
+    plt.show()
+
+def visualize_branch(branch_nodes:list[Node]):
+    G = nx.Graph()
+    create_branch(G, branch_nodes)
     pos = hierarchy_pos(G,f"-1 :0")    
     nx.draw(G, pos=pos, with_labels=True, font_weight='bold')
     #plt.figure(figsize=(16,16))
@@ -98,18 +113,7 @@ def print_console_nodes(nodes:list[Node], n):
             children.extend(node._children)
     print_console_nodes(children,n-1)
 
-def print_best_branch(root:Node):
-    branch = []#[f"{root.name} score:{root.utility_score}"]
-    curr = root
-    def best_child(node:Node)->Node:
-        more_p_child = None
-        gr_probability = -1e9
-        for child in node._children:
-            if child.visit_count/node.visit_count > gr_probability:
-                gr_probability = child.visit_count/node.visit_count
-                more_p_child = child
-        return more_p_child
-    while curr != None:
-        branch.append(f"{curr.name} score:{curr.visit_count/curr._parent.visit_count if curr._parent != None else 1}")
-        curr = best_child(curr)
-    print("\n||\n".join(branch))
+def print_branch_data(nodes:list[Node]):
+    print('root')
+    for node in nodes[1:]:
+        print(f"{node.value}  aplication time:{node.created_time}   p:{round((node.visit_count/node.parent.visit_count)*100)}%")

@@ -1,7 +1,11 @@
+from typing import Dict
+
+
 class Node(object):
     def __init__(self, value:str, parent = None, creation_time = 0, id = -1):
         self._value:str = value
-        self._states = []
+        self._arrival_state:Dict[str,float] = {}
+        self._final_state:Dict[str,float] = {}
         self._parent:Node = parent
         self._children:list[Node] = []
         self._created_time = creation_time
@@ -47,8 +51,36 @@ class Node(object):
         self._visit_count=visit_count
 
     @property
-    def states(self):
-        return self._states
+    def arrival_state(self):
+        return self._arrival_state
+
+    def update_arrival_state(self, new_arrival_state:Dict[str,float])->None:
+        for p, v in new_arrival_state.items():
+            if self._arrival_state.get(p) == None:
+                self._arrival_state[p] = 0
+            self._arrival_state[p]+=v
+
+    def get_average_arrival_state(self)->Dict[str,float]:
+        avg_state = {}
+        for p,v in self._arrival_state.items():
+            avg_state[p] = v/self.visit_count
+        return avg_state
+
+    @property
+    def final_state(self):
+        return self._final_state
+
+    def update_final_state(self, new_final_state:Dict[str,float])->None:
+        for p, v in new_final_state.items():
+            if self._final_state.get(p) == None:
+                self._final_state[p] = 0
+            self._final_state[p]+=v
+
+    def get_average_final_state(self)->Dict[str,float]:
+        avg_state = {}
+        for p,v in self._final_state.items():
+            avg_state[p] = v/self.visit_count
+        return avg_state
 
     @property
     def intervention(self):

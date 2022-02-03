@@ -25,7 +25,7 @@ class TreatmentTree(object):
             self._node_count+=1
             self._current._children.append(Node(intervention, self._current, current_time, self.node_count))
             _candidate_childs.append(self._current._children[-1])
-        self._current = UCT.find_best_utc(_candidate_childs)
+        self._current = UCT.find_best_uct(_candidate_childs)
         return self._current
 
     def back_propagation(self, utility_score):
@@ -37,5 +37,18 @@ class TreatmentTree(object):
         self._current.visit_count += 1
         return
 
-    def best_branch(self):
-        pass
+    def best_branch(self)->list[Node]:
+        branch = [] 
+        curr = self.root
+        def best_child(node:Node)->Node:
+            more_p_child = None
+            gr_probability = -1e9
+            for child in node._children:
+                if child.visit_count/node.visit_count > gr_probability:
+                    gr_probability = child.visit_count/node.visit_count
+                    more_p_child = child
+            return more_p_child
+        while curr != None:
+            branch.append(curr)
+            curr = best_child(curr)
+        return branch

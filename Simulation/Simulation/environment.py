@@ -1,3 +1,4 @@
+from typing import Dict
 from .parameter import Parameter
 
 class Environment:
@@ -41,6 +42,12 @@ class Environment:
         for p in self._parameters:
             param_list.append(Parameter(p.name, p.value, p.low_good_limit, p.upp_good_limit, p.low_bad_limit, p.upp_bad_limit))
         return Environment(param_list)
+
+    def get_params_dict(self)->Dict[str,float]:
+        params_dict = {}
+        for param in self._parameters:
+            params_dict[param.name]= param.value
+        return params_dict
 
     def __str__(self) -> str:
         representation = ""

@@ -13,7 +13,7 @@ class UCT(object):
         return node.utility_score/node.visit_count + math.sqrt(math.log10(node.parent.visit_count)/node.visit_count)
     
     @staticmethod
-    def find_best_utc(candidates:list[Node]):
+    def find_best_uct(candidates:list[Node]):
         best = -1e9
         best_candidates = []
         for child in candidates:

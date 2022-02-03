@@ -1,10 +1,9 @@
-from typing import Tuple
+from typing import Dict, Tuple
 from .environment import Environment
 from .agent import Agent
 
 class Simulation(object):
-    def __init__(self, env:Environment, disease:set[Agent],  treatment:set[Agent], #disease_rules:set[Rule], 
-    end_time:int=0):
+    def __init__(self, env:Environment, disease:set[Agent],  treatment:set[Agent], end_time:int=0):
         self._env = env
         self._all_symptoms = disease.copy()
         self._active_intervention:list[Tuple[int,Agent]] = []
@@ -23,7 +22,7 @@ class Simulation(object):
             return True
         return False
     
-    def check_enviroment(self)->int:
+    def check_environment(self)->int:
         #return -1 if not end, 0 if lose, 1 if win
         return 0 if self._env.final_state() else 1
 
@@ -39,7 +38,7 @@ class Simulation(object):
             val+= 1/(abs(p-p_center)+1)
         return val
 
-    def evaluate_enviroment(self)->float:
+    def evaluate_environment(self)->float:
         if self._env.final_state():
             return self.__evaluate_final_state()
         val = 0
@@ -52,6 +51,9 @@ class Simulation(object):
                 p = param.value/(p_max-p_min)
                 val+= 1/(abs(p-p_center)+1)
         return val
+
+    def environment_state(self)->Dict[str,float]:
+        return self._env.get_params_dict()
 
     def detect_new_symptom(self)->set[Agent]:
         _new_symptoms:set[Agent] = set()
