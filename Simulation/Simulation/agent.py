@@ -1,23 +1,27 @@
 from abc import ABC, abstractmethod
-from env import Env
-from rule import Rule
+from .environment import Environment
+from .rule import Rule
 
 class Agent(ABC):
-    def __init__(self, name:str, probability_function, activation_rules, efect_time, repetition) -> None:
+    def __init__(self, name:str, activation_rules, efect_time, repetition) -> None:
         self._name = name
         self._active:bool = False
         self._ag_history = None
         self._activation_rules:list[Rule] = activation_rules
         self._current_action_time = 0   # increse rep by rep if take action
-        self._efect_time = efect_time
+        self._efect_time = self.__calculate_efect_time(efect_time, repetition)
         self._repetition = repetition
-        self._probability_function = probability_function
+
+    def __calculate_efect_time(self, efect_time, repetition):
+        times = efect_time//repetition
+        return times*repetition
+
 
     @abstractmethod
-    def action(self, time:int, env:Env) -> Env:
+    def action(self, time:int, env:Environment) -> Environment:
         pass
 
-    def check_activation_conditions(self, time:int, env:Env)-> bool:
+    def check_activation_conditions(self, time:int, env:Environment)-> bool:
         """ Returns True if the activation conditions are met."""
         for rule in self._activation_rules:
             if rule.check_time(time) and rule.check_envioroment_condition(env):

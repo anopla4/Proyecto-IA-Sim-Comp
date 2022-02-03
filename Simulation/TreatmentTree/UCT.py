@@ -1,5 +1,6 @@
-from node import Node
+from .node import Node
 import math
+from random import randint
 
 class UCT(object):
     def __init__(self, c : float = math.sqrt(2)):
@@ -13,11 +14,14 @@ class UCT(object):
     
     @staticmethod
     def find_best_utc(candidates:list[Node]):
-        best_child = None
         best = -1e9
+        best_candidates = []
         for child in candidates:
             utc_v = UCT.uct_value(child)
             if utc_v > best:
-                best_child = child 
+                best_candidates = [child]
                 best = utc_v
-        return best_child
+            elif utc_v == best:
+                best_candidates.append(child)
+        b = best_candidates[randint(0, len(best_candidates)-1)]    
+        return b
