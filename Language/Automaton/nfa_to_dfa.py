@@ -1,6 +1,5 @@
-from pprint import pprint
 from Language.Automaton.automaton import Automaton
-from .state import State
+from .State import State
 from .final_state import FinalState
 
 
@@ -14,15 +13,27 @@ def goto(q_p: set(), transition: str, transition_function: dict):
 
 
 def epsilon_closure(q_p: set, transition_function: dict):
-    go = goto(q_p, 'epsilon', transition_function)
-    sol = q_p.union(go)
-    while go:
-        go = goto(go, "epsilon", transition_function)
-        sol = sol.union(go)
-    return sol
+    # go = goto(q_p, 'epsilon', transition_function)
+    # sol = q_p.union(go)
+    # while go:
+    #     go = goto(go, "epsilon", transition_function)
+    #     sol = sol.union(go)
+    # return sol
+    pending = [q_p,]
+    closure = q_p
+    visited = set()
+    while pending:
+        st = pending.pop()
+        go = goto(st, "epsilon", transition_function)
+        closure = closure.union(go)
+        for state in go:
+            if state not in visited:
+                pending.append(set([state]))
+                visited.add(state)
+    return closure
 
 
-def transform_nfa_to_dfa(aut: Automaton):
+def transform_nfa_to_dfa(aut: Automaton, lr = False):
     q_dfa = []
     v_dfa = [t for t in aut.characters if t != 'epsilon']
     f_dfa = []
@@ -35,12 +46,12 @@ def transform_nfa_to_dfa(aut: Automaton):
     while states:
         number = states.pop(0)
         current_state = state_number[number]
-        visited_states.append(current_state)
         for transition in v_dfa:
             goto_ = goto(current_state, transition, aut.transition_function)
             if goto_:
                 new_state = epsilon_closure(goto_, aut.transition_function)
                 if new_state not in visited_states:
+                    visited_states.append(new_state)
                     c = len(state_number) + 1
                     q_dfa.append(new_state)
                     states.append(c)
@@ -52,6 +63,11 @@ def transform_nfa_to_dfa(aut: Automaton):
                     transition_function_fda[(number, transition)] = n
                 if new_state.intersection(set(aut.f)):
                     f_dfa.append(new_state)
+    if lr:
+        new_states = [FinalState(state) for state in q_dfa]
+        new_transition_function = {(new_states[i-1], transition) : new_states[transition_function_fda[i,transition]-1] for i,transition in transition_function_fda}
+        return Automaton(new_states, new_states[0], v_dfa, new_states, new_transition_function)
+
     new_states = {state: State() for state in state_number}
     new_transition_function = {}
     new_f = []
