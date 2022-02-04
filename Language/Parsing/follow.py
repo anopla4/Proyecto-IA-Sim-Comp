@@ -11,33 +11,36 @@ def symbol_follow(productions, follows, first):
         _productions = all_productions(productions)
         for p in _productions:
             rs = p.right_side
-            for i in range(len(rs) - 1):
+            for i in range(len(rs)):
                 a = rs[i]
-                if not isinstance(a, NonTerminal):
-                    continue
-                z = rs[i + 1]
                 x = p.left_side
-                add_to_follow = [
-                    item for item in first[z] if not isinstance(item, Epsilon)
-                ]
-                for item in add_to_follow:
-                    if item not in follows[a]:
-                        follows[a].append(item)
-                        changed = True
-                if len([item for item in first[z] if isinstance(item, Epsilon)]) > 0:
+                if i < len(rs) - 1 and isinstance(a, NonTerminal):
+                    z = rs[i + 1]
+                    add_to_follow = [
+                        item for item in first[z] if not isinstance(item, Epsilon)
+                    ]
+                    for item in add_to_follow:
+                        if item not in follows[a]:
+                            follows[a].append(item)
+                            changed = True
+                    if len([item for item in first[z] if isinstance(item, Epsilon)]) > 0:
+                        for item in follows[x]:
+                            if item not in follows[a]:
+                                follows[a].append(item)
+                                changed = True
+                if i == len(rs) - 1 and isinstance(a, NonTerminal):
                     for item in follows[x]:
                         if item not in follows[a]:
                             follows[a].append(item)
                             changed = True
-                if i + 1 == len(rs) - 1 and isinstance(z, NonTerminal):
-                    for item in follows[x]:
-                        if item not in follows[z]:
-                            follows[z].append(item)
-                            changed = True
 
 
-def follow(s, symbols, productions, first):
+def follow(s, symbols, productions, first, lr = False, GEOF = None):
     res = {item: [] for item in symbols}
     symbol_follow(productions, res, first)
-    res[s].append(Dollar())
+    if lr:
+       for key in res:
+           res[key].append(GEOF)
+    else:
+        res[s].append(Dollar())
     return res
