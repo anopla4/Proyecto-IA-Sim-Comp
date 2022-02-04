@@ -9,8 +9,8 @@ def create_branch(G:nx.Graph, nodes:list[Node]):
         if i > 0:
             G.add_edge(nodes[i].name, nodes[i-1].name)
 
-def create_graph(G:nx.Graph,nodes:list[Node]):
-    if len(nodes) == 0:
+def create_graph(G:nx.Graph,nodes:list[Node], n):
+    if len(nodes) == 0 or n == 0:
         return
     for node in nodes:
         if node is not None:
@@ -22,7 +22,7 @@ def create_graph(G:nx.Graph,nodes:list[Node]):
     for node in nodes:
         if node is not None:
             childrens.extend(node._children)
-    create_graph(G, childrens)
+    create_graph(G, childrens, n-1)
 
 def hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5):
     '''
@@ -81,13 +81,12 @@ def hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, xcenter 
 
     return _hierarchy_pos(G, root, width, vert_gap, vert_loc, xcenter)
 
-def visualize_graph(root:Node):
+def visualize_graph(root:Node, level):
     G = nx.Graph()
-    create_graph(G, [root])
+    create_graph(G, [root], level)
     pos = hierarchy_pos(G,f"-1 :0")    
     nx.draw(G, pos=pos, with_labels=True, font_weight='bold')
     #plt.figure(figsize=(16,16))
-
     plt.show()
 
 def visualize_branch(branch_nodes:list[Node]):

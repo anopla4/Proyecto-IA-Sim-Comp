@@ -38,6 +38,9 @@ class TreatmentTree(object):
         return
 
     def best_branch(self)->list[Node]:
+        '''
+        Returns a list with the best branch of the tree
+        '''
         branch = [] 
         curr = self.root
         def best_child(node:Node)->Node:
@@ -52,3 +55,31 @@ class TreatmentTree(object):
             branch.append(curr)
             curr = best_child(curr)
         return branch
+
+    def prunning(self, max_childs=3, acc_probability=75):
+        '''
+        Prune the tree keeping the maximum number of children specified by "max_childs" or 
+        those that accumulate the highest probability equal to "acc_probability"
+        '''
+        self.root.probability_value=100.0
+        def best_childs(node:Node, max_childs, acc_probability)->list[Node]:
+            childs = []
+            acc_p = 0
+            for child in node._children:
+                child.probability_value = round((child.visit_count/node.visit_count)*100,1)
+                childs.append(child)
+            childs = sorted(childs, key=lambda x: x.probability_value, reverse=True)
+            limit = min(max_childs, len(childs))
+            i = 0
+            while acc_p < acc_probability and i < limit:
+                acc_p += childs[i].probability_value
+                i+=1
+            return childs[:i]
+        def prunning_rec(nodes:list[Node], max_childs, acc_p):
+            if len(nodes) == 0:
+                return
+            for node in nodes:
+                node._children = best_childs(node, max_childs, acc_p)
+            for node in nodes:
+                prunning_rec(node._children, max_childs, acc_p)
+        prunning_rec([self.root], max_childs, acc_probability)
