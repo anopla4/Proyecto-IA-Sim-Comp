@@ -1,11 +1,10 @@
-from abstract_function import membresy_function
+from .membresy_function import MembresyFunction
 from math import exp
-class sigmoidal(membresy_function):
+
+class Sigmoidal(MembresyFunction):
     """
-    Funcion sigmoidal, recibe como parametros a,b con todos
-    valores reales que representan las distintas regiones de la funcion.
-    Devuelve una funcion instanciada para un conjunto de parametros 
-    especificos
+    Sigmoidal function, receives as parameters a,b 
+    with all real values that represent the different regions of the function.
     """
     def __init__(self,a:float,b:float):
         self._a=a
@@ -18,7 +17,6 @@ class sigmoidal(membresy_function):
         def inner(x):
             return 1/(1+exp(-a*(x - b)))
         return inner
-         
     
     @property
     def limits(self):

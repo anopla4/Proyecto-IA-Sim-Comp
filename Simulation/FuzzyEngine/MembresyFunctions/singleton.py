@@ -1,9 +1,9 @@
-from abstract_function import membresy_function
+from .membresy_function import MembresyFunction
 
-class singleton(membresy_function):
+class Singleton(MembresyFunction):
     """
-    Funcion singleton, recibe un parametro y devuelve una instancia de la
-    funcion singleton con el valor fijado a x0
+    Singleton function, receives a parameter and with the property function
+    returns an instance of the singleton function with the value set to x0
     """
     def __init__(self,x0:float):
         self._x0=x0
@@ -17,7 +17,6 @@ class singleton(membresy_function):
             else :
                 return 0
         return inner
-         
     
     @property
     def limits(self):

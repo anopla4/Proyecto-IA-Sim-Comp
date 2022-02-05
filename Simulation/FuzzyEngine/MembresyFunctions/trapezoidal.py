@@ -1,14 +1,11 @@
-from abstract_functions import membresy_function
+from .membresy_function import MembresyFunction
 
-class trapezoidal(membresy_function):
-    
+class Trapezoidal(MembresyFunction):
     """
-    Funcion trapezoidal, recibe como parametros a,b,c y d con todos
-    valores reales que representan las distintas regiones de la funcion.
-    Devuelve una funcion instanciada para un conjunto de parametros 
-    especificos
+    Trapezoidal function, receives as parameters a, b, c and d with all
+    real values that represent the different regions of the function.
     """
-    
+
     def __init__(self,a:float,b:float,c:float,d:float):
         self._a=a
         self._b=b
@@ -24,14 +21,14 @@ class trapezoidal(membresy_function):
         d=self._d
         def inner(x):
             result=0.0
-            if x<=self._a or x>=self._d:
+            if x<=a or x>=d:
                 result=0.0      
-            if self._a<x<=self._b:
-                result=(x-self._a)/(self._b-self._a)
-            if self._b<x<self._c:
+            if a<x<=b:
+                result=(x-a)/(b-a)
+            if b<x<c:
                 result=1.0
-            if self._c<x<self._d:
-                result=(self._d-x)/(self._d-self._c)
+            if c<x<d:
+                result=(d-x)/(d-c)
             return result
         
         return inner

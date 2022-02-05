@@ -1,11 +1,9 @@
-from abstract_function import membresy_function
+from .membresy_function import MembresyFunction
 
-class triangular(membresy_function):
+class Triangular(MembresyFunction):
     """
-    Funcion triangular , recibe como parametros a,b y c  todos
-    valores reales que representan las distintas regiones de la funcion.
-    Devuelve una funcion instanciada para un conjunto de parametros 
-    especificos
+    Triangular function, receives as parameters a, b and c all
+    real values that represent the different regions of the function.
     """
     def __init__(self,a:float,b:float,c:float):
         self._a=a
@@ -32,5 +30,3 @@ class triangular(membresy_function):
     @property
     def limits(self):
         return (self._a,self._c)
-    
-    
