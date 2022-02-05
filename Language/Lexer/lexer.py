@@ -10,12 +10,17 @@ def tokenize_regex_automaton(aut, s):
     st = aut.initial_state
     tokens = []
     exp = ""
-    while(count >= 0):
-        if count > 0 and st == aut.initial_state and s[len(s) - count] == " " and (st, " ") not in aut.transition_function:
+    while count >= 0:
+        if (
+            count > 0
+            and st == aut.initial_state
+            and s[len(s) - count] == " "
+            and (st, " ") not in aut.transition_function
+        ):
             count -= 1
 
-        elif count > 0 and (st, s[len(s)-count]) in aut.transition_function:
-            st = aut.transition_function[(st, s[len(s)-count])]
+        elif count > 0 and (st, s[len(s) - count]) in aut.transition_function:
+            st = aut.transition_function[(st, s[len(s) - count])]
             exp += s[len(s) - count]
             count -= 1
         elif isinstance(st, FinalState):
@@ -23,7 +28,7 @@ def tokenize_regex_automaton(aut, s):
             t = None
             for i in st.type:
                 if maximum < i.priority:
-                    maximum = max(maximum, i.priority)
+                    maximum = max(maximum, i[1])
                     t = i
             tokens.append(Token(exp, t))
             st = aut.initial_state
