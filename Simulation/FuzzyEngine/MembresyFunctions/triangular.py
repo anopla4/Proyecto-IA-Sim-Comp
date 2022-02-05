@@ -30,3 +30,19 @@ class Triangular(MembresyFunction):
     @property
     def limits(self):
         return (self._a,self._c)
+    
+    def get_extended_function(self, extended):
+        a=self._a*extended
+        b=self._b*extended
+        c=self._c*extended
+        def inner(x):
+            result=0
+            if x<=a or x>=c:
+                result=0
+            if a<x<=b:
+                result=(x-a)/(b-a)
+            if b<x<c:
+                result=(c-x)/(c-b)
+            return result
+        return inner
+        

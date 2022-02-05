@@ -21,3 +21,11 @@ class Sigmoidal(MembresyFunction):
     @property
     def limits(self):
         return (self._x0,self._x0)
+    
+    def get_extended_function(self, extended):
+        a=self._a*extended
+        b=self._b*extended
+        def inner(x):
+            return 1/(1+exp(-a*(x - b)))
+        return inner
+        

@@ -21,3 +21,12 @@ class Singleton(MembresyFunction):
     @property
     def limits(self):
         return (self._x0,self._x0)
+    
+    def get_extended_function(self, extended):
+        x0=self._x0*extended
+        def inner(x):
+            if x==x0:
+                return 1
+            else :
+                return 0
+        return inner

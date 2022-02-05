@@ -12,6 +12,7 @@ class Trapezoidal(MembresyFunction):
         self._c=c
         self._d=d
         assert a<=b<=c<=d
+        
     
     @property
     def function(self):
@@ -36,3 +37,23 @@ class Trapezoidal(MembresyFunction):
     @property    
     def limits(self):
         return (self._a,self._d)
+    
+    
+    def get_extended_function(self, extended):
+        a=self._a*extended
+        b=self._b*extended
+        c=self._c*extended
+        d=self._d*extended
+        def inner(x):
+            result=0.0
+            if x<=a or x>=d:
+                result=0.0      
+            if a<x<=b:
+                result=(x-a)/(b-a)
+            if b<x<c:
+                result=1.0
+            if c<x<d:
+                result=(d-x)/(d-c)
+            return result
+        
+        return inner
