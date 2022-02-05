@@ -1,11 +1,19 @@
-from typing import Dict, Tuple
-
+from typing import Dict
 
 class Rule:
-    def Rule(self, parameters_conditions:list[tuple[str,str]], time_condition:Tuple[float,float],
-        agents_conditions:Dict[str,list[str]],then:tuple[str,str]):
+    def __init__(self, parameters_conditions:Dict[str,str], param_destination:str, then:tuple[str,str]):
         self._parameters_conditions = parameters_conditions
+        self._destination = param_destination
         self.then = then
 
-    def get_target(self)-> str:
+    @property
+    def target(self)-> str:
         return self.then[0]
+
+    @property
+    def destination(self)->str:
+        return self._destination
+
+    @property
+    def conditions(self)->Dict[str,str]:
+        return self._parameters_conditions

@@ -1,4 +1,4 @@
-from abc import ABC,abstractproperty
+from abc import ABC,abstractproperty, abstractmethod
 
 class MembresyFunction(ABC):
     @abstractproperty
@@ -8,6 +8,10 @@ class MembresyFunction(ABC):
         '''
         raise NotImplementedError
     
+    @abstractmethod
+    def get_extended_function(self, extended):
+        raise NotImplementedError()
+
     @abstractproperty
     def limits(self):
         raise NotImplementedError()

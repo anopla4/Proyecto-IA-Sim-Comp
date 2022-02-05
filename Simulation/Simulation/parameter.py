@@ -64,6 +64,12 @@ class Parameter:
         Returns the range where membership functions are defined
         '''
         return self._left_limit, self._rigth_limit
+
+    def get_extended_membresy_functions(self, extended)->Dict[str, Callable[[float], float]]:
+        dict_mf:Dict[str, Callable[[float], float]] = {}
+        for var, mf in self._membresy_functions.items():
+            dict_mf[var] = mf.get_extended_function(extended)
+        return dict_mf
     #
     #-----------------
 

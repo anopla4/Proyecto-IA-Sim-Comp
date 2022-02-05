@@ -1,6 +1,8 @@
 from typing import Dict, Tuple
 from .environment import Environment
 from .agent import Agent
+from FuzzyEngine.fuzzy_engine import fuzzy_engine
+from FuzzyEngine.rule import Rule
 
 class Simulation(object):
     def __init__(self, env:Environment, disease:set[Agent],  treatment:set[Agent], end_time:int=0):
@@ -18,7 +20,7 @@ class Simulation(object):
         return self._simulation_time
 
     def finish(self) ->bool:
-        if self._simulation_time == self._end_time or self._env.final_state():
+        if self._simulation_time == self._end_time: #or self._env.final_state():
             return True
         return False
     
@@ -64,11 +66,13 @@ class Simulation(object):
 
     def simulate(self, tick:int):
         self._simulation_time+=tick
+        _action_rules:list[Rule] = []
         _still_active_symptom:list[Tuple[int,Agent]] = []
         for act_time, symptom in self._active_symptoms:
             act_time+=tick
             if act_time == symptom.repetition:
-                self._env = symptom.action(self._simulation_time, self._env)
+                _action_rules.extend(symptom.action(self._simulation_time, self._env))
+                #self._env = symptom.action(self._simulation_time, self._env)
                 if not symptom.finish_action():
                     _still_active_symptom.append((0, symptom))
                 else:
@@ -80,19 +84,21 @@ class Simulation(object):
         for act_time, intervention in self._active_intervention:
             act_time+=tick
             if act_time == intervention.repetition:
-                self._env = intervention.action(self._simulation_time, self._env)
+                _action_rules.extend(intervention.action(self._simulation_time, self._env))
+                #self._env = intervention.action(self._simulation_time, self._env)
                 if not intervention.finish_action():
                     _still_active_intervention.append((0, intervention))
                 else:
                     self._inactive_intervention.add(intervention)
             else:
                 _still_active_intervention.append((act_time, intervention))
+        self._env = fuzzy_engine(self._env, _action_rules)
         self._active_intervention = _still_active_intervention
         _new_symptoms = self.detect_new_symptom()
         self._active_symptoms.extend([(0,s) for s in _new_symptoms])
         self._inactive_symptoms.difference_update(_new_symptoms)
 
-    def detect_new_interventions(self)-> set[str]:   #, treatment_rules:set[Rule]) -> set[Agent]:
+    def detect_new_interventions(self)-> set[str]:
         _new_interventions:set[str] = set()
         for intervention in self._inactive_intervention:
             if intervention.check_activation_conditions(self._simulation_time, self._env):

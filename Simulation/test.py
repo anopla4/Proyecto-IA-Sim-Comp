@@ -1,7 +1,7 @@
 from Simulation.agent import Agent
 from Simulation.environment import Environment
 from Simulation.parameter import Parameter
-from Simulation.rule import Rule
+from Simulation.activation_rule import ActivationRule
 from main import main
 
 from TreatmentTree.tree_draw import print_graph, print_console_nodes, print_best_branch

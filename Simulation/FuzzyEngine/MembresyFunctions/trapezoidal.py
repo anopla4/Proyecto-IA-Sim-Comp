@@ -34,5 +34,5 @@ class Trapezoidal(MembresyFunction):
         return inner
         
     @property    
-    def get_limits(self):
+    def limits(self):
         return (self._a,self._d)

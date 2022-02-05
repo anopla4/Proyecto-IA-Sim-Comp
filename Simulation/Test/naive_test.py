@@ -1,7 +1,7 @@
 from Simulation.agent import Agent
 from Simulation.environment import Environment
 from Simulation.parameter import Parameter
-from Simulation.rule import Rule
+from Simulation.activation_rule import ActivationRule
 
 class E(Agent):
     def __init__(self, name: str, activation_rules, efect_time=168, repetition=1) -> None:

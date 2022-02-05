@@ -40,7 +40,14 @@ class Environment:
     def copy(self):
         param_list = []
         for p in self._parameters:
-            param_list.append(Parameter(p.name, p.value, p.low_good_limit, p.upp_good_limit, p.low_bad_limit, p.upp_bad_limit))
+            param_list.append(
+                Parameter(name=p.name,
+                        value=p.value,
+                        membresy_functions=p._membresy_functions, 
+                        low_good_limit=p.low_good_limit, 
+                        upp_good_limit=p.upp_good_limit, 
+                        low_bad_limit=p.low_bad_limit,
+                        upp_bad_limit=p.upp_bad_limit))
         return Environment(param_list)
 
     def get_params_dict(self)->Dict[str,float]:
