@@ -18,7 +18,7 @@ class Simulation(object):
         return self._simulation_time
 
     def finish(self) ->bool:
-        if self._simulation_time == self._end_time: #or self._env.final_state():
+        if self._simulation_time == self._end_time or self._env.final_state():
             return True
         return False
     

@@ -12,6 +12,7 @@ class Rule:
         return self._then
 
     def check_time(self, enviroment_time:int)->bool:
+        """ Returns True if time conditions are met in the current time"""
         return self._time_conditions[0] <= enviroment_time <= self._time_conditions[1]
 
     def check_envioroment_condition(self, env:Environment)->bool:

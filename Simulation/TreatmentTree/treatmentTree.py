@@ -58,8 +58,9 @@ class TreatmentTree(object):
 
     def prunning(self, max_childs=3, acc_probability=75):
         '''
-        Prune the tree keeping the maximum number of children specified by "max_childs" or 
-        those that accumulate the highest probability equal to "acc_probability"
+        Prune the tree keeping the maximum number of children specified by "max_childs" 
+        or those with the highest probability that accumulate probability greater than 
+        or equal to "acc_probability"
         '''
         self.root.probability_value=100.0
         def best_childs(node:Node, max_childs, acc_probability)->list[Node]:

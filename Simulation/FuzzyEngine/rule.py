@@ -1,9 +1,11 @@
+from typing import Dict, Tuple
+
+
 class Rule:
-    def Rule(self, 
-        var_conditions:list[tuple[str,str]], then:tuple[str,str]):
-        self.and_conditions = var_conditions
+    def Rule(self, parameters_conditions:list[tuple[str,str]], time_condition:Tuple[float,float],
+        agents_conditions:Dict[str,list[str]],then:tuple[str,str]):
+        self._parameters_conditions = parameters_conditions
         self.then = then
-        #self.action_conditions = action_conditions
 
     def get_target(self)-> str:
         return self.then[0]
