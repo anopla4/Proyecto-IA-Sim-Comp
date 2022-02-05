@@ -1,4 +1,4 @@
-from fuzzy_functions import *
+from .fuzzy_functions import *
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -24,6 +24,7 @@ f3=inference_by_mandami(0.8, trian3)
 
 # Lista con todas las funciones  
 func_list=[f1,f2,f3]
+
 """ 
 funcion que se obtiene luego de aplicar el metodo de agregacion  por maximo
 a las 3 funciones que previamente se les aplico mandami

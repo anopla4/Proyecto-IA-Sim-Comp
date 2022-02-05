@@ -1,13 +1,12 @@
 
 from scipy import integrate
-import pytest
 
 def inference_by_mandami(param,func):
     """
- funcion para obtener la inferencia usando el metodo de Mandami
- param es el valor de corte y func es la funcion a la que se le hara el
- el corte. Devuelve una funcion que es el resultado de aplicar el metodo de
- Mandami en parametro
+    funcion para obtener la inferencia usando el método de Mandami
+    param es el valor de corte y func es la función a la que se le hará el
+    el corte. Devuelve una función que es el resultado de aplicar el método de
+    Mandami en parámetro
     """
     def inner(*args):
         return min(param,func(*args))
@@ -41,14 +40,14 @@ def discret_centroid(func,lower_range,upper_range,step=1):
     return num/den
 
 
-def __defuzzing_by_centroid(agregation_function,lower_range:float,upper_range:float):
+def defuzzing_by_centroid(agregation_function,lower_range:float,upper_range:float):
     """
     Funcion hecha para defuzzificar un valor aplicando el metodo de los 
     centroides en una variable con dominio continuo
     """
     func= lambda f: lambda x: x*f(x)
     num=integrate.quad(func(agregation_function),lower_range,upper_range)
-    den=integrate.quad(agregation_function,lower,upper_range)
+    den=integrate.quad(agregation_function,lower_range,upper_range)
     return num[0]/den[0]
 
 # funciones fuzzy basicas:
