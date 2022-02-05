@@ -15,7 +15,7 @@ def tokenize(
             and _tokens[-1][-1] == "\\"
             and i in t
         ):
-            _tokens[-1] = _tokens[-1][:-1] + i
+            _tokens[-1] += i
             if index == len(s) - 1:
                 tokens.append(Token(_tokens[-1], word_type))
         elif i in t:

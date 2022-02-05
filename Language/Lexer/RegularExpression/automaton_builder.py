@@ -36,7 +36,7 @@ def build_automaton_expression(ast, t):
     for i in aut.states:
         if i in aut.f:
             new_final_state = FinalState()
-            new_final_state.type.append(t)
+            new_final_state.type.add(t)
             f.append(new_final_state)
             new_states[i] = new_final_state
         else:
@@ -73,4 +73,6 @@ def build_entire_automaton(ll_table, sym, expressions, word_type, types, rules=N
     transition_function[(init_state, "epsilon")] = []
     for a in automatons:
         transition_function[(init_state, "epsilon")].append(a.initial_state)
-    return Automaton(states, init_state, characters, final_states, transition_function)
+    return Automaton(
+        states, init_state, set(characters), final_states, transition_function
+    )

@@ -11,6 +11,8 @@ def tokenize_regex_automaton(aut, s):
     tokens = []
     exp = ""
     while count >= 0:
+        if count == 0:
+            break
         if (
             count > 0
             and st == aut.initial_state
@@ -27,13 +29,12 @@ def tokenize_regex_automaton(aut, s):
             maximum = 0
             t = None
             for i in st.type:
-                if maximum < i.priority:
+                if maximum < i[1]:
                     maximum = max(maximum, i[1])
                     t = i
             tokens.append(Token(exp, t))
             st = aut.initial_state
             exp = ""
-            count -= 1
         else:
             raise Exception("La cadena no pertenece al lenguaje.")
     return tokens

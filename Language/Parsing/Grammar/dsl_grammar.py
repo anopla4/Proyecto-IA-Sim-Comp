@@ -1,4 +1,3 @@
-from ast import ClassDef
 from ..non_terminal import NonTerminal
 from ..terminal import Terminal
 from ..production import Production
@@ -405,10 +404,11 @@ rules[p_61] = lambda _: []
 
 # all_terminals
 name = "(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|_)*"
+num = "0|1|2|3|4|5|6|7|8|9|((1|2|3|4|5|6|7|8|9)U(0|1|2|3|4|5|6|7|8|9)*)"
 
 
 t = {
-    f"{name}|RandVariableEfect|Patient|Parameter|Intervention|Symptom|int|double|simulate": (
+    f"{name}|{num}|RandVariableEfect|Patient|Parameter|Intervention|Symptom|int|double|simulate": (
         "id",
         1,
     ),
@@ -428,22 +428,22 @@ t = {
     "\)": ("cpar", 4),
     "{": ("ocur", 4),
     "}": ("ccur", 4),
-    # "=": ("equal", 4),
-    # "+": ("plus", 4),
-    # "-": ("minus", 4),
-    # "\*": ("star", 4),
-    # "/": ("divide", 4),
-    # ">": ("gt", 4),
-    # "<": ("lt", 4),
-    # "==": ("equals_b", 4),
-    # "!=": ("not_equals_b", 4),
-    # "not": ("not", 4),
-    # "and": ("and", 4),
-    # "or": ("or", 4),
-    # "class": ("class", 4),
-    # "function": ("function", 4),
-    # "activation_conditions": ("activation_condition", 2),
-    # "efect_time": ("efect_time", 2),
-    # "repetition": ("repetition", 2),
-    # "action": ("action", 2),
+    "=": ("equal", 4),
+    "+": ("plus", 4),
+    "-": ("minus", 4),
+    "\*": ("star", 4),
+    "/": ("divide", 4),
+    ">": ("gt", 4),
+    "<": ("lt", 4),
+    "==": ("equals_b", 4),
+    "!=": ("not_equals_b", 4),
+    "not": ("not", 4),
+    "and": ("and", 4),
+    "or": ("or", 4),
+    "class": ("class", 4),
+    "function": ("function", 4),
+    "activation_conditions": ("activation_condition", 2),
+    "efect_time": ("efect_time", 2),
+    "repetition": ("repetition", 2),
+    "action": ("action", 2),
 }
