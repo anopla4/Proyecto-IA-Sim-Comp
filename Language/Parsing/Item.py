@@ -30,3 +30,6 @@ class Item:
     
     def Center(self):
         return Item(self.production, self.pos)
+
+    def Merge(self, other):
+        return Item(self.production, self.pos, self.lockahead.union(other.lockahead))
