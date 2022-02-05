@@ -25,5 +25,6 @@ class Grammar:
         GG_start_symbol = S
         GG_rules = dict(G.rules)
         GG_rules[init_production] = lambda h,s: s[1]
-
-        return Grammar(GG_non_terminals, GG_terminals, GG_productions, GG_start_symbol, productions_rules = GG_rules)
+        GG = Grammar(GG_non_terminals, GG_terminals, GG_productions, GG_start_symbol, productions_rules = GG_rules)
+        GG.EOF = G.EOF
+        return GG
