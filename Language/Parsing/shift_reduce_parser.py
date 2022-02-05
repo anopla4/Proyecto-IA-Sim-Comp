@@ -35,7 +35,7 @@ class ShiftReduceParser:
             G.EOF,
         )
 
-        for i, state in enumerate(automaton.q):
+        for i,state in enumerate(automaton.states):
             for item in state.state:
                 item = item.state
                 if item.IsReduceItem:
@@ -61,9 +61,7 @@ class ShiftReduceParser:
                             )
                 else:
                     next_symbol = item.NextSymbol
-                    next_state_index = automaton.q.index(
-                        automaton.transition_function[(state, next_symbol)]
-                    )
+                    next_state_index = automaton.states.index(automaton.transition_function[(state,next_symbol)])
                     if isinstance(next_symbol, Terminal):
                         assert (i, next_symbol) not in self.action or self.action[
                             (i, next_symbol)
