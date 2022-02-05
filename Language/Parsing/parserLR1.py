@@ -2,6 +2,8 @@ from Language.Automaton.automaton import Automaton
 from Language.Automaton.final_state import FinalState
 from Language.Parsing.Grammar import Grammar
 from Language.Parsing.follow import follow
+from Language.Parsing.shift_reduce_parser import ShiftReduceParser
+from Language.Parsing.terminal import Terminal
 from .Item import Item
 from .first import first
 from .non_terminal import NonTerminal
@@ -66,8 +68,33 @@ def build_LR1_automaton(G):
                     visited[closure_] = FinalState(closure_)
                     pending.append(closure_)
                 transition_function[(visited[items], symbol)] = visited[closure_]
+
     return Automaton(states, init_state, symbols, states, transition_function)
 
-        
+class ParserLR1(ShiftReduceParser):
+    def build_parser_table(self):
+        G = self.G
+        AugmentedG = Grammar.augment(G)
+        symbols = list(AugmentedG.terminals)
+        symbols.extend(AugmentedG.non_terminals)
+        automaton = build_LR1_automaton(AugmentedG)
 
-
+        for i,state in enumerate(automaton.states):
+            for item in state.state:
+                if item.IsReduceItem:
+                    if item.production.left_side == AugmentedG.start_symbol:
+                        assert (i,G.EOF) not in self.action or self.action[(i,G.EOF)] == (ShiftReduceParser.OK, None), 'Shift-Reduce or Reduce-Reduce conflict' 
+                        self.action[(i, G.EOF)] = (ShiftReduceParser.OK, None)
+                    else:
+                        for symbol in item.lockahead:
+                            assert (i,symbol) not in self.action or self.action[(i,symbol)] == (ShiftReduceParser.REDUCE, item.production), 'Shift-Reduce or Reduce-Reduce conflict'
+                            self.action[(i, symbol)] = (ShiftReduceParser.REDUCE, item.production)
+                else:
+                    next_symbol = item.NextSymbol
+                    next_state_index = automaton.states.index(automaton.transition_function[(state,next_symbol)])
+                    if isinstance(next_symbol, Terminal):
+                        assert (i,next_symbol) not in self.action or self.action[(i,next_symbol)] == (ShiftReduceParser.SHIFT, next_state_index), 'Shift-Reduce conflict!!!'
+                        self.action[(i,next_symbol)] = (ShiftReduceParser.SHIFT, next_state_index)
+                    else:
+                        assert (i,next_symbol) not in self.goto or self.goto[(i,next_symbol)] == next_state_index, 'Shift-Reduce or Reduce-Reduce conflict!!!'
+                        self.goto[(i,next_symbol)] = next_state_index 
