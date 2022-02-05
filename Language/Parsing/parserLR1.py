@@ -33,7 +33,7 @@ def closure(state, firsts, follows, productions, epsilon):
             if new_item not in clos:
                 pending.append(new_item)
                 clos.add(new_item)
-    return clos
+    return frozenset(clos)
 
 def gotoLR(state, transition):
     items = {item.NextItem() for item in state if transition == item.NextSymbol}
@@ -50,7 +50,7 @@ def build_LR1_automaton(G):
     item = Item(G.productions[G.start_symbol][0], 0, frozenset([G.EOF]))
     items = closure(frozenset([item]), firsts, follows, G.productions, G.epsilon)
     init_state = FinalState(items)
-    states = [init_state]
+    states = []
     transition_function = {}
     pending = [items]
     visited = {items: init_state}
@@ -61,13 +61,13 @@ def build_LR1_automaton(G):
         for symbol in symbols:
             new_items = gotoLR(items, symbol)
             if new_items:
-                if new_items not in visited:
-                    closure_ = closure(new_items, firsts, follows, G.productions, G.epsilon)
-                    visited[new_items] = FinalState(closure_)
-                    pending.append(new_items)
-                transition_function[(visited[items], symbol)] = visited[new_items]
-    return Automaton(states, init_state, G.characters, states, transition_function)
-    
+                closure_ = closure(new_items, firsts, follows, G.productions, G.epsilon)
+                if closure_ not in visited:
+                    visited[closure_] = FinalState(closure_)
+                    pending.append(closure_)
+                transition_function[(visited[items], symbol)] = visited[closure_]
+    return Automaton(states, init_state, symbols, states, transition_function)
+
         
 
 
