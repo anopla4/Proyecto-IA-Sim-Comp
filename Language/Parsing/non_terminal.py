@@ -5,8 +5,10 @@ class NonTerminal(AlphabetSymbol):
     def __init__(self, symbol) -> None:
         super().__init__(symbol)
 
-    def type_class():
-        pass
+    @staticmethod
+    def get_non_terminals(s):
+        t = s.split()
+        return [NonTerminal(nt) for nt in t]
 
 
 class ENonTerminal(NonTerminal):
@@ -14,17 +16,11 @@ class ENonTerminal(NonTerminal):
         super().__init__(symbol)
         self.type = type
 
-    def type_class():
-        return ENonTerminal
-
 
 class TNonTerminal(NonTerminal):
     def __init__(self, symbol, type=None) -> None:
         super().__init__(symbol)
         self.type = type
-
-    def type_class():
-        return TNonTerminal
 
 
 class XNonTerminal(NonTerminal):
@@ -32,17 +28,11 @@ class XNonTerminal(NonTerminal):
         super().__init__(symbol)
         self.type = type
 
-    def type_class():
-        return XNonTerminal
-
 
 class YNonTerminal(NonTerminal):
     def __init__(self, symbol, type=None) -> None:
         super().__init__(symbol)
         self.type = type
-
-    def type_class():
-        return YNonTerminal
 
 
 class FNonTerminal(NonTerminal):
@@ -50,14 +40,8 @@ class FNonTerminal(NonTerminal):
         super().__init__(symbol)
         self.type = type
 
-    def type_class():
-        return FNonTerminal
-
 
 class ZNonTerminal(NonTerminal):
-    def __init__(self, symbol, type = None) -> None:
+    def __init__(self, symbol, type=None) -> None:
         super().__init__(symbol)
         self.type = type
-
-    def type_class():
-        return ZNonTerminal
