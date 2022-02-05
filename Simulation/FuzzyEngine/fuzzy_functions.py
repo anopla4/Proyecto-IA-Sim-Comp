@@ -1,5 +1,6 @@
 
 from scipy import integrate
+from math import exp
 
 def inference_by_mandami(param,func):
     """
@@ -78,20 +79,18 @@ def triang_shape(params):
     assert a<=b<=c
     def inner(x):
         result=0
-        if x<=a:
+        if x<=a or x>=0:
             result=0
         if a<x<=b:
             result=(x-a)/(b-a)
     
         if b<x<c:
             result=(c-x)/(c-b)
-    
-        if x>=c:
-            resutl=1
         return result
+    
     return inner
             
-def s_shape(params):
+def sigmoidal_shape(params):
     """
     Funcion S, recibe como parametro una lista [a,b,c] con todos
     valores reales que representan las distintas regiones de la funcion.
@@ -100,21 +99,8 @@ def s_shape(params):
     """
     a=params[0]
     b=params[1]
-    c=params[2]
-    assert a<=b<=c
     def inner(x):
-        result=0
-        if x<=a:
-            result=0
-        if a<x<=b:
-            result=2*((x-a)/(c-a))*((x-a)/(c-a))
-    
-        if b<x<c:
-            result=1-2*((x-a)/(c-a))*((x-a)/(c-a))
-    
-        if x>=c:
-            resutl=1
-        return result
+        return 1/(1+exp(-a*(x - b)))
     return inner
 
 def trapezoidal_shape(params):
