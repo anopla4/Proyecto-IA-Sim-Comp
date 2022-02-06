@@ -1,7 +1,7 @@
 from pprint import pprint
 from Language.Automaton.automaton import Automaton
 from ..expression import Expression
-from Language.Automaton.state import State
+from Language.Automaton.State import State
 
 
 class Star(Expression):
@@ -18,8 +18,14 @@ class Star(Expression):
         characters = list(set(characters))
         transition_function = dict(_automaton.transition_function.items())
         transition_function[(init_state, "epsilon")] = [
-            final_state, _automaton.initial_state]
+            final_state,
+            _automaton.initial_state,
+        ]
         for fs in _automaton.f:
             transition_function[(fs, "epsilon")] = [
-                final_state, _automaton.initial_state]
-        return Automaton(states, init_state, characters, final_states, transition_function)
+                final_state,
+                _automaton.initial_state,
+            ]
+        return Automaton(
+            states, init_state, characters, final_states, transition_function
+        )

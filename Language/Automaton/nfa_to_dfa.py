@@ -1,5 +1,5 @@
 from Language.Automaton.automaton import Automaton
-from .state import State
+from .State import State
 from pprint import pprint
 from .final_state import FinalState
 

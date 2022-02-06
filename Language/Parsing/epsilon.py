@@ -1,3 +1,4 @@
+from Language.Parsing.terminal import Terminal
 from .alphabet_symbol import AlphabetSymbol
 
 
