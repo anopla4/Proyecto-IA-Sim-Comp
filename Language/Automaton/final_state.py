@@ -1,8 +1,9 @@
-from .state import State
+from .State import State
 
 
 class FinalState(State):
-    def __init__(self, t=None):
+    def __init__(self, state=None, t=None):
+        self.state = state
         if t == None:
             self.type = set()
         else:
