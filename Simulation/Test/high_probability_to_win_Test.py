@@ -5,6 +5,7 @@ from FuzzyEngine.MembresyFunctions.triangular import Triangular
 from FuzzyEngine.MembresyFunctions.trapezoidal import Trapezoidal
 from .disease_bank import *
 from .treatment_bank import *
+from FuzzyEngine.fuzzy_engine import FuzzyEngine
 
 
 def high_probability_to_win_Test(simulation_main, tick=1, end_time=168, simulations=5000):
@@ -54,18 +55,18 @@ def high_probability_to_win_Test(simulation_main, tick=1, end_time=168, simulati
         membresy_functions={'low': Triangular(0,0,0.3),
                             'medium':Trapezoidal(0.2,0.6,0.65,0.9),
                             'high':Triangular(0.45,0.7,1)},
-                low_good_limit=14, upp_good_limit=38,
-                low_bad_limit=-1e9, upp_bad_limit=48
+                low_good_limit=0, upp_good_limit=1,
+                low_bad_limit=0, upp_bad_limit=1
             )
 
     p_decrease=Parameter(
         name= 'decrease', value=0,
         membresy_functions={'low':Trapezoidal(0,0,0.2,0.4),
                             'medium':Triangular(0.1,0.4,0.7),
-                            'high': Trapezoidal(0.4,0.6,0.7,0.9)
+                            'high': Trapezoidal(0.4,0.6,0.7,1)
                             },
-                low_good_limit=14, upp_good_limit=38,
-                low_bad_limit=-1e9, upp_bad_limit=48
+                low_good_limit=0, upp_good_limit=1,
+                low_bad_limit=0, upp_bad_limit=1
             )
 
     p_plaqueta = Parameter(
@@ -111,6 +112,16 @@ def high_probability_to_win_Test(simulation_main, tick=1, end_time=168, simulati
 
     environment = Environment(parameters=[p_dolorCabeza, p_plaqueta, p_tos, p_temperatura])
 
-    t_t = simulation_main(env=environment, treatment=set([antibiotico, jarabe, dipirona_simple, dipirona_doble, calbamol, plaquetol]), disease=set([tos, fiebre, dc]), tick=tick, end_time=end_time, simulations=simulations)
+    print('Initial state---')
+    from pprint import pprint
+    pprint(environment.get_params_dict())
+
+    fuzzy_engine = FuzzyEngine(increse_parameter=p_increase, decrese_parameter=p_decrease)
+
+    t_t = simulation_main(env=environment, 
+                treatment=set([antibiotico, jarabe, dipirona_simple, dipirona_doble, calbamol, plaquetol]), 
+                disease=set([tos, fiebre, dc]), 
+                fuzzy_engine=fuzzy_engine,
+                tick=tick, end_time=end_time, simulations=simulations)
 
     return t_t

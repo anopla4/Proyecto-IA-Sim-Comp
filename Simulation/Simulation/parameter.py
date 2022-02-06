@@ -33,7 +33,7 @@ class Parameter:
             limits = mf.limits
             if limits[0] < l_limit:
                 l_limit = limits[0]
-            if limits[1] < r_limit:
+            if limits[1] > r_limit:
                 r_limit = limits[1]
         return l_limit, r_limit
 

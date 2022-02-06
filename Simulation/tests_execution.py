@@ -14,9 +14,9 @@ from TreatmentTree.tree_draw import visualize_branch, visualize_graph, print_bra
 
 #-----test good
 start = time()
-tree =  high_probability_to_win_Test(main, 1, 240, 100)
+tree =  high_probability_to_win_Test(main, 1, 240, 10)
 end = time()
-print(round(end-start, 4))
+print(f'time:{round(end-start, 4)}')
 
 best_branch = tree.best_branch()
 print(best_branch[-1].get_average_final_state())
@@ -29,4 +29,4 @@ print_branch_data(best_branch)
 #visualize_graph(tree.root, 10)
 
 tree.prunning()
-visualize_graph(tree.root, 10)
+visualize_graph(tree.root, 120)

@@ -34,7 +34,7 @@ class FuzzyEngine:
         return increse_value-decrese_value
 
 
-    def __get_var_value(fuzzing_state:Dict[str,Dict[str,float]], param_target:Parameter, rules:list[Rule], extended) -> float:
+    def __get_var_value(self,fuzzing_state:Dict[str,Dict[str,float]], param_target:Parameter, rules:list[Rule], extended) -> float:
         rules_evaluation = []
         target_membresy_function = param_target.get_extended_membresy_functions(extended)
         for rule in rules:
@@ -90,6 +90,9 @@ class FuzzyEngine:
         func= lambda f: lambda x: x*f(x)
         num=quad(func(agregation_function),lower_range,upper_range)
         den=quad(agregation_function,lower_range,upper_range)
+        if den[0]==0:
+            #print(f"num:{num[0]}  l:{lower_range}  r:{upper_range}")
+            return num[0]
         return num[0]/den[0]
 
 
