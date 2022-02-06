@@ -24,7 +24,7 @@ from Language.Lexer.RegularExpression.regex_grammar import (
     rules,
 )
 from Language.Lexer.parser_ll import build_ll_table
-from Language.Parsing.Grammar.dsl_grammar import _t
+from Language.Parsing.Grammar_dsl.dsl_grammar import _t
 from Language.Lexer.RegularExpression.automaton_builder import build_entire_automaton
 
 
@@ -46,7 +46,9 @@ def tokenize_regex_automaton(c):
     s = ""
 
     for j in c:
-        if j == "(" or j == ")" or j == "*":
+        if j == "\n":
+            s += " "
+        elif j == "(" or j == ")" or j == "*":
             s += "\\" + j
         else:
             s += j
