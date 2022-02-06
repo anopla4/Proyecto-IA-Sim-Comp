@@ -1,11 +1,13 @@
 from typing import Dict, Tuple
 from .environment import Environment
 from .agent import Agent
-from FuzzyEngine.fuzzy_engine import fuzzy_engine
+from FuzzyEngine.fuzzy_engine import FuzzyEngine
 from FuzzyEngine.rule import Rule
 
 class Simulation(object):
-    def __init__(self, env:Environment, disease:set[Agent],  treatment:set[Agent], end_time:int=0):
+    def __init__(self, env:Environment, disease:set[Agent],  treatment:set[Agent], 
+        fuzzy_engine:FuzzyEngine, end_time:int=0):
+
         self._env = env
         self._all_symptoms = disease.copy()
         self._active_intervention:list[Tuple[int,Agent]] = []
@@ -14,6 +16,7 @@ class Simulation(object):
         self._inactive_symptoms:set[Agent] = disease.copy()
         self._simulation_time:int = 0
         self._end_time:int = end_time
+        self._fuzzy_engine = fuzzy_engine
 
     @property
     def time(self)->int:
@@ -92,7 +95,7 @@ class Simulation(object):
                     self._inactive_intervention.add(intervention)
             else:
                 _still_active_intervention.append((act_time, intervention))
-        self._env = fuzzy_engine(self._env, _action_rules)
+        self._env = self._fuzzy_engine.fuzzy_engine(self._env, _action_rules)
         self._active_intervention = _still_active_intervention
         _new_symptoms = self.detect_new_symptom()
         self._active_symptoms.extend([(0,s) for s in _new_symptoms])

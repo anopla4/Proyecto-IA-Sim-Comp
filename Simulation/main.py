@@ -2,15 +2,16 @@ from Simulation.agent import Agent
 from Simulation.environment import Environment
 from Simulation.simulation import Simulation
 from TreatmentTree.treatmentTree import *
+from FuzzyEngine.fuzzy_engine import FuzzyEngine
 
-
-def main(env:Environment, treatment:set[Agent], disease:set[Agent],
+def main(env:Environment, treatment:set[Agent], disease:set[Agent], fuzzy_engine:FuzzyEngine,
     tick:int, end_time:int, simulations:int):
     
     _t_tree = TreatmentTree("")
     for _ in range(simulations):
         ##print(env)
-        _simulation = Simulation(env.copy(), disease=disease, treatment=treatment, end_time=end_time)
+        _simulation = Simulation(env.copy(), disease=disease, treatment=treatment, 
+                                fuzzy_engine=fuzzy_engine, end_time=end_time)
         while not _simulation.finish():
             _simulation.simulate(tick=tick)
             _posible_interventions = []
