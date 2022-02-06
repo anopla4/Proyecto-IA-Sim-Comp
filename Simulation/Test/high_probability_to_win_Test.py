@@ -49,16 +49,24 @@ def high_probability_to_win_Test(simulation_main, tick=1, end_time=168, simulati
     #p_dolorCabeza = Parameter('dolor de cabeza', value=26, low_good_limit=0, upp_good_limit=15, low_bad_limit=-20, upp_bad_limit=100)
     #p_fiebre = Parameter('fiebre', value=36.5, low_good_limit=35, upp_good_limit=36.9, low_bad_limit=34.5, upp_bad_limit=43)
 
-    p_increse = Parameter(
-        name = 'increse', value = 0,
-        membresy_functions={'little': Triangular(0,0,0.3),
-                            'medium':Triangular(0.2,0.6,0.65),
-                            'a lot':Triangular(0.45,0.7,1)},
+    p_increase = Parameter(
+        name = 'increase', value = 0,
+        membresy_functions={'low': Triangular(0,0,0.3),
+                            'medium':Trapezoidal(0.2,0.6,0.65,0.9),
+                            'high':Triangular(0.45,0.7,1)},
                 low_good_limit=14, upp_good_limit=38,
                 low_bad_limit=-1e9, upp_bad_limit=48
             )
 
-    #decrese
+    p_decrease=Parameter(
+        name= 'decrease', value=0,
+        membresy_functions={'low':Trapezoidal(0,0,0.2,0.4),
+                            'medium':Triangular(0.1,0.4,0.7),
+                            'high': Trapezoidal(0.4,0.6,0.7,0.9)
+                            },
+                low_good_limit=14, upp_good_limit=38,
+                low_bad_limit=-1e9, upp_bad_limit=48
+            )
 
     p_plaqueta = Parameter(
         name='plaqueta', value=12, 

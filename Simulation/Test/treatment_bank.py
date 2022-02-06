@@ -14,25 +14,30 @@ class DipironaSimple(Agent):
         if r < 0.7:
             if env.get_parameter('dolor de cabeza') != None and env.get_parameter('dolor de cabeza').value>5:
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'medio'},
+                parameters_conditions={'dolor de cabeza':'medio'},
                 param_destination='dolor de cabeza',
-                then=('decrese',"little")))
+                then=('decrese',"low")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'alto'},
-                then=('dolor de cabeza',"medio")))
+                parameters_conditions= {'dolor de cabeza':'alto'},
+                param_destination='dolor de cabeza',
+                then=('decrese',"medium")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'bajo'},
-                then=('dolor de cabeza',"bajo")))
+                    parameters_conditions= {'dolor de cabeza':'bajo'},
+                param_destination='dolor de cabeza',
+                then=('decrese',"low")))
             if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>=37:
                 actions_rules.append(Rule(
-                    {'temperatura':'muy alta'},
-                then=('temperatura',"alta")))
+                parameters_conditions= {'temperatura':'muy alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'alta'},
-                then=('temperatura',"media")))
+                 parameters_conditions= {'temperatura':'alta'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'media'},
-                then=('temperatura','baja')))
+                parameters_conditions= {'temperatura':'baja'},
+                param_destination='temperatura',
+                then=('decrease',"low")))
         return actions_rules
 
 class DipironaDoble(Agent):
@@ -46,32 +51,30 @@ class DipironaDoble(Agent):
         if r < 0.50:
             if env.get_parameter('dolor de cabeza') != None and env.get_parameter('dolor de cabeza').value>5:
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'medio'},
-                then=('dolor de cabeza',"bajo")))
+                parameters_conditions= {'dolor de cabeza':'medio'},
+                param_destination='dolor de cabeza',
+                then=('decrease',"low")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'alto'},
-                then=('dolor de cabeza',"medio")))
+                  parameters_conditions= {'dolor de cabeza':'alto'},
+                param_destination='dolor de cabeza',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'bajo'},
-                then=('dolor de cabeza',"bajo")))
+                parameters_conditions= {'dolor de cabeza':'bajo'},
+                param_destination='dolor de cabeza',
+                then=('decrease',"low")))
             if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>=37:
                 actions_rules.append(Rule(
-                    {'temperatura':'muy alta'},
-                then=('temperatura',"alta")))
+                 parameters_conditions= {'temperatura':'muy alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'alta'},
-                then=('temperatura',"media")))
+                  parameters_conditions= {'temperatura':'alta'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'media'},
-                then=('temperatura','baja')))
-        # elif r < 0.85:
-        #     if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>=37:
-        #         actions_rules.append(Rule(
-        #             {'temperatura':'muy alta'},
-        #         then=('temperatura',"media")))
-        #         actions_rules.append(Rule(
-        #             {'temperatura':'alta'},
-        #         then=('temperatura',"media")))
+                  parameters_conditions= {'temperatura':'media'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
         return actions_rules
 
 class Calbamol(Agent):
@@ -85,67 +88,86 @@ class Calbamol(Agent):
         if r < 0.40:
             if env.get_parameter('dolor de cabeza') != None and env.get_parameter('dolor de cabeza').value>5:
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'medio'},
-                then=('dolor de cabeza',"bajo")))
+                 parameters_conditions={'dolor de cabeza':'medio'},
+                param_destination='dolor de cabeza',
+                then=('decrese',"low")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'alto'},
-                then=('dolor de cabeza',"medio")))
+                 parameters_conditions={'dolor de cabeza':'medio'},
+                param_destination='dolor de cabeza',
+                then=('decrese',"high")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'bajo'},
-                then=('dolor de cabeza',"bajo")))
+                  parameters_conditions={'dolor de cabeza':'bajo'},
+                param_destination='dolor de cabeza',
+                then=('decrese',"low")))
             if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>=37:
                 actions_rules.append(Rule(
-                    {'temperatura':'muy alta'},
-                then=('temperatura',"alta")))
+                parameters_conditions={'temperatura':'muy alta'},
+                param_destination="temperatura",
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'alta'},
-                then=('temperatura',"media")))
+                   parameters_conditions={'temperatura':' alta'},
+                param_destination="temperatura",
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'media'},
-                then=('temperatura','baja')))
+                 parameters_conditions={'temperatura':'media'},
+                param_destination="temperatura",
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'baja'},
-                then=('temperatura','media')))
+                  parameters_conditions={'temperatura':'muy alta'},
+                param_destination="temperatura",
+                then=('increase',"medium")))
             if env.get_parameter('plaqueta') != None:
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'muy baja'},
-                then=('plaqueta',"baja")))
+                parameters_conditions={'plaqueta' : 'muy baja'},
+                param_destination='plaqueta',
+                then=('increase',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'baja'},
-                then=('plaqueta',"estable")))
+                parameters_conditions={'plaqueta' : 'baja'},
+                param_destination='plaqueta',
+                then=('increase',"high")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'muy alta'},
-                then=('plaqueta',"alta")))
+                parameters_conditions={'plaqueta' : 'muy alta'},
+                param_destination='plaqueta',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'alta'},
-                then=('plaqueta',"estable")))
+                parameters_conditions={'plaqueta' : 'alta'},
+                param_destination='plaqueta',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'estable'},
-                then=('plaqueta',"baja")))
+                 parameters_conditions={'plaqueta' : 'estable'},
+                param_destination='plaqueta',
+                then=('increase',"medium")))
         elif r < 0.80:
             if env.get_parameter('dolor de cabeza') != None and env.get_parameter('dolor de cabeza').value>5:
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'medio'},
-                then=('dolor de cabeza',"bajo")))
+                parameters_conditions= {'dolor de cabeza':'medio'},
+                param_destination='dolor de cabeza',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'alto'},
-                then=('dolor de cabeza',"medio")))
+                 parameters_conditions= {'dolor de cabeza':'alto'},
+                param_destination='dolor de cabeza',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'dolor de cabeza':'bajo'},
-                then=('dolor de cabeza',"bajo")))
+                parameters_conditions= {'dolor de cabeza':'bajo'},
+                param_destination='dolor de cabeza',
+                then=('decrease',"low")))
             if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>=37:
                 actions_rules.append(Rule(
-                    {'temperatura':'muy alta'},
-                then=('temperatura',"alta")))
+                parameters_conditions= {'temperatura':'muy alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'alta'},
-                then=('temperatura',"media")))
+                parameters_conditions= {'temperatura':' alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'media'},
-                then=('temperatura','baja')))
+                parameters_conditions= {'temperatura':'media'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'baja'},
-                then=('temperatura','media')))
+                 parameters_conditions= {'temperatura':'baja'},
+                param_destination='temperatura',
+                then=('decrease',"low")))
         return actions_rules
 
 class Jarabe(Agent):
@@ -159,14 +181,17 @@ class Jarabe(Agent):
         if r < 0.75:
             if env.get_parameter('tos') != None and env.get_parameter('tos').value>5:
                 actions_rules.append(Rule(
-                    {'tos':'baja'},
-                then=('tos',"baja")))
+                parameters_conditions= {'tos':'baja'},
+                param_destination='tos',
+                then=('decrease',"low")))
                 actions_rules.append(Rule(
-                    {'tos':'media'},
-                then=('tos',"baja")))
+                 parameters_conditions= {'tos':'media'},
+                param_destination='tos',
+                then=('decrease',"low")))
                 actions_rules.append(Rule(
-                    {'tos':'alta'},
-                then=('tos',"media")))
+                parameters_conditions= {'tos':'alta'},
+                param_destination='tos',
+                then=('decrease',"high")))
         return actions_rules
 
 class Antibiotico(Agent):
@@ -180,81 +205,104 @@ class Antibiotico(Agent):
         if r < 0.5:
             if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>38:
                 actions_rules.append(Rule(
-                    {'temperatura':'muy alta'},
-                then=('temperatura',"alta")))
+                parameters_conditions= {'temperatura':'muy alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'alta'},
-                then=('temperatura',"media")))
+               parameters_conditions= {'temperatura':' alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'media'},
-                then=('temperatura','baja')))
+               parameters_conditions= {'temperatura':'media'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'baja'},
-                then=('temperatura','media')))
+                parameters_conditions= {'temperatura':'baja'},
+                param_destination='temperatura',
+                then=('decrease',"low")))
             if env.get_parameter('tos') != None and env.get_parameter('tos').value>5:
                 actions_rules.append(Rule(
-                    {'tos':'baja'},
-                then=('tos',"baja")))
+               parameters_conditions= {'tos':'baja'},
+                param_destination='tos',
+                then=('decrease',"low")))
                 actions_rules.append(Rule(
-                    {'tos':'media'},
-                then=('tos',"baja")))
+                parameters_conditions= {'tos':'media'},
+                param_destination='tos',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'tos':'alta'},
-                then=('tos',"media")))
+                parameters_conditions= {'tos':'alta'},
+                param_destination='tos',
+                then=('decrease',"high")))
         if r < 0.8:
             if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>38:
                 actions_rules.append(Rule(
-                    {'temperatura':'muy alta'},
-                then=('temperatura',"alta")))
+                parameters_conditions= {'temperatura':'muy alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'alta'},
-                then=('temperatura',"media")))
+                parameters_conditions= {'temperatura':'alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'media'},
-                then=('temperatura','baja')))
+                parameters_conditions= {'temperatura':'media'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'baja'},
-                then=('temperatura','media')))
+                parameters_conditions= {'temperatura':'baja'},
+                param_destination='temperatura',
+                then=('decrease',"low")))
             if env.get_parameter('tos') != None and env.get_parameter('tos').value>5:
                 actions_rules.append(Rule(
-                    {'tos':'baja'},
-                then=('tos',"baja")))
+                parameters_conditions= {'tos':'baja'},
+                param_destination='tos',
+                then=('decrease',"low")))
                 actions_rules.append(Rule(
-                    {'tos':'media'},
-                then=('tos',"baja")))
+                parameters_conditions= {'tos':'media'},
+                param_destination='tos',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'tos':'alta'},
-                then=('tos',"media")))
+                 parameters_conditions= {'tos':'alta'},
+                param_destination='tos',
+                then=('decrease',"high")))
         else:
             if env.get_parameter('temperatura') != None and env.get_parameter('temperatura').value>38:
                 actions_rules.append(Rule(
-                    {'temperatura':'muy alta'},
-                then=('temperatura',"alta")))
+                 parameters_conditions= {'temperatura':'muy alta'},
+                param_destination='temperatura',
+                then=('decrease',"high")))
                 actions_rules.append(Rule(
-                    {'temperatura':'alta'},
-                then=('temperatura',"media")))
+                parameters_conditions= {'temperatura':'alta'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'media'},
-                then=('temperatura','baja')))
+                parameters_conditions= {'temperatura':'media'},
+                param_destination='temperatura',
+                then=('decrease',"medium")))
                 actions_rules.append(Rule(
-                    {'temperatura':'baja'},
-                then=('temperatura','media')))
+                parameters_conditions= {'temperatura':'baja'},
+                param_destination='temperatura',
+                then=('decrease',"low")))
             if env.get_parameter('plaqueta') != None:
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'muy baja'},
-                then=('plaqueta',"baja")))
+                parameters_conditions={'plaqueta' : 'muy baja'},
+                param_destination='plaqueta',
+                then=('increase',"high")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'baja'},
-                then=('plaqueta',"estable")))
+                 parameters_conditions={'plaqueta' : 'baja'},
+                param_destination='plaqueta',
+                then=('increase',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'muy alta'},
-                then=('plaqueta',"alta")))
+                parameters_conditions={'alta' : 'baja'},
+                param_destination='plaqueta',
+                then=('increase',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'alta'},
-                then=('plaqueta',"estable")))
+                parameters_conditions={'plaqueta' : 'estable'},
+                param_destination='plaqueta',
+                then=('increase',"high")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'estable'},
-                then=('plaqueta',"baja")))
+                 parameters_conditions={'plaqueta' : 'alta'},
+                param_destination='plaqueta',
+                then=('increase',"low")))
         return actions_rules
 
 class Plaquetol(Agent):
@@ -268,18 +316,23 @@ class Plaquetol(Agent):
         if r < 0.7:
             if env.get_parameter('plaqueta') != None:
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'muy baja'},
-                then=('plaqueta',"baja")))
+                parameters_conditions={'plaqueta' : 'muy baja'},
+                param_destination='plaqueta',
+                then=('increase',"high")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'baja'},
-                then=('plaqueta',"estable")))
+                parameters_conditions={'plaqueta' : 'baja'},
+                param_destination='plaqueta',
+                then=('increase',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'muy alta'},
-                then=('plaqueta',"alta")))
+                parameters_conditions={'plaqueta' : 'alta'},
+                param_destination='plaqueta',
+                then=('increase',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'alta'},
-                then=('plaqueta',"estable")))
+                parameters_conditions={'plaqueta' : 'estable'},
+                param_destination='plaqueta',
+                then=('increase',"medium")))
                 actions_rules.append(Rule(
-                    {'plaqueta' : 'estable'},
-                then=('plaqueta',"baja")))
+                parameters_conditions={'plaqueta' : 'estable'},
+                param_destination='plaqueta',
+                then=('increase',"low")))
         return actions_rules
