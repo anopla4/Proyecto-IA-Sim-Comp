@@ -105,7 +105,10 @@ class FormatVisitor(object):
 
     @visitor.when(EffectNode)
     def visit(self, node, tabs=0):
-        return f"update_parameter({node.par, node.e})"
+        return (
+            "\t" * tabs
+            + f"if {node.env}.get_parameter({node.par}): \n {node.env}.update_parameter({node.par, node.e})"
+        )
 
     @visitor.when(EffectRuleNode)
     def visit(self, node, tabs=0):
