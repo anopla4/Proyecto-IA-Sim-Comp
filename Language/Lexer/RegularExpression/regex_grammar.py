@@ -28,7 +28,7 @@ Z = ZNonTerminal("Z")
 Z1 = ZNonTerminal("Z1", Z)
 A = ZNonTerminal("A")
 
-i = Terminal("i")
+_i = Terminal("i")
 _or = Terminal("|")
 _concat = Terminal("U")
 _star = Terminal("*")
@@ -45,7 +45,7 @@ p_6 = Production(F, [A, Z])
 p_7 = Production(Z, [_star, Z1])
 p_8 = Production(Z, [epsilon])
 p_9 = Production(A, [left_br, E, right_br])
-p_10 = Production(A, [i])
+p_10 = Production(A, [_i])
 productions = {
     E: [p_0],
     X: [p_1, p_2],
@@ -99,7 +99,7 @@ rules = {
     ),
     p_10: ProductionRules(
         inherited_rules_functions={},
-        synthesized_rules_functions={A: {(A, ast): (Word, (i, "symbol"))}},
+        synthesized_rules_functions={A: {(A, ast): (Word, (_i, "symbol"))}},
     ),
 }
 symbol = E
