@@ -1,7 +1,7 @@
 from pprint import pprint
 from Language.Automaton.automaton import Automaton
 from ..expression import Expression
-from Language.Automaton.State import State
+from Language.Automaton.state import State
 
 
 class Star(Expression):
