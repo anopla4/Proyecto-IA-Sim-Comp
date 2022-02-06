@@ -335,8 +335,8 @@ rules[p_40] = lambda _, s: ProbFunctionValueNode(s[1], s[3])
 
 # <def-effect>
 
-p_41 = Production(def_effect, [effect, idx, idx])
-rules[p_41] = lambda _, s: EffectNode(s[2], s[3])
+p_41 = Production(def_effect, [effect, idx, idx, idx])
+rules[p_41] = lambda _, s: EffectNode(s[2], s[3], s[4])
 p_42 = Production(def_effect, [rule])
 rules[p_42] = lambda _, s: EffectRuleNode(s[1])
 
