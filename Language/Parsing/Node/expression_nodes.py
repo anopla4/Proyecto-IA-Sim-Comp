@@ -126,9 +126,10 @@ class ProbabilityFunctionNode(ExpressionNode):
 
 
 class EffectNode(ExpressionNode):
-    def __init__(self, par, e) -> None:
+    def __init__(self, par, env, e) -> None:
         super().__init__()
         self.par = par
+        self.env = env
         self.e = e
 
 
