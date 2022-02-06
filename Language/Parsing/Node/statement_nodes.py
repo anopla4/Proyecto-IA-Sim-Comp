@@ -24,8 +24,11 @@ class AgentDefNode(StatementNode):
 
 
 class AttrDeclarationNode(StatementNode):
-    def __init__(self) -> None:
+    def __init__(self, type, id, expr) -> None:
         super().__init__()
+        self.type = type
+        self.id = id
+        self.expr = expr
 
 
 class RandomVariableNode(StatementNode):
