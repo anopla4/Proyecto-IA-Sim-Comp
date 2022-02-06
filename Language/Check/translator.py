@@ -103,11 +103,11 @@ class FormatVisitor(object):
         args = "\n".join(args)
         return "\t" * tabs + f"def f(): \n  {args}"
 
-    @visitor.when(EfectNode)
+    @visitor.when(EffectNode)
     def visit(self, node, tabs=0):
         return f"update_parameter({node.par, node.e})"
 
-    @visitor.when(EfectRuleNode)
+    @visitor.when(EffectRuleNode)
     def visit(self, node, tabs=0):
         pass
 
