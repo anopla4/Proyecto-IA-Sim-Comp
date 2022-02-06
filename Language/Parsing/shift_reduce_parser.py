@@ -1,5 +1,5 @@
 from Language.Parsing.production import Production
-from .grammar import Grammar
+from .Grammar import Grammar
 from .buildLRAutomaton import build_lr0_automaton
 from .first import first
 from .follow import follow
@@ -35,7 +35,7 @@ class ShiftReduceParser:
             G.EOF,
         )
 
-        for i,state in enumerate(automaton.states):
+        for i, state in enumerate(automaton.states):
             for item in state.state:
                 item = item.state
                 if item.IsReduceItem:
@@ -61,7 +61,9 @@ class ShiftReduceParser:
                             )
                 else:
                     next_symbol = item.NextSymbol
-                    next_state_index = automaton.states.index(automaton.transition_function[(state,next_symbol)])
+                    next_state_index = automaton.states.index(
+                        automaton.transition_function[(state, next_symbol)]
+                    )
                     if isinstance(next_symbol, Terminal):
                         assert (i, next_symbol) not in self.action or self.action[
                             (i, next_symbol)
@@ -92,7 +94,6 @@ class ShiftReduceParser:
         while True:
             state = stack[-1]
             lookahead = w[index]
-
             if (state, lookahead) not in self.action:
                 return None
 
@@ -103,8 +104,9 @@ class ShiftReduceParser:
                 actions.append(action)
                 index += 1
             elif action == ShiftReduceParser.REDUCE:
-                for _ in range(len(tag.right_side)):
-                    stack.pop()
+                if tag.right_side[0] != self.G.epsilon:
+                    for _ in range(len(tag.right_side)):
+                        stack.pop()
                 stack.append(self.goto[stack[-1], tag.left_side])
                 actions.append(action)
                 result.append(tag)
