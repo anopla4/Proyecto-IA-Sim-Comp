@@ -14,7 +14,8 @@ class AtomicNode(ExpressionNode):
 
 
 class ConstantNumNode(AtomicNode):
-    pass
+    def __init__(self, lex) -> None:
+        super().__init__(lex)
 
 
 class CallNode(AtomicNode):
@@ -26,82 +27,89 @@ class CallNode(AtomicNode):
 
 class InstanceNode(AtomicNode):
     def __init__(self, idc, argums) -> None:
-        super().__init__()
-        self.id = idc
+        super().__init__(idc)
         self.arguments = argums
 
 
 class VariableNode(AtomicNode):
-    pass
+    def __init__(self, lex) -> None:
+        super().__init__(lex)
 
 
 class BinaryNode(ExpressionNode):
-    def __init__(self, left, right) -> None:
+    def __init__(self, left, right, symbol) -> None:
         super().__init__()
         self.left = left
         self.right = right
+        self.symbol = symbol
 
 
 class ByNode(BinaryNode):
-    pass
+    def __init__(self, left, right) -> None:
+        super().__init__(left, right, "*")
 
 
 class DivideNode(BinaryNode):
-    pass
+    def __init__(self, left, right) -> None:
+        super().__init__(left, right, "/")
 
 
 class PlusNode(BinaryNode):
-    pass
+    def __init__(self, left, right) -> None:
+        super().__init__(left, right, "+")
 
 
 class MinusNode(BinaryNode):
-    pass
+    def __init__(self, left, right) -> None:
+        super().__init__(left, right, "-")
 
 
 class EqualsNode(BinaryNode):
     def __init__(self, left, right) -> None:
-        super().__init__(left, right)
+        super().__init__(left, right, "==")
 
 
 class NotEqualsNode(BinaryNode):
     def __init__(self, left, right) -> None:
-        super().__init__(left, right)
+        super().__init__(left, right, "!=")
 
 
 class GreaterNode(BinaryNode):
     def __init__(self, left, right) -> None:
-        super().__init__(left, right)
+        super().__init__(left, right, ">")
 
 
 class LesserNode(BinaryNode):
     def __init__(self, left, right) -> None:
-        super().__init__(left, right)
+        super().__init__(left, right, "<")
 
 
 class AndNode(BinaryNode):
     def __init__(self, left, right) -> None:
-        super().__init__(left, right)
+        super().__init__(left, right, "and")
 
 
 class OrNode(BinaryNode):
     def __init__(self, left, right) -> None:
-        super().__init__(left, right)
+        super().__init__(left, right, "or")
 
 
 class UnaryNode(ExpressionNode):
-    def __init__(self, expr) -> None:
+    def __init__(self, expr, symbol) -> None:
         super().__init__()
         self.expr = expr
+        self.symbol = symbol
 
 
 class NotNode(UnaryNode):
     def __init__(self, expr) -> None:
-        super().__init__(expr)
+        super().__init__(expr, "not")
 
 
 class RuleNode(ExpressionNode):
     def __init__(self, left, right) -> None:
-        super().__init__(left, right)
+        self.left = left
+        self.right = right
 
 
 class ProbFunctionValueNode(ExpressionNode):
@@ -117,14 +125,14 @@ class ProbabilityFunctionNode(ExpressionNode):
         self.values = values
 
 
-class EfectNode(ExpressionNode):
+class EffectNode(ExpressionNode):
     def __init__(self, par, e) -> None:
         super().__init__()
         self.par = par
         self.e = e
 
 
-class EfectRuleNode(ExpressionNode):
+class EffectRuleNode(ExpressionNode):
     def __init__(self, e) -> None:
         super().__init__()
         self.e = e

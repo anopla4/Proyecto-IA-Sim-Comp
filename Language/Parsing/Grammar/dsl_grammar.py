@@ -26,15 +26,14 @@ def_class, class_statements, body_statements = NonTerminal.get_non_terminals(
 def_agent = NonTerminal("<def-agent>")
 param, param_list = NonTerminal.get_non_terminals("<param> <param-list>")
 instance = NonTerminal("<instance>")
-def_rand_var, def_efect = NonTerminal.get_non_terminals("<def-rand-var> <def-efect>")
+def_rand_var, def_effect = NonTerminal.get_non_terminals("<def-rand-var> <def-effect>")
 expr, arith, term, factor, atom = NonTerminal.get_non_terminals(
     "<expr> <arith> <term> <factor> <atom>"
 )
 func_call, arg_list = NonTerminal.get_non_terminals("<func-call> <arg-list>")
 prob_func, prob_func_list, rule, consecuent = NonTerminal.get_non_terminals(
-    "<prob-func> <prob-func-list> <rule> <consecuent>"
+    "<prob-func> <prob-func-list> <rule>"
 )
-simulation_call = NonTerminal("<sim-call>")
 for_, if_, if_else = NonTerminal.get_non_terminals("<for> <if> <if-else>")
 (
     bool_expr,
@@ -48,11 +47,7 @@ for_, if_, if_else = NonTerminal.get_non_terminals("<for> <if> <if-else>")
 # terminals
 
 epsilon = Terminal("epsilon")
-d_rand_var = Terminal.get_terminals("RandVariableEfect")
-patient, parameter, intervention, symptom = Terminal.get_terminals(
-    "Patient Parameter Intervention Symptom"
-)
-efect = Terminal("efect")
+effect = Terminal("effect")
 in_, is_ = Terminal.get_terminals("in is")
 rule_operator, arrow = Terminal.get_terminals("=> ->")
 semi, colon, comma, dot, opar, cpar, ocur, ccur = Terminal.get_terminals(
@@ -63,11 +58,9 @@ gt, lt, equals_b, not_equals_b, not_, and_, or_ = Terminal.get_terminals(
     "> < == != not and or"
 )
 idx, class_, function_ = Terminal.get_terminals("idx class function")
-num, int_ = Terminal.get_terminals("num int")
 for_kw, if_kw, else_kw = Terminal.get_terminals("for if else")
-simulate = Terminal("simulate")
-activation_condition, efect_time, repetition, action = Terminal.get_terminals(
-    "activationCondition efectTime repetition action"
+activation_condition, effect_time, repetition, action = Terminal.get_terminals(
+    "activationCondition effectTime repetition action"
 )
 
 rules = {}
@@ -99,7 +92,7 @@ rules[p_75] = lambda _, s: [s[1]]
 p_54 = Production(statement, [simple_statement])
 rules[p_54] = lambda _, s: [s[1]]
 p_3 = Production(statement, [epsilon])
-rules[p_3] = lambda _: []
+rules[p_3] = lambda h, s: []
 
 # <simple-statement>
 
@@ -131,7 +124,7 @@ rules[p_58] = lambda _, s: [s[1]] + s[2]
 p_7 = Production(class_statements, [def_attr, class_statements])
 rules[p_7] = lambda _, s: [s[1]] + s[2]
 p_55 = Production(class_statements, [epsilon])
-rules[p_55] = lambda _: []
+rules[p_55] = lambda h, s: []
 
 
 # <def-agent>
@@ -147,7 +140,7 @@ p_76 = Production(
         colon,
         bool_expr,
         semi,
-        efect_time,
+        effect_time,
         colon,
         idx,
         semi,
@@ -181,7 +174,7 @@ rules[p_9] = lambda _, s: FuncDeclarationNode(s[2], s[4], s[7], s[9])
 p_78 = Production(func_statements, [simple_statement, func_statements])
 rules[p_78] = lambda _, s: [s[1]] + s[2]
 p_79 = Production(func_statements, [epsilon])
-rules[p_78] = lambda _: []
+rules[p_78] = lambda h, s: []
 
 # <def-var>
 
@@ -205,7 +198,7 @@ rules[p_10] = lambda _, s: (s[1], s[2])
 p_11 = Production(param_list, [param, comma, param_list])
 rules[p_11] = lambda _, s: [s[1]] + s[2]
 p_12 = Production(param_list, [epsilon])
-rules[p_12] = lambda _: []
+rules[p_12] = lambda h, s: []
 
 
 # <expr>
@@ -218,7 +211,7 @@ p_14 = Production(expr, [prob_func])
 rules[p_14] = lambda _, s: s[1]
 p_17 = Production(expr, [rule])
 rules[p_17] = lambda _, s: s[1]
-p_18 = Production(expr, [def_efect])
+p_18 = Production(expr, [def_effect])
 rules[p_18] = lambda _, s: s[1]
 p_19 = Production(expr, [func_call])
 rules[p_19] = lambda _, s: s[1]
@@ -256,8 +249,6 @@ rules[p_26] = lambda _, s: s[2]
 
 # <atom>
 
-p_27 = Production(atom, [num])
-rules[p_27] = lambda _, s: s[1]
 p_28 = Production(atom, [idx])
 rules[p_28] = lambda _, s: s[1]
 p_29 = Production(atom, [func_call])
@@ -309,7 +300,6 @@ p_33 = Production(func_call, [func_call, dot, idx, opar, arg_list, cpar])
 rules[p_33] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
 p_34 = Production(func_call, [instance, dot, idx, opar, arg_list, cpar])
 rules[p_34] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
-# p_47 = Production(func_call, [simulation_call])
 
 # <instance>
 
@@ -319,19 +309,16 @@ rules[p_62] = lambda _, s: InstanceNode(s[1], s[3])
 # <arg-list>
 
 p_35 = Production(arg_list, [epsilon])
-rules[p_35] = lambda _: []
+rules[p_35] = lambda h, s: []
 p_36 = Production(arg_list, [atom, comma, arg_list])
 rules[p_36] = lambda _, s: [s[1]] + s[2]
 p_37 = Production(arg_list, [arith, comma, arg_list])
 rules[p_37] = lambda _, s: [s[1]] + s[2]
 
-# <num>
-
-# p_38 = Production(num, [int_])
 
 # <def-rand-var>
 
-p_39 = Production(def_rand_var, [d_rand_var, idx, equal, ocur, prob_func_list, ccur])
+p_39 = Production(def_rand_var, [idx, idx, equal, ocur, prob_func_list, ccur])
 rules[p_39] = lambda _, s: RandomVariableNode(s[2], s[5])
 
 # <prob-func-list>
@@ -339,36 +326,25 @@ rules[p_39] = lambda _, s: RandomVariableNode(s[2], s[5])
 p_85 = Production(prob_func_list, [prob_func, prob_func_list])
 rules[p_85] = lambda _, s: [s[1]] + s[2]
 p_86 = Production(prob_func_list, [epsilon])
-rules[p_86] = lambda _: []
+rules[p_86] = lambda h, s: []
 
 # <prob-func>
 
-p_40 = Production(prob_func, [idx, arrow, def_efect])
+p_40 = Production(prob_func, [idx, arrow, def_effect])
 rules[p_40] = lambda _, s: ProbFunctionValueNode(s[1], s[3])
 
-# <def-efect>
+# <def-effect>
 
-p_41 = Production(def_efect, [efect, idx, idx])
-rules[p_41] = lambda _, s: EfectNode(s[2], s[3])
-p_42 = Production(def_efect, [rule])
-rules[p_42] = lambda _, s: EfectRuleNode(s[1])
+p_41 = Production(def_effect, [effect, idx, idx])
+rules[p_41] = lambda _, s: EffectNode(s[2], s[3])
+p_42 = Production(def_effect, [rule])
+rules[p_42] = lambda _, s: EffectRuleNode(s[1])
 
 
 # <rule>
 
 p_43 = Production(rule, [bool_expr, rule_operator, assignment])
 rules[p_43] = lambda _, s: RuleNode(s[1], s[3])
-
-# <consecuent>
-
-# p_87 = Production(consecuent, [idx, is_, idx])
-# rules[p_87] = lambda
-
-# <simulation-call>
-
-# p_44 = Production(
-#     simulation_call, [simulate, opar, param, param, param, param, param, param, cpar]
-# )
 
 # <for>
 
@@ -399,7 +375,7 @@ rules[p_59] = lambda _, s: [s[1]] + s[2]
 p_60 = Production(body_statements, [func_call, body_statements])
 rules[p_60] = lambda _, s: [s[1]] + s[2]
 p_61 = Production(body_statements, [epsilon])
-rules[p_61] = lambda _: []
+rules[p_61] = lambda h, s: []
 
 
 # all_terminals
@@ -407,43 +383,43 @@ name = "(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|_)*"
 num = "0|1|2|3|4|5|6|7|8|9|((1|2|3|4|5|6|7|8|9)U(0|1|2|3|4|5|6|7|8|9)*)"
 
 
-t = {
-    f"{name}|{num}|RandVariableEfect|Patient|Parameter|Intervention|Symptom|int|double|simulate": (
-        "id",
+_t = {
+    f"{name}|{num}|RandVariableEffect|Patient|Parameter|Intervention|Symptom|int|double|simulate": (
+        idx,
         1,
     ),
-    "for": ("for", 2),
-    "if": ("if", 2),
-    "else": ("else", 2),
-    "efect": ("efect", 2),
-    "in": ("in", 2),
-    "is": ("is", 2),
-    "=>": ("rule_operator", 3),
-    "->": ("arrow", 3),
-    ";": ("semi", 4),
-    ":": ("colon", 4),
-    ",": ("comma", 4),
-    ".": ("dot", 4),
-    "\(": ("opar", 4),
-    "\)": ("cpar", 4),
-    "{": ("ocur", 4),
-    "}": ("ccur", 4),
-    "=": ("equal", 4),
-    "+": ("plus", 4),
-    "-": ("minus", 4),
-    "\*": ("star", 4),
-    "/": ("divide", 4),
-    ">": ("gt", 4),
-    "<": ("lt", 4),
-    "==": ("equals_b", 4),
-    "!=": ("not_equals_b", 4),
-    "not": ("not", 4),
-    "and": ("and", 4),
-    "or": ("or", 4),
-    "class": ("class", 4),
-    "function": ("function", 4),
-    "activation_conditions": ("activation_condition", 2),
-    "efect_time": ("efect_time", 2),
-    "repetition": ("repetition", 2),
-    "action": ("action", 2),
+    "for": (for_kw, 2),
+    "if": (if_kw, 2),
+    "else": (else_kw, 2),
+    "effect": (effect, 2),
+    "in": (in_, 2),
+    "is": (is_, 2),
+    "=>": (rule_operator, 3),
+    "->": (arrow, 3),
+    ";": (semi, 4),
+    ":": (colon, 4),
+    ",": (comma, 4),
+    ".": (dot, 4),
+    "\(": (opar, 4),
+    "\)": (cpar, 4),
+    "{": (ocur, 4),
+    "}": (ccur, 4),
+    "=": (equal, 4),
+    "+": (plus, 4),
+    "-": (minus, 4),
+    "\*": (star, 4),
+    "/": (div, 4),
+    ">": (gt, 4),
+    "<": (lt, 4),
+    "==": (equals_b, 4),
+    "!=": (not_equals_b, 4),
+    "not": (not_, 4),
+    "and": (and_, 4),
+    "or": (or_, 4),
+    "class": (class_, 4),
+    "function": (function_, 4),
+    "activation_conditions": (activation_condition, 2),
+    "effect_time": (effect_time, 2),
+    "repetition": (repetition, 2),
+    "action": (action, 2),
 }
