@@ -5,6 +5,11 @@ from Simulation.parameter import Parameter
 from Simulation.environment import Environment
 from scipy.integrate import quad
 
+from pprint import pprint
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 class FuzzyEngine:
 
     def __init__(self, increse_parameter:Parameter, decrese_parameter:Parameter) -> None:
@@ -25,8 +30,11 @@ class FuzzyEngine:
         return env
 
     def __detect_variation(self, fuzzing_state:Dict[str,Dict[str,float]], param_target:Parameter, rules:list[Rule])->float:
-        increse_rules = [r for r in rules if r.target == 'increse']
-        decrese_rules = [r for r in rules if r.target == 'decrese']
+        #for r in rules:
+        #    print(r)
+        #print('=============')
+        increse_rules = [r for r in rules if r.target == 'increase']
+        decrese_rules = [r for r in rules if r.target == 'decrease']
         l,r = param_target.get_definition_range()
         extended = r-l
         increse_value = self.__get_var_value(fuzzing_state, self._increse_parameter, increse_rules, extended)
@@ -43,6 +51,8 @@ class FuzzyEngine:
                 #print(f'{param}:{value}')
                 #a = fuzzing_state[param][value]
                 and_=min(and_, fuzzing_state[param][value])
+            #print(f'{and_} and aqui')
+            #pprint('fud')
             mem_f = target_membresy_function[rule.then[1]]
             rules_evaluation.append(FuzzyEngine.inference_by_mandami(and_,mem_f))
             #rules_evaluation.append(lambda x: and_ if mem_f(x) > and_ else mem_f(x))
@@ -87,12 +97,15 @@ class FuzzyEngine:
         Funcion hecha para defuzzificar un valor aplicando el metodo de los 
         centroides en una variable con dominio continuo
         """
+        # x=np.linspace(0, 80)
+        # for i in x:
+        #     plt.scatter(i,agregation_function(i))
+        # plt.show()
         func= lambda f: lambda x: x*f(x)
         num=quad(func(agregation_function),lower_range,upper_range)
         den=quad(agregation_function,lower_range,upper_range)
         if den[0]==0:
-            #print(f"num:{num[0]}  l:{lower_range}  r:{upper_range}")
-            return num[0]
+            return 0
         return num[0]/den[0]
 
 

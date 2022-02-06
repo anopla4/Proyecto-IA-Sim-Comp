@@ -1,9 +1,9 @@
 from typing import Dict
 
 class Rule:
-    def __init__(self, parameters_conditions:Dict[str,str], param_destination:str, then:tuple[str,str]):
+    def __init__(self, parameters_conditions:Dict[str,str], destination:str, then:tuple[str,str]):
         self._parameters_conditions = parameters_conditions
-        self._destination = param_destination
+        self._destination = destination
         self.then = then
 
     @property
@@ -17,3 +17,11 @@ class Rule:
     @property
     def conditions(self)->Dict[str,str]:
         return self._parameters_conditions
+
+    def __str__(self) -> str:
+        s = ''
+        for param,value in self._parameters_conditions.items():
+            s+= f"{param}:{value}  "
+        s+= f" destination:{self._destination}  "
+        s+= f"target:{self.then[0]}"
+        return s

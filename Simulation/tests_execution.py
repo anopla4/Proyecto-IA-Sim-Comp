@@ -8,14 +8,21 @@ from TreatmentTree.tree_draw import visualize_branch, visualize_graph, print_bra
 #from TreatmentTree.pyviz_draw import visualize_graph
 
 # ----  test naive
-##tree = naive_test(main)
+#
+start = time()
+tree = naive_test(main, 1, 240, 100)
+end = time()
+#
 #-----
 
 
 #-----test good
-start = time()
-tree =  high_probability_to_win_Test(main, 1, 240, 10)
-end = time()
+# start = time()
+# tree =  high_probability_to_win_Test(main, 1, 240, 10)
+# end = time()
+#
+#------
+
 print(f'time:{round(end-start, 4)}')
 
 best_branch = tree.best_branch()
@@ -30,3 +37,4 @@ print_branch_data(best_branch)
 
 tree.prunning()
 visualize_graph(tree.root, 120)
+
