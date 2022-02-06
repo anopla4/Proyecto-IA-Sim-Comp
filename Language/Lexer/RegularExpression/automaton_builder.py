@@ -1,5 +1,5 @@
 from Language.Automaton.automaton import Automaton
-from Language.Automaton.state import State
+from Language.Automaton.State import State
 from Language.Automaton.final_state import FinalState
 from Language.Lexer.RegularExpression.word import Word
 from Language.Lexer.RegularExpression._or import Or

@@ -32,7 +32,7 @@ expr, arith, term, factor, atom = NonTerminal.get_non_terminals(
     "<expr> <arith> <term> <factor> <atom>"
 )
 func_call, arg_list = NonTerminal.get_non_terminals("<func-call> <arg-list>")
-prob_func, prob_func_list, rule, consecuent = NonTerminal.get_non_terminals(
+prob_func, prob_func_list, rule = NonTerminal.get_non_terminals(
     "<prob-func> <prob-func-list> <rule>"
 )
 for_, if_, if_else = NonTerminal.get_non_terminals("<for> <if> <if-else>")
@@ -46,39 +46,38 @@ for_, if_, if_else = NonTerminal.get_non_terminals("<for> <if> <if-else>")
 )
 
 non_terminals = [
-    program,
-    elements_list,
-    statement,
-    simple_statement,
-    statement_list,
-    def_class,
-    class_statements,
+    # program,
+    # elements_list,
+    # statement,
+    # simple_statement,
+    # statement_list,
+    # def_class,
+    # class_statements,
     body_statements,
-    def_attr,
-    def_func,
-    func_statements,
-    def_var,
-    assignment,
-    def_agent,
-    param,
-    param_list,
-    instance,
-    def_rand_var,
-    def_effect,
+    # def_attr,
+    # def_func,
+    # func_statements,
+    # def_var,
+    # assignment,
+    # def_agent,
+    # param,
+    # param_list,
+    # instance,
+    # def_rand_var,
+    # def_effect,
     expr,
     arith,
     term,
     factor,
     atom,
-    arg_list,
-    prob_func_list,
-    rule,
-    consecuent,
-    if_,
-    if_else,
-    func_call,
-    for_,
-    prob_func,
+    # arg_list,
+    # prob_func_list,
+    # rule,
+    # if_,
+    # if_else,
+    # func_call,
+    # for_,
+    # prob_func,
     bool_expr,
     compare_expr,
     comparison_operator,
@@ -105,20 +104,20 @@ activation_condition, effect_time, repetition, action = Terminal.get_terminals(
 )
 terminals = [
     epsilon,
-    effect,
-    in_,
-    rule_operator,
+    # effect,
+    # in_,
+    # rule_operator,
     semi,
     equal,
     gt,
     idx,
-    for_kw,
-    activation_condition,
-    is_,
-    arrow,
+    # for_kw,
+    # activation_condition,
+    # is_,
+    # arrow,
     colon,
-    comma,
-    dot,
+    # comma,
+    # dot,
     opar,
     cpar,
     ocur,
@@ -133,165 +132,165 @@ terminals = [
     not_,
     and_,
     or_,
-    class_,
-    function_,
-    if_kw,
-    else_kw,
-    effect_time,
-    repetition,
-    action,
+    # class_,
+    # function_,
+    # if_kw,
+    # else_kw,
+    # effect_time,
+    # repetition,
+    # action,
 ]
 
 
 rules = {}
 productions = {}
 
-# <program>
+# # <program>
 
-p_77 = Production(program, [elements_list])
-rules[p_77] = lambda _, s: ProgramNode(s[1])
-productions[program] = [p_77]
+# p_77 = Production(program, [elements_list])
+# rules[p_77] = lambda _, s: ProgramNode(s[1])
+# productions[program] = [p_77]
 
-# <elements-list>
+# # <elements-list>
 
-p_0 = Production(elements_list, [statement, elements_list])
-rules[p_0] = lambda _, s: [s[1]] + s[2]
-p_48 = Production(elements_list, [func_call, elements_list])
-rules[p_48] = lambda _, s: [s[1]] + s[2]
-p_49 = Production(elements_list, [statement])
-rules[p_49] = lambda _, s: [s[1]]
-p_50 = Production(elements_list, [func_call])
-rules[p_50] = lambda _, s: [s[1]]
-productions[elements_list] = [p_0, p_48, p_49, p_50]
+# p_0 = Production(elements_list, [statement, elements_list])
+# rules[p_0] = lambda _, s: [s[1]] + s[2]
+# p_48 = Production(elements_list, [func_call, elements_list])
+# rules[p_48] = lambda _, s: [s[1]] + s[2]
+# p_49 = Production(elements_list, [statement])
+# rules[p_49] = lambda _, s: [s[1]]
+# p_50 = Production(elements_list, [func_call])
+# rules[p_50] = lambda _, s: [s[1]]
+# productions[elements_list] = [p_0, p_48, p_49, p_50]
 
-# <statement>
+# # <statement>
 
-p_1 = Production(statement, [def_class])
-rules[p_1] = lambda _, s: [s[1]]
-p_2 = Production(statement, [def_func])
-rules[p_2] = lambda _, s: [s[1]]
-p_75 = Production(statement, [def_agent])
-rules[p_75] = lambda _, s: [s[1]]
-p_54 = Production(statement, [simple_statement])
-rules[p_54] = lambda _, s: [s[1]]
-p_3 = Production(statement, [epsilon])
-rules[p_3] = lambda h, s: []
-productions[statement] = [p_1, p_2, p_75, p_54, p_3]
+# p_1 = Production(statement, [def_class])
+# rules[p_1] = lambda _, s: [s[1]]
+# p_2 = Production(statement, [def_func])
+# rules[p_2] = lambda _, s: [s[1]]
+# p_75 = Production(statement, [def_agent])
+# rules[p_75] = lambda _, s: [s[1]]
+# p_54 = Production(statement, [simple_statement])
+# rules[p_54] = lambda _, s: [s[1]]
+# p_3 = Production(statement, [epsilon])
+# rules[p_3] = lambda h, s: []
+# productions[statement] = [p_1, p_2, p_75, p_54, p_3]
 
-# <simple-statement>
+# # <simple-statement>
 
-p_51 = Production(simple_statement, [if_])
-rules[p_51] = lambda _, s: [s[1]]
-p_52 = Production(simple_statement, [if_else])
-rules[p_52] = lambda _, s: [s[1]]
-p_53 = Production(simple_statement, [for_])
-rules[p_53] = lambda _, s: [s[1]]
-p_56 = Production(simple_statement, [def_var])
-rules[p_56] = lambda _, s: [s[1]]
-p_57 = Production(simple_statement, [assignment])
-rules[p_57] = lambda _, s: [s[1]]
-productions[simple_statement] = [p_51, p_52, p_53, p_56, p_57]
+# p_51 = Production(simple_statement, [if_])
+# rules[p_51] = lambda _, s: [s[1]]
+# p_52 = Production(simple_statement, [if_else])
+# rules[p_52] = lambda _, s: [s[1]]
+# p_53 = Production(simple_statement, [for_])
+# rules[p_53] = lambda _, s: [s[1]]
+# p_56 = Production(simple_statement, [def_var])
+# rules[p_56] = lambda _, s: [s[1]]
+# p_57 = Production(simple_statement, [assignment])
+# rules[p_57] = lambda _, s: [s[1]]
+# productions[simple_statement] = [p_51, p_52, p_53, p_56, p_57]
 
-# <def_class>
+# # <def_class>
 
-p_4 = Production(def_class, [class_, idx, ocur, class_statements, ccur])
-rules[p_4] = lambda _, s: ClassNode(s[2], s[4])
-p_5 = Production(def_class, [class_, idx, colon, idx, ocur, class_statements, ccur])
-rules[p_5] = lambda _, s: ClassNode(s[2], s[3], s[4])
-productions[def_class] = [p_4, p_5]
+# p_4 = Production(def_class, [class_, idx, ocur, class_statements, ccur])
+# rules[p_4] = lambda _, s: ClassNode(s[2], s[4])
+# p_5 = Production(def_class, [class_, idx, colon, idx, ocur, class_statements, ccur])
+# rules[p_5] = lambda _, s: ClassNode(s[2], s[3], s[4])
+# productions[def_class] = [p_4, p_5]
 
-# <class-statements>
+# # <class-statements>
 
-p_6 = Production(class_statements, [simple_statement, class_statements])
-rules[p_6] = lambda _, s: [s[1]] + s[2]
-p_58 = Production(class_statements, [def_func, class_statements])
-rules[p_58] = lambda _, s: [s[1]] + s[2]
-p_7 = Production(class_statements, [def_attr, class_statements])
-rules[p_7] = lambda _, s: [s[1]] + s[2]
-p_55 = Production(class_statements, [epsilon])
-rules[p_55] = lambda h, s: []
-productions[class_statements] = [p_6, p_58, p_7, p_55]
+# p_6 = Production(class_statements, [simple_statement, class_statements])
+# rules[p_6] = lambda _, s: [s[1]] + s[2]
+# p_58 = Production(class_statements, [def_func, class_statements])
+# rules[p_58] = lambda _, s: [s[1]] + s[2]
+# p_7 = Production(class_statements, [def_attr, class_statements])
+# rules[p_7] = lambda _, s: [s[1]] + s[2]
+# p_55 = Production(class_statements, [epsilon])
+# rules[p_55] = lambda h, s: []
+# productions[class_statements] = [p_6, p_58, p_7, p_55]
 
-# <def-agent>
+# # <def-agent>
 
-p_76 = Production(
-    def_agent,
-    [
-        idx,
-        idx,
-        equal,
-        ocur,
-        activation_condition,
-        colon,
-        bool_expr,
-        semi,
-        effect_time,
-        colon,
-        idx,
-        semi,
-        repetition,
-        colon,
-        idx,
-        semi,
-        action,
-        colon,
-        idx,
-        semi,
-    ],
-)
-rules[p_76] = lambda _, s: AgentDefNode(s[1], s[2], s[7], s[11], s[15], s[19])
-productions[def_agent] = [p_76]
+# p_76 = Production(
+#     def_agent,
+#     [
+#         idx,
+#         idx,
+#         equal,
+#         ocur,
+#         activation_condition,
+#         colon,
+#         bool_expr,
+#         semi,
+#         effect_time,
+#         colon,
+#         idx,
+#         semi,
+#         repetition,
+#         colon,
+#         idx,
+#         semi,
+#         action,
+#         colon,
+#         idx,
+#         semi,
+#     ],
+# )
+# rules[p_76] = lambda _, s: AgentDefNode(s[1], s[2], s[7], s[11], s[15], s[19])
+# productions[def_agent] = [p_76]
 
-# <def-attr>
+# # <def-attr>
 
-p_8 = Production(def_attr, [idx, idx, equal, expr, semi])
-rules[p_8] = lambda _, s: AttrDeclarationNode(s[1], s[2], s[4])
-productions[def_attr] = [p_8]
+# p_8 = Production(def_attr, [idx, idx, equal, expr, semi])
+# rules[p_8] = lambda _, s: AttrDeclarationNode(s[1], s[2], s[4])
+# productions[def_attr] = [p_8]
 
-# <def-func>
+# # <def-func>
 
-p_9 = Production(
-    def_func,
-    [function_, idx, opar, param_list, cpar, arrow, idx, ocur, func_statements, ccur],
-)
-rules[p_9] = lambda _, s: FuncDeclarationNode(s[2], s[4], s[7], s[9])
-productions[def_func] = [p_9]
+# p_9 = Production(
+#     def_func,
+#     [function_, idx, opar, param_list, cpar, arrow, idx, ocur, func_statements, ccur],
+# )
+# rules[p_9] = lambda _, s: FuncDeclarationNode(s[2], s[4], s[7], s[9])
+# productions[def_func] = [p_9]
 
-# <func-statements>
+# # <func-statements>
 
-p_78 = Production(func_statements, [simple_statement, func_statements])
-rules[p_78] = lambda _, s: [s[1]] + s[2]
-p_79 = Production(func_statements, [epsilon])
-rules[p_79] = lambda h, s: []
-productions[func_statements] = [p_78, p_79]
+# p_78 = Production(func_statements, [simple_statement, func_statements])
+# rules[p_78] = lambda _, s: [s[1]] + s[2]
+# p_79 = Production(func_statements, [epsilon])
+# rules[p_79] = lambda h, s: []
+# productions[func_statements] = [p_78, p_79]
 
-# <def-var>
+# # <def-var>
 
-p_15 = Production(def_var, [idx, idx, equal, expr, semi])
-rules[p_15] = lambda _, s: VarDeclarationNode(s[1], s[2], s[4])
-p_88 = Production(def_var, [def_rand_var])
-rules[p_88] = lambda _, s: [s[1]]
-productions[def_var] = [p_15, p_88]
+# p_15 = Production(def_var, [idx, idx, equal, expr, semi])
+# rules[p_15] = lambda _, s: VarDeclarationNode(s[1], s[2], s[4])
+# p_88 = Production(def_var, [def_rand_var])
+# rules[p_88] = lambda _, s: [s[1]]
+# productions[def_var] = [p_15, p_88]
 
-# <assignment>
+# # <assignment>
 
-p_16 = Production(assignment, [idx, equal, expr, semi])
-rules[p_16] = lambda _, s: AssignmentNode(s[1], s[3])
-productions[assignment] = [p_16]
+# p_16 = Production(assignment, [idx, equal, expr, semi])
+# rules[p_16] = lambda _, s: AssignmentNode(s[1], s[3])
+# productions[assignment] = [p_16]
 
-# <param>
+# # <param>
 
-p_10 = Production(param, [idx, idx])
-rules[p_10] = lambda _, s: (s[1], s[2])
-productions[param] = [p_10]
+# p_10 = Production(param, [idx, idx])
+# rules[p_10] = lambda _, s: (s[1], s[2])
+# productions[param] = [p_10]
 
-# <param-list>
+# # <param-list>
 
-p_11 = Production(param_list, [param, comma, param_list])
-rules[p_11] = lambda _, s: [s[1]] + s[2]
-p_12 = Production(param_list, [epsilon])
-rules[p_12] = lambda h, s: []
-productions[param_list] = [p_11, p_12]
+# p_11 = Production(param_list, [param, comma, param_list])
+# rules[p_11] = lambda _, s: [s[1]] + s[2]
+# p_12 = Production(param_list, [epsilon])
+# rules[p_12] = lambda h, s: []
+# productions[param_list] = [p_11, p_12]
 
 # <expr>
 
@@ -299,17 +298,18 @@ p_13 = Production(expr, [arith])
 rules[p_13] = lambda _, s: s[1]
 p_64 = Production(expr, [bool_expr])
 rules[p_64] = lambda _, s: s[1]
-p_14 = Production(expr, [prob_func])
-rules[p_14] = lambda _, s: s[1]
-p_17 = Production(expr, [rule])
-rules[p_17] = lambda _, s: s[1]
-p_18 = Production(expr, [def_effect])
-rules[p_18] = lambda _, s: s[1]
-p_19 = Production(expr, [func_call])
-rules[p_19] = lambda _, s: s[1]
-p_63 = Production(expr, [instance])
-rules[p_63] = lambda _, s: s[1]
-productions[expr] = [p_13, p_64, p_14, p_17, p_18, p_19, p_63]
+# p_14 = Production(expr, [prob_func])
+# rules[p_14] = lambda _, s: s[1]
+# p_17 = Production(expr, [rule])
+# rules[p_17] = lambda _, s: s[1]
+# p_18 = Production(expr, [def_effect])
+# rules[p_18] = lambda _, s: s[1]
+# p_19 = Production(expr, [func_call])
+# rules[p_19] = lambda _, s: s[1]
+# p_63 = Production(expr, [instance])
+# rules[p_63] = lambda _, s: s[1]
+# productions[expr] = [p_13, p_64, p_14, p_17, p_18, p_19, p_63]
+productions[expr] = [p_13, p_64]
 
 # <arith>
 
@@ -337,17 +337,19 @@ p_24 = Production(factor, [atom])
 rules[p_24] = lambda _, s: s[1]
 p_25 = Production(factor, [opar, arith, cpar])
 rules[p_25] = lambda _, s: s[2]
-p_26 = Production(factor, [opar, func_call, cpar])
-rules[p_26] = lambda _, s: s[2]
-productions[factor] = [p_24, p_25, p_26]
+# p_26 = Production(factor, [opar, func_call, cpar])
+# rules[p_26] = lambda _, s: s[2]
+# productions[factor] = [p_24, p_25, p_26]
+productions[factor] = [p_24, p_25]
 
 # <atom>
 
 p_28 = Production(atom, [idx])
 rules[p_28] = lambda _, s: s[1]
-p_29 = Production(atom, [func_call])
-rules[p_29] = lambda _, s: s[1]
-productions[atom] = [p_28, p_29]
+# p_29 = Production(atom, [func_call])
+# rules[p_29] = lambda _, s: s[1]
+# productions[atom] = [p_28, p_29]
+productions[atom] = [p_28]
 
 # <bool-expr>
 
@@ -379,110 +381,112 @@ p_84 = Production(compare_factor, [not_, compare_factor])
 rules[p_84] = lambda _, s: NotNode(s[2])
 p_71 = Production(compare_factor, [idx])
 rules[p_71] = lambda _, s: s[1]
-p_72 = Production(compare_factor, [func_call])
-rules[p_72] = lambda _, s: s[1]
-p_73 = Production(compare_factor, [instance])
-rules[p_73] = lambda _, s: s[1]
+# p_72 = Production(compare_factor, [func_call])
+# rules[p_72] = lambda _, s: s[1]
+# p_73 = Production(compare_factor, [instance])
+# rules[p_73] = lambda _, s: s[1]
 p_74 = Production(compare_factor, [opar, bool_expr, opar])
 rules[p_74] = lambda _, s: s[2]
-productions[compare_factor] = [p_84, p_71, p_72, p_73, p_74]
+# productions[compare_factor] = [p_84, p_71, p_72, p_73, p_74]
+productions[compare_factor] = [p_84, p_71, p_74]
 
-# <func-call>
+# # <func-call>
 
-p_31 = Production(func_call, [idx, opar, arg_list, cpar])
-rules[p_31] = lambda _, s: CallNode(s[1], s[3])
-p_32 = Production(func_call, [idx, dot, idx, opar, arg_list, cpar])
-rules[p_32] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
-p_33 = Production(func_call, [func_call, dot, idx, opar, arg_list, cpar])
-rules[p_33] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
-p_34 = Production(func_call, [instance, dot, idx, opar, arg_list, cpar])
-rules[p_34] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
-productions[func_call] = [p_31, p_32, p_33, p_34]
+# p_31 = Production(func_call, [idx, opar, arg_list, cpar])
+# rules[p_31] = lambda _, s: CallNode(s[1], s[3])
+# p_32 = Production(func_call, [idx, dot, idx, opar, arg_list, cpar])
+# rules[p_32] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
+# p_33 = Production(func_call, [func_call, dot, idx, opar, arg_list, cpar])
+# rules[p_33] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
+# p_34 = Production(func_call, [instance, dot, idx, opar, arg_list, cpar])
+# rules[p_34] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
+# productions[func_call] = [p_31, p_32, p_33, p_34]
 
-# <instance>
+# # <instance>
 
-p_62 = Production(instance, [idx, opar, arg_list, cpar])
-rules[p_62] = lambda _, s: InstanceNode(s[1], s[3])
-productions[instance] = [p_62]
+# p_62 = Production(instance, [idx, opar, arg_list, cpar])
+# rules[p_62] = lambda _, s: InstanceNode(s[1], s[3])
+# productions[instance] = [p_62]
 
-# <arg-list>
+# # <arg-list>
 
-p_35 = Production(arg_list, [epsilon])
-rules[p_35] = lambda h, s: []
-p_36 = Production(arg_list, [atom, comma, arg_list])
-rules[p_36] = lambda _, s: [s[1]] + s[2]
-p_37 = Production(arg_list, [arith, comma, arg_list])
-rules[p_37] = lambda _, s: [s[1]] + s[2]
-productions[arg_list] = [p_35, p_36, p_37]
+# p_35 = Production(arg_list, [epsilon])
+# rules[p_35] = lambda h, s: []
+# p_36 = Production(arg_list, [atom, comma, arg_list])
+# rules[p_36] = lambda _, s: [s[1]] + s[2]
+# p_37 = Production(arg_list, [arith, comma, arg_list])
+# rules[p_37] = lambda _, s: [s[1]] + s[2]
+# productions[arg_list] = [p_35, p_36, p_37]
 
-# <def-rand-var>
+# # <def-rand-var>
 
-p_39 = Production(def_rand_var, [idx, idx, equal, ocur, prob_func_list, ccur])
-rules[p_39] = lambda _, s: RandomVariableNode(s[2], s[5])
-productions[def_rand_var] = [p_39]
+# p_39 = Production(def_rand_var, [idx, idx, equal, ocur, prob_func_list, ccur])
+# rules[p_39] = lambda _, s: RandomVariableNode(s[2], s[5])
+# productions[def_rand_var] = [p_39]
 
-# <prob-func-list>
+# # <prob-func-list>
 
-p_85 = Production(prob_func_list, [prob_func, prob_func_list])
-rules[p_85] = lambda _, s: [s[1]] + s[2]
-p_86 = Production(prob_func_list, [epsilon])
-rules[p_86] = lambda h, s: []
-productions[prob_func_list] = [p_85, p_86]
+# p_85 = Production(prob_func_list, [prob_func, prob_func_list])
+# rules[p_85] = lambda _, s: [s[1]] + s[2]
+# p_86 = Production(prob_func_list, [epsilon])
+# rules[p_86] = lambda h, s: []
+# productions[prob_func_list] = [p_85, p_86]
 
-# <prob-func>
+# # <prob-func>
 
-p_40 = Production(prob_func, [idx, arrow, def_effect])
-rules[p_40] = lambda _, s: ProbFunctionValueNode(s[1], s[3])
-productions[prob_func] = [p_40]
+# p_40 = Production(prob_func, [idx, arrow, def_effect])
+# rules[p_40] = lambda _, s: ProbFunctionValueNode(s[1], s[3])
+# productions[prob_func] = [p_40]
 
-# <def-effect>
+# # <def-effect>
 
-p_41 = Production(def_effect, [effect, idx, idx, idx])
-rules[p_41] = lambda _, s: EffectNode(s[2], s[3], s[4])
-p_42 = Production(def_effect, [rule])
-rules[p_42] = lambda _, s: EffectRuleNode(s[1])
-productions[def_effect] = [p_41, p_42]
+# p_41 = Production(def_effect, [effect, idx, idx, idx])
+# rules[p_41] = lambda _, s: EffectNode(s[2], s[3], s[4])
+# p_42 = Production(def_effect, [rule])
+# rules[p_42] = lambda _, s: EffectRuleNode(s[1])
+# productions[def_effect] = [p_41, p_42]
 
-# <rule>
+# # <rule>
 
-p_43 = Production(rule, [bool_expr, rule_operator, assignment])
-rules[p_43] = lambda _, s: RuleNode(s[1], s[3])
-productions[rule] = [p_43]
+# p_43 = Production(rule, [bool_expr, rule_operator, assignment])
+# rules[p_43] = lambda _, s: RuleNode(s[1], s[3])
+# productions[rule] = [p_43]
 
 # <for>
 
-p_45 = Production(
-    for_,
-    [for_kw, idx, in_, expr, ocur, body_statements, ccur],
-)
-rules[p_45] = lambda _, s: ForNode(s[2], s[4], s[6])
-productions[for_] = [p_45]
+# p_45 = Production(
+#     for_,
+#     [for_kw, idx, in_, expr, ocur, body_statements, ccur],
+# )
+# rules[p_45] = lambda _, s: ForNode(s[2], s[4], s[6])
+# productions[for_] = [p_45]
 
 # <if>
 
-p_46 = Production(if_, [if_kw, expr, ocur, body_statements, ccur])
-rules[p_46] = lambda _, s: IfNode(s[2], s[4])
-productions[if_] = [p_46]
+# p_46 = Production(if_, [if_kw, expr, ocur, body_statements, ccur])
+# rules[p_46] = lambda _, s: IfNode(s[2], s[4])
+# productions[if_] = [p_46]
 
 # <if-else>
 
-p_87 = Production(
-    if_,
-    [if_kw, expr, ocur, body_statements, ccur, else_kw, ocur, body_statements, ccur],
-)
-rules[p_87] = lambda _, s: IfElseNode(s[2], s[4], s[8])
-productions[if_else] = [p_87]
+# p_87 = Production(
+#     if_,
+#     [if_kw, expr, ocur, body_statements, ccur, else_kw, ocur, body_statements, ccur],
+# )
+# rules[p_87] = lambda _, s: IfElseNode(s[2], s[4], s[8])
+# productions[if_else] = [p_87]
 
 
 # <body_statements>
 
-p_59 = Production(body_statements, [simple_statement, body_statements])
-rules[p_59] = lambda _, s: [s[1]] + s[2]
-p_60 = Production(body_statements, [func_call, body_statements])
-rules[p_60] = lambda _, s: [s[1]] + s[2]
+# p_59 = Production(body_statements, [simple_statement, body_statements])
+# rules[p_59] = lambda _, s: [s[1]] + s[2]
+# p_60 = Production(body_statements, [func_call, body_statements])
+# rules[p_60] = lambda _, s: [s[1]] + s[2]
 p_61 = Production(body_statements, [epsilon])
 rules[p_61] = lambda h, s: []
-productions[body_statements] = [p_59, p_60, p_61]
+# productions[body_statements] = [p_59, p_60, p_61]
+productions[body_statements] = [p_61]
 
 
 # all_terminals
@@ -531,5 +535,5 @@ _t = {
     "action": (action, 2),
 }
 
-G = Grammar(non_terminals, terminals, productions, if_, rules)
+G = Grammar(non_terminals, terminals, productions, expr, rules)
 G.epsilon = epsilon
