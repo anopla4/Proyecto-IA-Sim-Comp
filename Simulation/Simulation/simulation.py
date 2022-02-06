@@ -15,16 +15,23 @@ class Simulation(object):
 
     @property
     def time(self)->int:
+        '''
+        Returns the currento time of simulation
+        '''
         return self._simulation_time
 
     def finish(self) ->bool:
-        if self._simulation_time == self._end_time: #or self._env.final_state():
+        '''
+        Returns True if the simulation time is complete or the 
+        environment has reached a final state of any of its parameters.
+        '''
+        if self._simulation_time == self._end_time or self._env.final_state():
             return True
         return False
     
-    def check_environment(self)->int:
-        #return -1 if not end, 0 if lose, 1 if win
-        return 0 if self._env.final_state() else 1
+    #def check_environment(self)->int:
+    #    #return -1 if not end, 0 if lose, 1 if win
+    #    return 0 if self._env.final_state() else 1
 
     def __evaluate_final_state(self)->float:
         val = 0
@@ -39,6 +46,9 @@ class Simulation(object):
         return val
 
     def evaluate_environment(self)->float:
+        '''
+        Returns the utility value for the current state of the environment
+        '''
         if self._env.final_state():
             return self.__evaluate_final_state()
         val = 0
@@ -53,9 +63,17 @@ class Simulation(object):
         return val
 
     def environment_state(self)->Dict[str,float]:
+        '''
+        Returns a dictionary with the values of the environment parameters in 
+        the current state of the simulation
+        '''
         return self._env.get_params_dict()
 
-    def detect_new_symptom(self)->set[Agent]:
+    def detect_new_symptoms(self)->set[Agent]:
+        '''
+        Returns the set of possible disease agents that can become active 
+        given the environmental conditions
+        '''
         _new_symptoms:set[Agent] = set()
         for symptom in self._inactive_symptoms:
             if symptom.check_activation_conditions(self._simulation_time, self._env):
@@ -63,6 +81,9 @@ class Simulation(object):
         return _new_symptoms
 
     def simulate(self, tick:int):
+        '''
+        Simulate a time tick
+        '''
         self._simulation_time+=tick
         _still_active_symptom:list[Tuple[int,Agent]] = []
         for act_time, symptom in self._active_symptoms:
@@ -88,18 +109,25 @@ class Simulation(object):
             else:
                 _still_active_intervention.append((act_time, intervention))
         self._active_intervention = _still_active_intervention
-        _new_symptoms = self.detect_new_symptom()
+        _new_symptoms = self.detect_new_symptoms()
         self._active_symptoms.extend([(0,s) for s in _new_symptoms])
         self._inactive_symptoms.difference_update(_new_symptoms)
 
-    def detect_new_interventions(self)-> set[str]:   #, treatment_rules:set[Rule]) -> set[Agent]:
+    def detect_new_interventions(self)-> set[str]:
+        '''
+        Returns the set of possible interventions agents that can become active 
+        given the environmental conditions
+        '''
         _new_interventions:set[str] = set()
         for intervention in self._inactive_intervention:
             if intervention.check_activation_conditions(self._simulation_time, self._env):
                 _new_interventions.add(intervention.name)
         return _new_interventions
 
-    def add_intervention(self, new_intervention:str):
+    def add_intervention(self, new_intervention:str)->None:
+        '''
+        Adds an intervention to the set of active interventions
+        '''
         if new_intervention == "":
             return
         temp = None

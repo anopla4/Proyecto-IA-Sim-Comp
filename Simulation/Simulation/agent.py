@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from .environment import Environment
-from .rule import Rule
+from .activation_rule import ActivationRule
 
 class Agent(ABC):
-    def __init__(self, name:str, activation_rules, efect_time, repetition) -> None:
+    def __init__(self, name:str, activation_rules:list[ActivationRule], efect_time, repetition) -> None:
         self._name = name
         self._active:bool = False
         self._ag_history = None
-        self._activation_rules:list[Rule] = activation_rules
+        self._activation_rules:list[ActivationRule] = activation_rules
         self._current_action_time = 0   # increse rep by rep if take action
         self._efect_time = self.__calculate_efect_time(efect_time, repetition)
         self._repetition = repetition
@@ -39,8 +39,14 @@ class Agent(ABC):
 
     @property
     def repetition(self)->int:
+        '''
+        Returns the repetition time of the agent action
+        '''
         return self._repetition
 
     @property
     def name(self)->str:
+        '''
+        Returns the name of the agent
+        '''
         return self._name

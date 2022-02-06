@@ -1,7 +1,7 @@
 from Simulation.agent import Agent
 from Simulation.environment import Environment
 from Simulation.parameter import Parameter
-from Simulation.rule import Rule
+from Simulation.activation_rule import ActivationRule
 from main import main
 
 from TreatmentTree.tree_draw import print_graph, print_console_nodes, print_best_branch
@@ -96,30 +96,30 @@ class Plaquetol(Agent):
         return env
 
 
-tos_rule = Rule(parameters_conditions={'plaqueta':(-1e9,22)}, time_condition=(0,1e9), then='tos')
+tos_rule = ActivationRule(parameters_conditions={'plaqueta':(-1e9,22)}, time_condition=(0,1e9))
 tos = Tos(name="tos",activation_rules=[tos_rule])
 
-dc_rule1 = Rule(parameters_conditions={'tos':(10, 200)}, time_condition=(0,1e9), then='dolor de cabeza')
-dc_rule2 = Rule(parameters_conditions={'fiebre':(37, 200)}, time_condition=(0,1e9), then='dolor de cabeza')
+dc_rule1 = ActivationRule(parameters_conditions={'tos':(10, 200)}, time_condition=(0,1e9))
+dc_rule2 = ActivationRule(parameters_conditions={'fiebre':(37, 200)}, time_condition=(0,1e9) )
 dc = DolorCabeza(name='dolor de cabeza',activation_rules=[dc_rule1, dc_rule2])
 
-fiebre_rule = Rule(parameters_conditions={'plaqueta':(-1e9,15)}, time_condition=(0,1e9), then='fiebre')
+fiebre_rule = ActivationRule(parameters_conditions={'plaqueta':(-1e9,15)}, time_condition=(0,1e9))
 fiebre = Fiebre(name='fiebre',activation_rules=[fiebre_rule])
 
 
-antibiotico_rule = Rule(parameters_conditions={'fiebre':(38, 100)}, time_condition=(72,1e9), then='antibiotico')
+antibiotico_rule = ActivationRule(parameters_conditions={'fiebre':(38, 100)}, time_condition=(72,1e9))
 antibiotico = Antibiotico(name='antibiotico',activation_rules=[antibiotico_rule])
 
-dipirona_rule1 = Rule(parameters_conditions={'fiebre':(37, 100)}, time_condition=(0,1e9), then='dipirona')
-dipirona_rule2 = Rule(parameters_conditions={'dolor de cabeza':(10, 1000)}, time_condition=(0,1e9), then='dipirona')
+dipirona_rule1 = ActivationRule(parameters_conditions={'fiebre':(37, 100)}, time_condition=(0,1e9))
+dipirona_rule2 = ActivationRule(parameters_conditions={'dolor de cabeza':(10, 1000)}, time_condition=(0,1e9))
 dipirona =  Dipirona(name='dipirona',activation_rules=[dipirona_rule1, dipirona_rule2])
 
-calbamol_rule1 = Rule(parameters_conditions={'fiebre':(38, 100)}, time_condition=(0,1e9), then='calbamol')
-calbamol_rule2 = Rule(parameters_conditions={'dolor de cabeza':(20, 1000)}, time_condition=(48,1e9), then='calbamol')
-calbamol_rule3 = Rule(parameters_conditions={'plaqueta':(-1e9, 5)}, time_condition=(24,1e9), then='calbamol')
+calbamol_rule1 = ActivationRule(parameters_conditions={'fiebre':(38, 100)}, time_condition=(0,1e9))
+calbamol_rule2 = ActivationRule(parameters_conditions={'dolor de cabeza':(20, 1000)}, time_condition=(48,1e9))
+calbamol_rule3 = ActivationRule(parameters_conditions={'plaqueta':(-1e9, 5)}, time_condition=(24,1e9))
 calbamol = Calbamol(name='calbamol',activation_rules=[calbamol_rule1, calbamol_rule2, calbamol_rule3])
 
-plaquetol_rule = Rule(parameters_conditions={'plaqueta':(-1e9, 10)}, time_condition=(24,1e9), then='plaquetol')
+plaquetol_rule = ActivationRule(parameters_conditions={'plaqueta':(-1e9, 10)}, time_condition=(24,1e9))
 plaquetol = Plaquetol(name='plaquetol', activation_rules=[plaquetol_rule])
 
 p_plaqueta = Parameter('plaqueta', value=20, low_good_limit=23, upp_good_limit=50, low_bad_limit=-20, upp_bad_limit=80)

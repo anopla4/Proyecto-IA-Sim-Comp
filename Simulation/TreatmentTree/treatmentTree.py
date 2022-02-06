@@ -9,13 +9,23 @@ class TreatmentTree(object):
 
     @property
     def root(self):
+        '''
+        Returns the node root of the tree
+        '''
         return self._root
 
     @property
     def node_count(self):
+        '''
+        Returns the number of nodes in the tree
+        '''
         return self._node_count
 
     def expand_selection(self, _posible_intervention:list[str], current_time)->Node:
+        '''
+        Based on the possible candidate children of the current node, expand the tree and select 
+        the one based on the UTC policy weighting explotation and exploration
+        '''
         _candidate_childs = []
         for child in self._current._children:
             if child.value in _posible_intervention and child.created_time == current_time:
@@ -29,6 +39,10 @@ class TreatmentTree(object):
         return self._current
 
     def back_propagation(self, utility_score):
+        '''
+        Updates the simulation variables of all ancestors of the current node.
+        Increases the visit counter and utility score values of said nodes.
+        '''
         while(self._current.parent != None):
             self._current.utility_score += utility_score
             self._current.visit_count += 1

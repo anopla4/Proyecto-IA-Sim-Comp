@@ -1,7 +1,7 @@
 from Simulation.agent import Agent
 from Simulation.environment import Environment
 from Simulation.parameter import Parameter
-from Simulation.rule import Rule
+from Simulation.activation_rule import ActivationRule
 
 class E(Agent):
     def __init__(self, name: str, activation_rules, efect_time=168, repetition=1) -> None:
@@ -26,10 +26,10 @@ class T(Agent):
         return env
 
 def naive_test(simulation_main):
-    e_rule = Rule(parameters_conditions={'param':(-1e9,1e9)}, time_condition=(0,1e9), then='enf')
+    e_rule = ActivationRule(parameters_conditions={'param':(-1e9,1e9)}, time_condition=(0,1e9), then='enf')
     e = E(name="enf",activation_rules=[e_rule])
 
-    t_rule = Rule(parameters_conditions={'param':(-1e9,1e9)}, time_condition=(0,1e9), then='trat')
+    t_rule = ActivationRule(parameters_conditions={'param':(-1e9,1e9)}, time_condition=(0,1e9), then='trat')
     t = T(name="trat",activation_rules=[t_rule])
 
     p = Parameter('param', value=0, inf_limit=-1e9, upper_limit=1e9)

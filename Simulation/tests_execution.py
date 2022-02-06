@@ -23,7 +23,7 @@ print_branch_data(best_branch)
 #visualize_graph(tree.root)
 
 
-visualize_graph(tree.root, 10)
+visualize_graph(tree.root, 140)
 
 tree.prunning()
-visualize_graph(tree.root, 10)
+visualize_graph(tree.root, 140)
