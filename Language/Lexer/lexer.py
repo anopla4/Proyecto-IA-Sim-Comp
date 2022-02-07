@@ -3,45 +3,48 @@ from .token import Token
 from Language.Automaton.nfa_to_dfa import transform_nfa_to_dfa
 from pprint import pprint
 from Language.Lexer.RegularExpression.regex_grammar import (
-    E,
-    X,
-    X1,
-    T,
-    Y,
-    Y1,
-    F,
-    Z,
-    Z1,
-    A,
-    _i,
-    _or,
-    _concat,
-    _star,
-    left_br,
-    right_br,
-    epsilon,
-    productions,
-    rules,
+    #     E,
+    #     X,
+    #     X1,
+    #     T,
+    #     Y,
+    #     Y1,
+    #     F,
+    #     Z,
+    #     Z1,
+    #     A,
+    #     _i,
+    #     _or,
+    #     _concat,
+    #     _star,
+    #     left_br,
+    #     right_br,
+    #     epsilon,
+    #     productions,
+    #     rules,
+    regex_grammar,
 )
 from Language.Lexer.parser_ll import build_ll_table
-from Language.Parsing.Grammar_dsl.dsl_grammar import _t
+
+# from Language.Parsing.Grammar_dsl.dsl_grammar import _t
 from Language.Lexer.RegularExpression.automaton_builder import build_entire_automaton
 
 
-def tokenize_regex_automaton(c):
+def tokenize_regex_automaton(c, _t):
+    G, _i, left_br, right_br, _or, _concat, _star = regex_grammar()
     ll_table = build_ll_table(
-        productions,
-        [E, X, X1, T, Y, Y1, F, A, Z, Z1],
-        [_i, _or, _concat, left_br, right_br, _star, epsilon],
-        E,
+        G.productions,
+        G.non_terminals,
+        G.terminals,
+        G.start_symbol,
     )
     aut = build_entire_automaton(
         ll_table,
-        E,
+        G.start_symbol,
         _t,
         _i,
         {"(": left_br, ")": right_br, "|": _or, "U": _concat, "*": _star},
-        rules,
+        G.rules,
     )
     s = ""
 

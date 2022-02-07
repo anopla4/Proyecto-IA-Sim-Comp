@@ -27,8 +27,9 @@ def symbol_first(productions, firsts):
                 if (
                     # len(list(filter(lambda x: isinstance(x, Epsilon), firsts[x]))) > 0
                     len(list(filter(lambda x: x.symbol == "epsilon", firsts[x]))) > 0
-                    and len(p.right_side) > 0
+                    and len(p.right_side) > 1
                 ):
+
                     z = p.right_side[1]
                     for item in firsts[z]:
                         if item in firsts[x]:
