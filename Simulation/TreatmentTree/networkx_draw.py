@@ -3,13 +3,13 @@ import networkx as nx
 import random
 from .node import Node
 
-def create_branch(G:nx.Graph, nodes:list[Node]):
+def __create_branch(G:nx.Graph, nodes:list[Node]):
     for i in range(len(nodes)):
         G.add_node(nodes[i].name)
         if i > 0:
             G.add_edge(nodes[i].name, nodes[i-1].name)
 
-def create_graph(G:nx.Graph,nodes:list[Node], n):
+def __create_graph(G:nx.Graph,nodes:list[Node], n):
     if len(nodes) == 0 or n == 0:
         return
     for node in nodes:
@@ -22,7 +22,7 @@ def create_graph(G:nx.Graph,nodes:list[Node], n):
     for node in nodes:
         if node is not None:
             childrens.extend(node._children)
-    create_graph(G, childrens, n-1)
+    __create_graph(G, childrens, n-1)
 
 def hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5):
     '''
@@ -81,17 +81,17 @@ def hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, xcenter 
 
     return _hierarchy_pos(G, root, width, vert_gap, vert_loc, xcenter)
 
-def visualize_graph(root:Node, level):
+def visualize_graph_nx(root:Node, level):
     G = nx.Graph()
-    create_graph(G, [root], level)
+    __create_graph(G, [root], level)
     pos = hierarchy_pos(G,f"-1 :0")    
     nx.draw(G, pos=pos, with_labels=True, font_weight='bold')
     #plt.figure(figsize=(16,16))
     plt.show()
 
-def visualize_branch(branch_nodes:list[Node]):
+def visualize_branch_nx(branch_nodes:list[Node]):
     G = nx.Graph()
-    create_branch(G, branch_nodes)
+    __create_branch(G, branch_nodes)
     pos = hierarchy_pos(G,f"-1 :0")    
     nx.draw(G, pos=pos, with_labels=True, font_weight='bold')
     #plt.figure(figsize=(16,16))
@@ -111,8 +111,3 @@ def print_console_nodes(nodes:list[Node], n):
         if node is not None:
             children.extend(node._children)
     print_console_nodes(children,n-1)
-
-def print_branch_data(nodes:list[Node]):
-    print('root')
-    for node in nodes[1:]:
-        print(f"{node.value}  aplication time:{node.created_time}   p:{round((node.visit_count/node.parent.visit_count)*100)}%")
