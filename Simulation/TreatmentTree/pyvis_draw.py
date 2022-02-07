@@ -1,6 +1,5 @@
 from typing import Dict
 from pyvis.network import Network
-#import networkx as nx
 from .node import Node
 
 def __format_info(state:Dict[str,float])->str:
@@ -21,7 +20,7 @@ def __create_branch(G:Network, nodes:list[Node]):
         title = f"Time:{nodes[i].created_time} \n\n {info}"
         G.add_node(n_id=id, label=label,shape='circle', title=title, level=i)
         if i > 0:
-            G.add_edge(nodes[i]._id, nodes[i-1]._id)
+            G.add_edge(nodes[i]._id, nodes[i-1]._id, title=str(nodes[i].probability_value))
 
 def __create_graph(G:Network,nodes:list[Node], n):
     if len(nodes) == 0 or n == 0:

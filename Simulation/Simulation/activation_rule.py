@@ -5,11 +5,7 @@ class ActivationRule:
     def __init__(self, 
         parameters_conditions:Dict[str,Tuple[float,float]], time_condition:Tuple[float,float]):
         self._parameters_conditions = parameters_conditions
-        #self._then = then
         self._time_conditions = time_condition
-
-    #def get_target(self)-> str:
-    #    return self._then
 
     def check_time(self, enviroment_time:int)->bool:
         '''
