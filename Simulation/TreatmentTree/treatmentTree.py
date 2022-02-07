@@ -70,6 +70,24 @@ class TreatmentTree(object):
             curr = best_child(curr)
         return branch
 
+    def calculate_probability(self):
+        '''
+        Calculate for each node of the tree its probability value
+        '''
+        self.root.probability_value = 100.0
+        def __calculate(nodes:list[Node]):
+            if len(nodes) == 0:
+                return
+            for node in nodes:
+                if node is not None:
+                    node.probability_value = round((node.visit_count/node.parent.visit_count)*100,1)
+            childrens = []
+            for node in nodes:
+                if node is not None:
+                    childrens.extend(node._children)
+            __calculate(childrens)
+        __calculate(self.root._children)
+
     def prunning(self, max_childs=3, acc_probability=75):
         '''
         Prune the tree keeping the maximum number of children specified by "max_childs" or 
@@ -80,7 +98,6 @@ class TreatmentTree(object):
             childs = []
             acc_p = 0
             for child in node._children:
-                child.probability_value = round((child.visit_count/node.visit_count)*100,1)
                 childs.append(child)
             childs = sorted(childs, key=lambda x: x.probability_value, reverse=True)
             limit = min(max_childs, len(childs))

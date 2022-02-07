@@ -65,10 +65,6 @@ class Node(object):
     def visit_count(self,visit_count:float):
         self._visit_count=visit_count
 
-    #@property
-    # def arrival_state(self):
-    ##    return self._arrival_state
-
     def update_arrival_state(self, new_arrival_state:Dict[str,float])->None:
         '''
         Updates the values of the landing state of the current node based 
@@ -90,10 +86,6 @@ class Node(object):
             avg_state[p] = v/self.visit_count
         return avg_state
 
-    #@property
-    #def final_state(self):
-    #    return self._final_state
-
     def update_final_state(self, new_final_state:Dict[str,float])->None:
         '''
         Updates the values of the final state of the current node based 
@@ -114,10 +106,6 @@ class Node(object):
         for p,v in self._final_state.items():
             avg_state[p] = v/self.visit_count
         return avg_state
-
-    #@property
-    #def intervention(self):
-    #    return self._value
 
     @property
     def created_time(self):
