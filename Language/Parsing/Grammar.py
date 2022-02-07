@@ -7,11 +7,11 @@ from .non_terminal import NonTerminal
 class Grammar:
     def __init__(
         self,
-        non_terminals=[],
-        terminals=[],
-        productions=[],
+        non_terminals=None,
+        terminals=None,
+        productions=None,
         start_symbol=None,
-        productions_rules={},
+        productions_rules=None,
     ):
         self.non_terminals = non_terminals
         self.terminals = terminals

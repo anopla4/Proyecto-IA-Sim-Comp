@@ -83,7 +83,7 @@ class ShiftReduceParser:
                         )
                         self.goto[(i, next_symbol)] = next_state_index
 
-    def __call__(self, w):
+    def parse(self, w):
         stack = [
             0,
         ]
