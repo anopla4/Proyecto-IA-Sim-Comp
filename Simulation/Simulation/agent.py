@@ -3,7 +3,8 @@ from .environment import Environment
 from .activation_rule import ActivationRule
 
 class Agent(ABC):
-    def __init__(self, name:str, activation_rules:list[ActivationRule], efect_time, repetition) -> None:
+    def __init__(self, name:str, activation_rules:list[ActivationRule], 
+        efect_time:int, repetition:int) -> None:
         self._name = name
         self._active:bool = False
         self._ag_history = None
@@ -11,15 +12,23 @@ class Agent(ABC):
         self._current_action_time = 0   # increse rep by rep if take action
         self._efect_time = self.__calculate_efect_time(efect_time, repetition)
         self._repetition = repetition
+        self._action = None #function
 
     def __calculate_efect_time(self, efect_time, repetition):
         times = efect_time//repetition
         return times*repetition
 
+    @property
+    def inner_action(self):
+        return self._action
 
-    @abstractmethod
+    @inner_action.setter
+    def inner_action(self, action):
+        self._action = action
+
     def action(self, time:int, env:Environment) -> Environment:
-        pass
+        self._current_action_time+=self._repetition
+        return self._action(time,env)
 
     def check_activation_conditions(self, time:int, env:Environment)-> bool:
         """ Returns True if the activation conditions are met."""

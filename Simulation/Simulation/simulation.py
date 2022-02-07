@@ -1,13 +1,15 @@
 from typing import Dict, Tuple
 from .environment import Environment
 from .agent import Agent
+from .intervention import Intervention
 
 class Simulation(object):
-    def __init__(self, env:Environment, disease:set[Agent],  treatment:set[Agent], end_time:int=0):
+    def __init__(self, env:Environment, disease:set[Agent],  treatment:set[Intervention], end_time:int=0):
         self._env = env
         self._all_symptoms = disease.copy()
-        self._active_intervention:list[Tuple[int,Agent]] = []
-        self._inactive_intervention:set[Agent] = treatment.copy()
+        self._active_intervention:list[Tuple[int,Intervention]] = []
+        self._inactive_intervention:set[Intervention] = treatment.copy()
+        self._interventions_supply_count:Dict[str,int] = {}
         self._active_symptoms:list[Tuple[int,Agent]] = []
         self._inactive_symptoms:set[Agent] = disease.copy()
         self._simulation_time:int = 0
@@ -28,19 +30,17 @@ class Simulation(object):
         if self._simulation_time == self._end_time or self._env.final_state():
             return True
         return False
-    
-    #def check_environment(self)->int:
-    #    #return -1 if not end, 0 if lose, 1 if win
-    #    return 0 if self._env.final_state() else 1
 
     def __evaluate_final_state(self)->float:
         val = 0
         for param in self._env.parameters:
             p_max, p_min = param.upp_bad_limit, param.low_bad_limit
-            p_center = (param.upp_good_limit - param.low_good_limit)/2*(p_max-p_min)
-            p = p_max
+            p_c = (param.upp_good_limit - param.low_good_limit)
+            p_center = (p_c)/2*(p_max-p_min)
+            p = p_max if abs(p_max-p_c) >= abs(p_min-p_c) else p_min
             if not param.in_limits:
-                p = param.value
+                p_v = param.value
+                p = p_v if abs(p_v-p_c) > abs(p-p_c) else p
             p = p/(p_max-p_min)
             val+= 1/(abs(p-p_center)+1)
         return val
@@ -105,7 +105,9 @@ class Simulation(object):
                 if not intervention.finish_action():
                     _still_active_intervention.append((0, intervention))
                 else:
-                    self._inactive_intervention.add(intervention)
+                    self._interventions_supply_count[intervention.name]+=1
+                    if self._interventions_supply_count[intervention.name] < intervention.supply:
+                        self._inactive_intervention.add(intervention)
             else:
                 _still_active_intervention.append((act_time, intervention))
         self._active_intervention = _still_active_intervention
@@ -135,5 +137,6 @@ class Simulation(object):
             if intervention.name == new_intervention:
                 temp = intervention
                 break
+        self._interventions_supply_count[temp.name] = 0
         self._active_intervention.append((0,temp))
         self._inactive_intervention.remove(temp)
