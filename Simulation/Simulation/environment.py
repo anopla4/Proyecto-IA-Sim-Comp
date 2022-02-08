@@ -5,7 +5,7 @@ class Environment:
     def __init__(self,parameters:list[Parameter]):
         self._parameters:list[Parameter]=parameters
         
-    def get_parameter(self, param_name:str)->Parameter:
+    def get_parameter(self, param_name:str):
         '''
         Returns the instance of the named parameter "name". 
         If not found, returns None
@@ -50,7 +50,9 @@ class Environment:
         '''
         param_list = []
         for p in self._parameters:
-            param_list.append(Parameter(p.name, p.value, p.low_good_limit, p.upp_good_limit, p.low_bad_limit, p.upp_bad_limit))
+            param_list.append(Parameter(p.name, p.value, 
+                    p.low_good_limit, p.upp_good_limit, p.low_bad_limit, p.upp_bad_limit,
+                    p._membresy_functions))
         return Environment(param_list)
 
     def get_params_dict(self)->Dict[str,float]:

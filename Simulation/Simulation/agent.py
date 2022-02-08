@@ -26,7 +26,7 @@ class Agent(ABC):
     def inner_action(self, action):
         self._action = action
 
-    def action(self, time:int, env:Environment) -> Environment:
+    def action(self, time:int, env:Environment):
         self._current_action_time+=self._repetition
         return self._action(time,env)
 

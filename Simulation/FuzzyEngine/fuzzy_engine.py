@@ -1,6 +1,5 @@
 from typing import Dict
 from .rule import Rule
-#from .fuzzy_functions import defuzzing_by_centroid, inference_by_mandami,max_agreg
 from Simulation.parameter import Parameter
 from Simulation.environment import Environment
 from scipy.integrate import quad
@@ -83,52 +82,9 @@ class FuzzyEngine:
         Funcion hecha para defuzzificar un valor aplicando el metodo de los 
         centroides en una variable con dominio continuo
         """
-        # x=np.linspace(0, 80)
-        # for i in x:
-        #     plt.scatter(i,agregation_function(i))
-        # plt.show()
         func= lambda f: lambda x: x*f(x)
         num=quad(func(agregation_function),lower_range,upper_range)
         den=quad(agregation_function,lower_range,upper_range)
         if den[0]==0:
             return 0
         return num[0]/den[0]
-
-
-
-
-
-
-
-# def fuzzy_engine(env:Environment, rules:list[Rule]) -> Environment:
-#     """
-#     Given a environment state, it uses fuzzy logic mechanisms to determine the next state.
-#     """
-#     fuzzing_state:Dict[str,Dict[str,float]] = {} # {variable: {value: membresy_value}}
-#     membresy_functions = {} # {variable : {value: membresy_function}}
-#     for param in env.parameters:
-#         fuzzing_state[param.name] = param.get_defuzzy_values()
-#         membresy_functions[param.name] = param.membresy_functions
-#     for param in env.parameters:
-#         target_rules = [r for r in rules if r.target == param.name]
-#         if len(target_rules) > 0:
-#             param.value = __get_var_value(fuzzing_state, param, target_rules)
-#     return env
-
-
-# def __get_var_value(fuzzing_state:Dict[str,Dict[str,float]], param_target:Parameter, rules:list[Rule]) -> float:
-#     rules_evaluation = []
-#     for rule in rules:
-#         and_ = 1.1
-#         for param, value in rule.conditions.items():
-#             #print(f'{param}:{value}')
-#             #a = fuzzing_state[param][value]
-#             and_=min(and_, fuzzing_state[param][value])
-#         mem_f = param_target.membresy_functions[rule.then[1]]
-#         rules_evaluation.append(inference_by_mandami(and_,mem_f))
-#         #rules_evaluation.append(lambda x: and_ if mem_f(x) > and_ else mem_f(x))
-#     agregation = max_agreg(rules_evaluation)
-#     #agregation = lambda x : max([f(x) for f in rules_evaluation])
-#     l,r = param_target.get_definition_range()
-#     output = defuzzing_by_centroid(agregation, l,r)
-#     return output

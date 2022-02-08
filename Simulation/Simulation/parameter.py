@@ -1,12 +1,64 @@
+from typing import Dict, Tuple, Callable
+from FuzzyEngine.MembresyFunctions.membresy_function import MembresyFunction
+
 class Parameter:
     def __init__(self,name:str,value:float,
-    low_good_limit:float, upp_good_limit:float, low_bad_limit:float,upp_bad_limit:float):
+    low_good_limit:float, upp_good_limit:float, low_bad_limit:float,upp_bad_limit:float,
+    membresy_functions:Dict[str, MembresyFunction]= None):
         self._name=name
         self._value=value
         self._low_good_limit=low_good_limit
         self._upp_good_limit=upp_good_limit
         self._low_bad_limit=low_bad_limit
         self._upp_bad_limit=upp_bad_limit
+
+        self._membresy_functions = membresy_functions
+        self._left_limit, self._rigth_limit = -1,-1
+        if self._membresy_functions != None:
+            self._left_limit, self._rigth_limit = self.__set_limits()
+
+    def __set_limits(self):
+        l_limit = 1e9
+        r_limit = -1e9
+        for _, mf in self._membresy_functions.items():
+            limits = mf.limits
+            if limits[0] < l_limit:
+                l_limit = limits[0]
+            if limits[1] > r_limit:
+                r_limit = limits[1]
+        return l_limit, r_limit
+
+    def aply_memebresy_funtions(self, target:str, value:float)->float:
+        """
+        Returns the membership degree of the specified value
+        to a given element of the fuzzy set.
+        """
+        return self._membresy_functions[target].function(value)
+
+    def get_defuzzy_values(self)->Dict[str,float]:
+        """
+        Returns the membership values of the variable based on its current value
+        """
+        return { k:mf.function(self.value) for k,mf in self._membresy_functions.items() }
+    
+    @property
+    def membresy_functions(self)->Dict[str, Callable[[float], float]]:
+        dict_mf:Dict[str, Callable[[float], float]] = {}
+        for var, mf in self._membresy_functions.items():
+            dict_mf[var] = mf.function
+        return dict_mf
+    
+    def get_definition_range(self)->Tuple[float,float]:
+        '''
+        Returns the range where membership functions are defined
+        '''
+        return self._left_limit, self._rigth_limit
+
+    def get_extended_membresy_functions(self, extended)->Dict[str, Callable[[float], float]]:
+        dict_mf:Dict[str, Callable[[float], float]] = {}
+        for var, mf in self._membresy_functions.items():
+            dict_mf[var] = mf.get_extended_function(extended)
+        return dict_mf
     
     @property
     def in_good_limits(self):

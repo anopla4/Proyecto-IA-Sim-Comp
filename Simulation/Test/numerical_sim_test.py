@@ -3,10 +3,10 @@ from Simulation.parameter import Parameter
 from Simulation.activation_rule import ActivationRule
 from Simulation.symptom import Symptom
 from Simulation.intervention import Intervention
-from .disease_bank import *
-from .treatment_bank import *
+from .DiseaseBank.numerical_actions import *
+from .TreatmentBank.numerical_actions import *
 
-def high_probability_to_win_Test(simulation_main, tick=1, end_time=168, simulations=5000):
+def numerical_sim_test(simulation_main, tick=1, end_time=168, simulations=5000):
     
     tos = Symptom(name="tos",
     activation_rules=[ActivationRule(parameters_conditions={'plaqueta':(-1e9,22)}, time_condition=(0,1e9))],
