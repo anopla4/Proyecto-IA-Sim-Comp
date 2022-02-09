@@ -1,11 +1,7 @@
 from .token import Token
 
 
-def tokenize(
-    s,
-    word_type,
-    t={},
-):
+def tokenize(s, word_type, t):
     tokens = []
     _tokens = [""]
     for (index, i) in enumerate(s):
