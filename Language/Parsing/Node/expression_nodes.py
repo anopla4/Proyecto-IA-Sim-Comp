@@ -36,6 +36,36 @@ class VariableNode(AtomicNode):
         super().__init__(lex)
 
 
+class StringNode(AtomicNode):
+    def __init__(self, lex) -> None:
+        super().__init__(lex)
+
+
+class DictNode(ExpressionNode):
+    def __init__(self, items) -> None:
+        super().__init__()
+        self.items = items
+
+
+class ItemNode(ExpressionNode):
+    def __init__(self, key, val) -> None:
+        super().__init__()
+        self.key = key
+        self.val = val
+
+
+class TupleNode(ExpressionNode):
+    def __init__(self, items) -> None:
+        super().__init__()
+        self.items = items
+
+
+class ListNode(ExpressionNode):
+    def __init__(self, items) -> None:
+        super().__init__()
+        self.items = items
+
+
 class BinaryNode(ExpressionNode):
     def __init__(self, left, right, symbol) -> None:
         super().__init__()
@@ -107,9 +137,11 @@ class NotNode(UnaryNode):
 
 
 class RuleNode(ExpressionNode):
-    def __init__(self, left, right) -> None:
-        self.left = left
-        self.right = right
+    def __init__(self, condition, destination, then_var, then_val) -> None:
+        self.condition = condition
+        self.destination = destination
+        self.then_var = then_var
+        self.then_val = then_val
 
 
 class ProbFunctionValueNode(ExpressionNode):

@@ -40,18 +40,13 @@ def get_grammar():
         "<prob-func> <prob-func-list> <rule>"
     )
     for_, if_, if_else = NonTerminal.get_non_terminals("<for> <if> <if-else>")
-    (
-        bool_expr,
-        compare_expr,
-        comparison_operator,
-        compare_factor,
-    ) = NonTerminal.get_non_terminals(
-        "<bool-expr> <compare-expr> <comparison-operator> <compare-factor>"
+    or_expr, and_expr, not_expr, compare_expr = NonTerminal.get_non_terminals(
+        "<or-expr> <and-expr> <not-expr> <compare-factor>"
     )
-    or_expr, and_expr, not_expr = NonTerminal.get_non_terminals(
-        "<or-expr> <and-expr> <not-expr>"
+    dict_, dict_items_list, dict_items = NonTerminal.get_non_terminals(
+        "<dict> <dict-items-list> <dict-items>"
     )
-    compare_atom = NonTerminal("<compare-atom>")
+    tuple_, list_ = NonTerminal.get_non_terminals("<tuple> <list>")
 
     non_terminals = [
         # program,
@@ -81,7 +76,6 @@ def get_grammar():
         or_expr,
         and_expr,
         not_expr,
-        # compare_atom,
         arg_list,
         # prob_func_list,
         # rule,
@@ -89,31 +83,42 @@ def get_grammar():
         if_else,
         func_call,
         for_,
+        dict_,
+        dict_items_list,
+        dict_items,
+        tuple_,
+        list_,
         # prob_func,
-        # bool_expr,
         compare_expr,
-        # comparison_operator,
-        # compare_factor,
     ]
 
     # terminals
 
     epsilon = Terminal("epsilon")
     effect = Terminal("effect")
-    in_, is_ = Terminal.get_terminals("in is")
+    in_, on, is_ = Terminal.get_terminals("in on is")
     rule_operator, arrow = Terminal.get_terminals("=> ->")
-    semi, colon, comma, dot, opar, cpar, ocur, ccur = Terminal.get_terminals(
-        "; : , . ( ) { }"
-    )
+    (
+        semi,
+        colon,
+        comma,
+        dot,
+        opar,
+        cpar,
+        ocur,
+        ccur,
+        quotation_marks,
+    ) = Terminal.get_terminals('; : , . ( ) { } " ')
     equal, plus, minus, star, div = Terminal.get_terminals("= + - * /")
     gt, lt, equals_b, not_equals_b, not_, and_, or_ = Terminal.get_terminals(
         "> < == != not and or"
     )
-    idx, class_, function_ = Terminal.get_terminals("idx class function")
+    idx, num, class_, function_ = Terminal.get_terminals("idx num class function")
     for_kw, if_kw, else_kw = Terminal.get_terminals("for if else")
     activation_condition, effect_time, repetition, action = Terminal.get_terminals(
         "activationCondition effectTime repetition action"
     )
+    osquare_br, csquare_br = Terminal.get_terminals("[ ]")
     terminals = [
         epsilon,
         # effect,
@@ -144,6 +149,7 @@ def get_grammar():
         not_,
         and_,
         or_,
+        on,
         # class_,
         # function_,
         if_kw,
@@ -151,6 +157,8 @@ def get_grammar():
         # effect_time,
         # repetition,
         # action,
+        osquare_br,
+        csquare_br,
     ]
 
     rules = {}
@@ -233,7 +241,7 @@ def get_grammar():
     #         ocur,
     #         activation_condition,
     #         colon,
-    #         bool_expr,
+    #         or_expr,
     #         semi,
     #         effect_time,
     #         colon,
@@ -305,8 +313,6 @@ def get_grammar():
 
     # <expr>
 
-    # p_13 = Production(expr, [arith])
-    # rules[p_13] = lambda _, s: s[1]
     p_64 = Production(expr, [or_expr])
     rules[p_64] = lambda _, s: s[1]
     # p_14 = Production(expr, [prob_func])
@@ -315,11 +321,9 @@ def get_grammar():
     # rules[p_17] = lambda _, s: s[1]
     # p_18 = Production(expr, [def_effect])
     # rules[p_18] = lambda _, s: s[1]
-    # p_19 = Production(expr, [func_call])
-    # rules[p_19] = lambda _, s: s[1]
     # p_63 = Production(expr, [instance])
     # rules[p_63] = lambda _, s: s[1]
-    # productions[expr] = [p_13, p_64, p_14, p_17, p_18, p_19, p_63]
+    # productions[expr] = [p_64, p_14, p_17, p_18, p_63]
     productions[expr] = [p_64]
 
     # <arith>
@@ -330,8 +334,6 @@ def get_grammar():
     rules[p_21] = lambda _, s: PlusNode(s[1], s[3])
     p_22 = Production(arith, [term, minus, arith])
     rules[p_22] = lambda _, s: MinusNode(s[1], s[3])
-    # p_95 = Production(arith, [opar, or_expr, cpar])
-    # rules[p_95] = lambda _, s: s[2]
 
     productions[arith] = [p_20, p_21, p_22]
 
@@ -351,32 +353,30 @@ def get_grammar():
     rules[p_24] = lambda _, s: s[1]
     p_25 = Production(factor, [opar, or_expr, cpar])
     rules[p_25] = lambda _, s: s[2]
-    # p_26 = Production(factor, [opar, func_call, cpar])
-    # rules[p_26] = lambda _, s: s[2]
-    # productions[factor] = [p_24, p_25, p_26]
     productions[factor] = [p_24, p_25]
 
     # <atom>
 
     p_28 = Production(atom, [idx])
-    rules[p_28] = lambda _, s: s[1]
-    # p_25 = Production(atom, [opar, arith, cpar])
-    # rules[p_25] = lambda _, s: s[2]
+    rules[p_28] = lambda _, s: VariableNode(s[1])
+    p_95 = Production(atom, [num])
+    rules[p_95] = lambda _, s: ConstantNumNode(s[1])
+    p_96 = Production(atom, [quotation_marks, idx, quotation_marks])
+    rules[p_96] = lambda _, s: StringNode(s[2])
     p_29 = Production(atom, [func_call])
     rules[p_29] = lambda _, s: s[1]
-    # productions[atom] = [p_28, p_29]
-    productions[atom] = [p_28, p_29]
-
-    # <bool-expr>
+    p_100 = Production(atom, [dict_])
+    rules[p_100] = lambda _, s: DictNode(s[1])
+    p_101 = Production(atom, [tuple_])
+    rules[p_101] = lambda _, s: TupleNode(s[1])
+    p_102 = Production(atom, [list_])
+    rules[p_102] = lambda _, s: ListNode(s[1])
+    productions[atom] = [p_28, p_29, p_95, p_96, p_100, p_101, p_102]
 
     # <or-expr>
 
     p_65 = Production(or_expr, [and_expr, or_, or_expr])
     rules[p_65] = lambda _, s: OrNode(s[1], s[3])
-    # p_90 = Production(or_expr, [opar, or_expr, cpar])
-    # rules[p_90] = lambda _, s: s[2]
-    # p_66 = Production(bool_expr, [compare_expr, or_, bool_expr])
-    # rules[p_66] = lambda _, s: OrNode(s[1], s[3])
     p_82 = Production(or_expr, [and_expr])
     rules[p_82] = lambda _, s: s[1]
     productions[or_expr] = [p_65, p_82]
@@ -399,47 +399,17 @@ def get_grammar():
 
     # <compare-expr>
 
-    # p_84 = Production(compare_expr, [opar, or_expr, cpar])
-    # rules[p_84] = lambda _, s: s[2]
-    p_67 = Production(compare_expr, [arith, equals_b, arith])
+    p_67 = Production(compare_expr, [arith, equals_b, compare_expr])
     rules[p_67] = lambda _, s: EqualsNode(s[1], s[3])
-    p_68 = Production(compare_expr, [arith, not_equals_b, arith])
+    p_68 = Production(compare_expr, [arith, not_equals_b, compare_expr])
     rules[p_68] = lambda _, s: NotEqualsNode(s[1], s[3])
-    p_69 = Production(compare_expr, [arith, lt, arith])
+    p_69 = Production(compare_expr, [arith, lt, compare_expr])
     rules[p_69] = lambda _, s: LesserNode(s[1], s[3])
-    p_83 = Production(compare_expr, [arith, gt, arith])
+    p_83 = Production(compare_expr, [arith, gt, compare_expr])
     rules[p_83] = lambda _, s: GreaterNode(s[1], s[3])
     p_94 = Production(compare_expr, [arith])
     rules[p_94] = lambda _, s: s[1]
     productions[compare_expr] = [p_67, p_68, p_69, p_83, p_94]
-
-    # <compare-atom>
-
-    # p_70 = Production(compare_atom, [arith])
-    # rules[p_70] = lambda _, s: s[1]
-    # p_74 = Production(compare_atom, [opar, or_expr, cpar])
-    # rules[p_74] = lambda _, s: s[2]
-    # p_71 = Production(compare_factor, [atom])
-    # rules[p_71] = lambda _, s: s[1]
-    # p_72 = Production(compare_factor, [func_call])
-    # rules[p_72] = lambda _, s: s[1]
-    # p_73 = Production(compare_factor, [instance])
-    # rules[p_73] = lambda _, s: s[1]
-    # productions[compare_factor] = [p_84, p_71, p_72, p_73, p_74]
-    # productions[compare_atom] = [p_70]
-
-    # <compare-factor>
-
-    # p_71 = Production(compare_factor, [arith])
-    # rules[p_71] = lambda _, s: s[1]
-    # p_72 = Production(compare_factor, [func_call])
-    # rules[p_72] = lambda _, s: s[1]
-    # p_73 = Production(compare_factor, [instance])
-    # rules[p_73] = lambda _, s: s[1]
-    # p_74 = Production(compare_factor, [opar, bool_expr, cpar])
-    # rules[p_74] = lambda _, s: s[2]
-    # productions[compare_factor] = [p_84, p_71, p_72, p_73, p_74]
-    # productions[compare_factor] = [p_71, p_74]
 
     # <func-call>
 
@@ -449,18 +419,15 @@ def get_grammar():
     rules[p_32] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
     p_33 = Production(func_call, [func_call, dot, idx, opar, arg_list, cpar])
     rules[p_33] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
-    # p_34 = Production(func_call, [instance, dot, idx, opar, arg_list, cpar])
-    # rules[p_34] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
-    # productions[func_call] = [p_31, p_32, p_33, p_34]
     productions[func_call] = [p_31, p_32, p_33]
 
-    # # <instance>
+    # <instance>
 
-    # p_62 = Production(instance, [idx, opar, arg_list, cpar])
-    # rules[p_62] = lambda _, s: InstanceNode(s[1], s[3])
-    # productions[instance] = [p_62]
+    p_62 = Production(instance, [idx, opar, arg_list, cpar])
+    rules[p_62] = lambda _, s: InstanceNode(s[1], s[3])
+    productions[instance] = [p_62]
 
-    # # <arg-list>
+    # <arg-list>
 
     p_35 = Production(arg_list, [epsilon])
     rules[p_35] = lambda h, s: []
@@ -487,7 +454,7 @@ def get_grammar():
     # # <prob-func>
 
     # p_40 = Production(prob_func, [idx, arrow, def_effect])
-    # rules[p_40] = lambda _, s: ProbFunctionValueNode(s[1], s[3])
+    # rules[p_40] = lambda _, s: ProbFunctionValueNode(ConstantNumNode(s[1]), s[3])
     # productions[prob_func] = [p_40]
 
     # # <def-effect>
@@ -500,9 +467,43 @@ def get_grammar():
 
     # # <rule>
 
-    # p_43 = Production(rule, [bool_expr, rule_operator, assignment])
-    # rules[p_43] = lambda _, s: RuleNode(s[1], s[3])
+    # p_43 = Production(rule, [conditions_list, on, atom, rule_operator, tuple_])
+    # rules[p_43] = lambda _, s: RuleNode(s[1], s[3], s[5])
     # productions[rule] = [p_43]
+
+    # <dict>
+
+    # p_99 = Production(
+    #     dict_, [ocur, dict_items_list, ccur]
+    # )
+    # rules[p_99] = lambda _, s: DictNode(s[2])
+    # productions[dict_] = [p_99]
+
+    # <dict-items-list>
+
+    # p_96 = Production(dict_items_list, [dict_item, comma, dict_items_list])
+    # rules[p_96] = lambda _, s: [s[1]] + s[2]
+    # p_97 = Production(dict_items_list, [dict_item])
+    # rules[p_97] = lambda _, s: [s[1]]
+    # productions[dict_items_list] = [p_96, p_97]
+
+    # <dict-item>
+
+    # p_98 = Production(dict_item, [atom, semi, atom])
+    # rules[p_98] = lambda _, s: ItemNode(s[1], s[3])
+    # productions[dict_item] = [p_98]
+
+    # <tuple>
+
+    p_103 = Production(tuple_, [opar, arg_list, cpar])
+    rules[tuple_] = lambda _, s: TupleNode(s[2])
+    productions[tuple_] = [p_103]
+
+    # <list>
+
+    p_104 = Production(list_, [osquare_br, arg_list, csquare_br])
+    rules[list_] = lambda _, s: ListNode(s[2])
+    productions[list_] = [p_104]
 
     # <for>
 
@@ -542,12 +543,12 @@ def get_grammar():
 
     # p_59 = Production(body_statements, [simple_statement, body_statements])
     # rules[p_59] = lambda _, s: [s[1]] + s[2]
-    # p_60 = Production(body_statements, [func_call, body_statements])
-    # rules[p_60] = lambda _, s: [s[1]] + s[2]
+    p_60 = Production(body_statements, [func_call, body_statements])
+    rules[p_60] = lambda _, s: [s[1]] + s[2]
     p_61 = Production(body_statements, [epsilon])
     rules[p_61] = lambda h, s: []
     # productions[body_statements] = [p_59, p_60, p_61]
-    productions[body_statements] = [p_61]
+    productions[body_statements] = [p_60, p_61]
 
     # all_terminals
     name = "(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|_)U(a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|_)*"
