@@ -1,3 +1,4 @@
+from sqlite3 import paramstyle
 from .node import Node
 
 
@@ -13,7 +14,7 @@ class AssignmentNode(StatementNode):
 
 
 class AgentDefNode(StatementNode):
-    def __init__(self, idt, idn, conditions, t, rep, act) -> None:
+    def __init__(self, idt, idn, conditions, t, rep, act, supply=None) -> None:
         super().__init__()
         self.idt = idt
         self.idn = idn
@@ -21,6 +22,7 @@ class AgentDefNode(StatementNode):
         self.t = t
         self.rep = rep
         self.act = act
+        self.supply = supply
 
 
 class AttrDeclarationNode(StatementNode):
@@ -59,3 +61,10 @@ class IfNode(StatementNode):
         super().__init__()
         self.expr = expr
         self.body = body
+
+
+class ConditonNode(StatementNode):
+    def __init__(self, param, value) -> None:
+        super().__init__()
+        self.param = param
+        self.value = value
