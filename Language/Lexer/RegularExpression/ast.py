@@ -8,13 +8,16 @@ from Language.Parsing.terminal import Terminal
 
 class Node:
     def __init__(
-        self, alphabet_symbol, ast=None, tmp=None, children: list = [], symbol=None
+        self, alphabet_symbol, ast=None, tmp=None, children: list = None, symbol=None
     ) -> None:
         self.alphabet_symbol = alphabet_symbol
         self.ast = ast
         self.tmp = tmp
         self.parent = None
-        self.children = children
+        if children == None:
+            self.children = []
+        else:
+            self.children = children
         self.symbol = (
             alphabet_symbol
             if isinstance(alphabet_symbol, NonTerminal)
