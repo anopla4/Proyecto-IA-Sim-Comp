@@ -27,18 +27,18 @@ def closure(state, firsts, follows, productions, epsilon):
         stop = False
         index = 0
         while not stop:
-            firsts_delta = firsts_delta.union(frozenset(firsts[delta[index]]))
-            index += 1
-            if (
-                index == len(delta)
-                or isinstance(delta[index], Terminal)
-                or (
-                    delta[index] in firsts
-                    and not "epsilon"
-                    in [symbol.symbol for symbol in firsts[delta[index]]]
-                )
+            if index == len(delta):
+                firsts_delta = firsts_delta.union(item.lockahead)
+                stop = True
+                continue
+            if isinstance(delta[index], Terminal) or (
+                delta[index] in firsts
+                and not "epsilon" in [symbol.symbol for symbol in firsts[delta[index]]]
             ):
                 stop = True
+            firsts_delta = firsts_delta.union(frozenset(firsts[delta[index]]))
+            index += 1
+
         firsts_delta = firsts_delta.difference(frozenset([epsilon]))
 
         for production in productions_symbol:
