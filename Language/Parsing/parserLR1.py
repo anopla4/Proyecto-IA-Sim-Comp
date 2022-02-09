@@ -22,7 +22,7 @@ def closure(state, firsts, follows, productions, epsilon):
             continue
         productions_symbol = productions[next_symbol]
         delta = item.production.right_side[item.pos + 1 :]
-        delta.extend(list(item.lockahead))
+        # delta.extend(list(item.lockahead))
         firsts_delta = frozenset()
         stop = False
         index = 0
