@@ -38,8 +38,16 @@ class Type:
     def set_parent(self, parent):
         self.parent = parent
 
-    def conforms_to(self, t):
-        return t in self.conforms_to_list
+    def conforms_to(self, other):
+        return (
+            other.bypass()
+            or self == other
+            or self.parent is not None
+            and self.parent.conforms_to(other)
+        )
+
+    def bypass(self):
+        return False
 
 
 class ErrorType(Type):
@@ -91,3 +99,23 @@ class EnvironmentType(Type):
 class RandVarEffectType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("RandVarEffect", parent)
+
+
+class ActivationRuleType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("ActivationRule", parent)
+
+
+class ListType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("List", parent)
+
+
+class DictType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("Dict", parent)
+
+
+class TupleType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("Tuple", parent)
