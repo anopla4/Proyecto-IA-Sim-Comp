@@ -11,44 +11,6 @@ from FuzzyEngine.fuzzy_engine import FuzzyEngine
 
 def naive_fuzzy_test(simulation_main, tick=1, end_time=168, simulations=5000):
     
-    tos_rule = ActivationRule(parameters_conditions={'plaqueta':(-1e9,20)}, time_condition=(0,1e9))
-    tos = Symptom(name="tos",activation_rules=[tos_rule], efect_time=48, repetition=8)
-    tos.inner_action = tos_action
-
-    fiebre_rule = ActivationRule(parameters_conditions={'plaqueta':(-1e9,18)}, time_condition=(0,1e9))
-    fiebre = Symptom(name='fiebre',activation_rules=[fiebre_rule], efect_time=48, repetition=12)
-    fiebre.inner_action = fiebre_action
-
-    antibiotico_rule1 = ActivationRule(parameters_conditions={'fiebre':(37, 100)}, time_condition=(0,1e9))
-    antibiotico_rule2 = ActivationRule(parameters_conditions={'plaqueta':(-1e9, 8)}, time_condition=(0,1e9))
-    antibiotico = Intervention(name='antibiotico',activation_rules=[antibiotico_rule1, antibiotico_rule2], 
-                efect_time=48, repetition=12, supply=6)
-    antibiotico.inner_action = antibiotico_action
-
-    dipirona_simple_rule1 = ActivationRule(parameters_conditions={'temperatura':(37, 100)}, time_condition=(0,1e9))
-    dipirona_simple =  Intervention(name='dipirona',activation_rules=[dipirona_simple_rule1],
-            efect_time=24, repetition=4, supply=10)
-    dipirona_simple.inner_action = dipirona_action
-
-    calbamol_rule1 = ActivationRule(parameters_conditions={'temperatura':(37.5, 100),'plaqueta':(-1e9, 24)}, 
-                                                time_condition=(0,1e9))
-    calbamol_rule2 = ActivationRule(parameters_conditions={'plaqueta':(-1e9, 10)}, time_condition=(0,1e9))
-    calbamol = Intervention(name='calbamol',activation_rules=[calbamol_rule1, calbamol_rule2],
-                efect_time=48, repetition=6, supply=8)
-    calbamol.inner_action = calbamol_action
-
-    plaquetol_rule = ActivationRule(parameters_conditions={'plaqueta':(-1e9, 22)}, time_condition=(0,1e9))
-    plaquetol = Intervention(name='plaquetol', activation_rules=[plaquetol_rule], 
-                    efect_time=24, repetition=6, supply=12)
-    plaquetol.inner_action = plaquetol_action
-
-
-    jarabe_rule = ActivationRule(parameters_conditions={'tos':(10, 1e9)}, time_condition=(0,1e9))
-    jarabe = Intervention(name='jarabe', activation_rules=[jarabe_rule], efect_time=48, repetition=8,
-                    supply=6)
-    jarabe.inner_action = jarabe_action
-
-
     p_increase = Parameter(
         name = 'increase', value = 0,
         membresy_functions={'low': Triangular(0,0,0.3),
@@ -94,7 +56,42 @@ def naive_fuzzy_test(simulation_main, tick=1, end_time=168, simulations=5000):
         low_good_limit=35, upp_good_limit=36.8,
         low_bad_limit=34, upp_bad_limit=43
     )
-    
+
+    tos_rule = ActivationRule(parameters_conditions={p_plaqueta:(-1e9,20)}, time_condition=(0,1e9))
+    tos = Symptom(name="tos",activation_rules=[tos_rule], efect_time=48, repetition=8)
+    tos.inner_action = tos_action
+
+    fiebre_rule = ActivationRule(parameters_conditions={p_plaqueta:(-1e9,18)}, time_condition=(0,1e9))
+    fiebre = Symptom(name='fiebre',activation_rules=[fiebre_rule], efect_time=48, repetition=12)
+    fiebre.inner_action = fiebre_action
+
+    antibiotico_rule1 = ActivationRule(parameters_conditions={p_temperatura:(37, 100)}, time_condition=(0,1e9))
+    antibiotico_rule2 = ActivationRule(parameters_conditions={p_plaqueta:(-1e9, 8)}, time_condition=(0,1e9))
+    antibiotico = Intervention(name='antibiotico',activation_rules=[antibiotico_rule1, antibiotico_rule2], 
+                efect_time=48, repetition=12, supply=6)
+    antibiotico.inner_action = antibiotico_action
+
+    dipirona_simple_rule1 = ActivationRule(parameters_conditions={p_temperatura:(37, 100)}, time_condition=(0,1e9))
+    dipirona_simple =  Intervention(name='dipirona',activation_rules=[dipirona_simple_rule1],
+            efect_time=24, repetition=4, supply=10)
+    dipirona_simple.inner_action = dipirona_action
+
+    calbamol_rule1 = ActivationRule(parameters_conditions={p_temperatura:(37.5, 100),p_plaqueta:(-1e9, 24)}, 
+                                                time_condition=(0,1e9))
+    calbamol_rule2 = ActivationRule(parameters_conditions={p_plaqueta:(-1e9, 10)}, time_condition=(0,1e9))
+    calbamol = Intervention(name='calbamol',activation_rules=[calbamol_rule1, calbamol_rule2],
+                efect_time=48, repetition=6, supply=8)
+    calbamol.inner_action = calbamol_action
+
+    plaquetol_rule = ActivationRule(parameters_conditions={p_plaqueta:(-1e9, 22)}, time_condition=(0,1e9))
+    plaquetol = Intervention(name='plaquetol', activation_rules=[plaquetol_rule], 
+                    efect_time=24, repetition=6, supply=12)
+    plaquetol.inner_action = plaquetol_action
+
+    jarabe_rule = ActivationRule(parameters_conditions={p_tos:(10, 1e9)}, time_condition=(0,1e9))
+    jarabe = Intervention(name='jarabe', activation_rules=[jarabe_rule], efect_time=48, repetition=8,
+                    supply=6)
+    jarabe.inner_action = jarabe_action
 
     environment = Environment(parameters=[p_plaqueta, p_tos, p_temperatura])
     fuzzy_engine = FuzzyEngine(increse_parameter=p_increase, decrese_parameter=p_decrease)

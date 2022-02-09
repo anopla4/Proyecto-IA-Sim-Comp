@@ -4,7 +4,6 @@ from TreatmentTree.node import Node
 from main import main
 from time import time
 
-#from TreatmentTree.networkx_draw import visualize_branch_nx, visualize_graph_nx
 from TreatmentTree.pyvis_draw import visualize_graph_pyvis, visualize_branch_pyvis
 
 def print_branch_data(nodes:list[Node]):
@@ -31,6 +30,6 @@ best_branch = tree.best_branch()
 print(best_branch[-1].get_average_final_state())
 print_branch_data(best_branch)
 
-visualize_branch_pyvis(best_branch)
-tree.prunning(max_childs=2)
-visualize_graph_pyvis(tree.root, 140)
+#visualize_branch_pyvis(best_branch)
+#tree.prunning(max_childs=2)
+#visualize_graph_pyvis(tree.root, 140)
