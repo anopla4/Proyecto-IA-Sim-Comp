@@ -59,7 +59,7 @@ def get_grammar():
         # def_attr,
         def_func,
         func_statements,
-        # def_var,
+        def_var,
         assignment,
         # def_agent,
         param,
@@ -117,8 +117,10 @@ def get_grammar():
     activation_condition, effect_time, repetition, action = Terminal.get_terminals(
         "activationCondition effectTime repetition action"
     )
+    type_ = Terminal("type")
     osquare_br, csquare_br = Terminal.get_terminals("[ ]")
     terminals = [
+        type_,
         epsilon,
         # effect,
         in_,
@@ -204,11 +206,11 @@ def get_grammar():
     rules[p_53] = lambda _, s: [s[1]]
     p_97 = Production(simple_statement, [func_call])
     rules[p_97] = lambda _, s: [s[1]]
-    # p_56 = Production(simple_statement, [def_var])
-    # rules[p_56] = lambda _, s: [s[1]]
+    p_56 = Production(simple_statement, [def_var])
+    rules[p_56] = lambda _, s: [s[1]]
     p_57 = Production(simple_statement, [assignment])
     rules[p_57] = lambda _, s: [s[1]]
-    productions[simple_statement] = [p_51, p_52, p_53, p_97, p_57]
+    productions[simple_statement] = [p_51, p_52, p_53, p_97, p_57, p_56]
     # productions[simple_statement] = [p_51, p_52, p_53, p_56, p_57]
 
     # # <def_class>
@@ -295,15 +297,13 @@ def get_grammar():
     # rules[p_79] = lambda h, s: []
     # productions[func_statements] = [p_78, p_79]
 
-    # # <def-var>
+    # <def-var>
 
-    # p_15 = Production(def_var, [idx, idx, equal, expr, semi])
-    # rules[p_15] = lambda _, s: VarDeclarationNode(s[1], s[2], s[4])
-    # p_95 = Production(def_var, [idx, idx, equal, expr, semi])
-    # rules[p_15] = lambda _, s: VarDeclarationNode(s[1], s[2], s[4])
+    p_15 = Production(def_var, [type_, idx, equal, expr, semi])
+    rules[p_15] = lambda _, s: VarDeclarationNode(s[1], s[2], s[4])
     # p_88 = Production(def_var, [def_rand_var])
     # rules[p_88] = lambda _, s: [s[1]]
-    # productions[def_var] = [p_15]
+    productions[def_var] = [p_15]
 
     # <assignment>
 
@@ -313,7 +313,7 @@ def get_grammar():
 
     # <param>
 
-    p_10 = Production(param, [idx, idx])
+    p_10 = Production(param, [type_, idx])
     rules[p_10] = lambda _, s: (s[1], s[2])
     productions[param] = [p_10]
 
@@ -587,9 +587,13 @@ def get_grammar():
     num = "0|1|2|3|4|5|6|7|8|9|((1|2|3|4|5|6|7|8|9)U(0|1|2|3|4|5|6|7|8|9)*)"
 
     _t = {
-        f"{name}|{num}|RandVariableEffect|Patient|Parameter|Intervention|Symptom|int|double|simulate": (
+        f"{name}|{num}": (
             idx,
             1,
+        ),
+        "RandVariableEffect|Patient|Parameter|Intervention|Symptom|int|double|simulate": (
+            type_,
+            2,
         ),
         "for": (for_kw, 2),
         "if": (if_kw, 2),
