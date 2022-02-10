@@ -112,16 +112,25 @@ class ParserLR1(ShiftReduceParser):
                         self.action[(i, G.EOF)] = (ShiftReduceParser.OK, None)
                     else:
                         for symbol in item.lockahead:
-                            assert (i, symbol) not in self.action or self.action[
+                            if (i, symbol) not in self.action or self.action[
                                 (i, symbol)
                             ] == (
                                 ShiftReduceParser.REDUCE,
                                 item.production,
-                            ), "Shift-Reduce or Reduce-Reduce conflict"
-                            self.action[(i, symbol)] = (
-                                ShiftReduceParser.REDUCE,
+                            ):
+                                self.action[(i, symbol)] = (
+                                    ShiftReduceParser.REDUCE,
+                                    item.production,
+                                )
+                            elif (i, symbol) in self.action and self.action[
+                                i, symbol
+                            ] == (
+                                ShiftReduceParser.SHIFT,
                                 item.production,
-                            )
+                            ):
+                                raise Exception("SHIF REDUCE CONFLICT")
+                            else:
+                                raise Exception("Reduce-Reduce conflict 2")
                 else:
                     next_symbol = item.NextSymbol
                     next_state_index = automaton.states.index(

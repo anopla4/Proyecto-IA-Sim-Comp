@@ -22,10 +22,11 @@ class VarDeclarationNode(DeclarationNode):
 
 
 class FuncDeclarationNode(DeclarationNode):
-    def __init__(self, idf, params_types, params_names, body, return_type) -> None:
+    def __init__(self, idf, params_names, return_type, body) -> None:
+        # def __init__(self, idf, params_types, params_names, body, return_type) -> None:
         super().__init__()
         self.id = idf
-        self.params_types = params_types
+        # self.params_types = params_types
         self.params_names = params_names
         self.body = body
         self.return_type = return_type
