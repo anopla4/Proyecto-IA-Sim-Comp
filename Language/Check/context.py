@@ -6,10 +6,21 @@ class Context:
     def __init__(self) -> None:
         self.types = {}
 
+    def __str__(self):
+        return (
+            "{\n\t"
+            + "\n\t".join(y for x in self.types.values() for y in str(x).split("\n"))
+            + "\n}"
+        )
+
+    def __repr__(self):
+        return str(self)
+
     def def_type(self, type):
         if type in self.types:
             raise SemanticError(f"Type {type} is already defined.")
         self.types[type] = Type(type)
+        return self.types[type]
 
     def get_type(self, type_name):
         if type_name not in self.types:
