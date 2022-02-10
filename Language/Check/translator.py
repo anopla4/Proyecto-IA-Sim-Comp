@@ -50,7 +50,7 @@ class Translator(object):
 
     @visitor.when(FuncDeclarationNode)
     def visit(self, node, tabs=0):
-        params = ", ".join(param for param in node.params_names)
+        params = ", ".join(param[1] for param in node.params)
         body = "\n".join(self.visit(child, tabs + 1) for child in node.body)
         ans = "\t" * tabs + f"def {node.id}({params}):\n{body}"
         return ans
