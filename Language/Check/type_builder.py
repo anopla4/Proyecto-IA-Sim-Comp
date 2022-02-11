@@ -1,4 +1,4 @@
-import visitor
+import Language.Check.visitor as visitor
 from ..Parsing.Node.declaration_nodes import *
 from ..Parsing.Node.expression_nodes import *
 from ..Parsing.Node.statement_nodes import *
@@ -10,7 +10,7 @@ from .error import SemanticError
 class TypeBuilder(object):
     def __init__(self, context, errors=[]) -> None:
         self.context = context
-        self.current_type = None
+        self.current_type = context.types["Main"]
         self.errors = errors
 
     @visitor.on("node")
@@ -19,7 +19,7 @@ class TypeBuilder(object):
 
     @visitor.when(ProgramNode)
     def visit(self, node):
-        for dec in node.declarations:
+        for dec in node.statements:
             self.visit(dec)
 
     @visitor.when(ClassNode)
@@ -55,7 +55,6 @@ class TypeBuilder(object):
                 self.errors.append(ex.text)
                 t = ErrorType()
             param_types.append(t)
-
         try:
             rtype = self.context.get_type(node.return_type)
         except SemanticError as ex:
@@ -63,7 +62,7 @@ class TypeBuilder(object):
             rtype = ErrorType()
 
         try:
-            self.current_type.set_function(node.id, param_names, param_types, rtype)
+            self.current_type.set_function(node.id, rtype, param_names, param_types)
         except SemanticError as ex:
             self.errors.append(ex.text)
 

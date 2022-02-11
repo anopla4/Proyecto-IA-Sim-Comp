@@ -128,12 +128,12 @@ class LesserNode(BooleanBinaryNode):
         super().__init__(left, right, "<")
 
 
-class AndNode(BooleanBinaryNode):
+class AndNode(BinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "and")
 
 
-class OrNode(BooleanBinaryNode):
+class OrNode(BinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "or")
 

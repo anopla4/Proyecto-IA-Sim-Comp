@@ -1,4 +1,6 @@
+from textwrap import wrap
 import streamlit as st
+from main import main
 from streamlit_ace import st_ace
 
 def title():
@@ -10,8 +12,12 @@ def code_editor():
     first, second = st.columns([11,1])
     with first:
         code = st_ace(wrap=True)
-    with second:
-        st.write(code)
+        if code:
+            main(code)
+            # st.write(code)
+    # with second:
+    #     main()
+    #     st.write('hbyvv')
 
 def guide():
     st.info("This page sould be a language syntax guide")

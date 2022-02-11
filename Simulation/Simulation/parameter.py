@@ -1,5 +1,5 @@
 from typing import Dict, Tuple, Callable
-from FuzzyEngine.MembresyFunctions.membresy_function import MembresyFunction
+from ..FuzzyEngine.MembresyFunctions.membresy_function import MembresyFunction
 
 class Parameter:
     def __init__(self,name:str,value:float,

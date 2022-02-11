@@ -1,6 +1,7 @@
 class SemanticError(Exception):
-    def __init__(self, text) -> None:
+    def __init__(self, text=None) -> None:
         super().__init__(text)
+        self.text = text
 
 
 METHOD_NOT_DEFINED = 'Method "%s" is not defined.'

@@ -12,6 +12,7 @@ class Scope:
         self.attributes = {}
         self.parent = parent
         self.locals = []
+        self.children = []
 
     def create_child(self):
         child = Scope(self)
@@ -21,7 +22,7 @@ class Scope:
     def define_variable(self, vtype, vname):
         info = Variable(vname, vtype)
         self.locals.append(info)
-        self.attributes.append(vname)
+        self.attributes[vname] = info
         return info
 
     def find_variable(self, vname, index=None):

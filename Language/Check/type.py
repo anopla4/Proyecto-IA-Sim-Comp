@@ -5,10 +5,10 @@ from .method import Method
 
 
 class Type:
-    def __init__(self, name, parent=None) -> None:
+    def __init__(self, name, parent=None, functions=None) -> None:
         self.name = name
         self.parent = parent
-        self.functions = {}
+        self.functions = {} if functions == None else functions
         self.attributes = {}
         self.conforms_to_list = []
 
@@ -41,7 +41,7 @@ class Type:
 
     def get_function(self, name: str):
         try:
-            return next(f for f in self.functions if f.name == name)
+            return next(self.functions[f] for f in self.functions if self.functions[f].name == name)
         except StopIteration:
             if self.parent is None:
                 raise SemanticError(f'Method "{name}" is not defined in {self.name}.')
@@ -53,11 +53,10 @@ class Type:
     def set_function(
         self, name: str, param_names: list, param_types: list, return_type
     ):
-        if name in (f.name for f in self.functions):
+        if name in (self.functions[f].name for f in self.functions):
             raise SemanticError(f'Method "{name}" already defined in {self.name}')
-
         method = Method(name, param_names, param_types, return_type)
-        self.functions.append(method)
+        self.functions[name] = method
         return method
 
     def set_parent(self, parent):
@@ -81,6 +80,7 @@ class Type:
 
     def conforms_to(self, other):
         return (
+            isinstance(other, MainType) or
             other.bypass()
             or self == other
             or self.parent is not None
@@ -108,10 +108,9 @@ class Type:
 
 
 class ErrorType(Type):
-    def __init__(self, text, parent=None) -> None:
-        super().__init__(self, "<error>", parent)
-        self.text = text
-
+    def __init__(self, parent=None) -> None:
+        super().__init__("<error>", parent)
+        
     def conforms_to(self, other):
         return True
 
@@ -124,15 +123,18 @@ class ErrorType(Type):
 
 class MainType(Type):
     def __init__(self, parent=None) -> None:
-        super().__init__("Main", parent)
-        self.functions = {
+        functions={
             "simulate": Method(
                 "simulate",
-                TreeType,
+                "Tree",
                 ["env", "treatment", "disease", "tick", "end_time", "num_sim"],
-                [EnvironmentType, ListType, ListType, NumType, NumType, NumType],
-            )
+                ["Environment", "List", "List", "Num", "Num", "Num"],
+            ),
+            "print": Method(
+                "print", "void", ["text"], ["Main"] )
         }
+        super().__init__("Main", parent, functions)
+    
 
 
 class TreeType(Type):
@@ -141,8 +143,8 @@ class TreeType(Type):
 
 
 class NumType(Type):
-    def __init__(self, parent=None) -> None:
-        super().__init__("num", parent)
+    def __init__(self, name="num", parent=None) -> None:
+        super().__init__(name, parent)
 
     def __eq__(self, other):
         return other.name == self.name or isinstance(other, NumType)
@@ -167,8 +169,8 @@ class StringType(Type):
 
 
 class VoidType(Type):
-    def __init__(self, name, parent=None) -> None:
-        super().__init__(name, parent)
+    def __init__(self, parent=None) -> None:
+        super().__init__("void", parent)
 
     def conforms_to(self, other):
         raise Exception("Invalid type: void type.")
@@ -201,8 +203,8 @@ class ParameterType(Type):
 
 
 class EnvironmentType(Type):
-    def __init__(self, name, parent=None) -> None:
-        super().__init__(name, parent)
+    def __init__(self, parent=None) -> None:
+        super().__init__("environment", parent)
 
 
 class RandVarEffectType(Type):

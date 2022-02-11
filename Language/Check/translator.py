@@ -1,4 +1,4 @@
-from . import visitor
+import Language.Check.visitor as visitor
 from ..Parsing.Node.declaration_nodes import *
 from ..Parsing.Node.expression_nodes import *
 from ..Parsing.Node.statement_nodes import *
@@ -15,13 +15,9 @@ class Translator(object):
 
     @visitor.when(ProgramNode)
     def visit(self, node, tabs=0):
-        statements = "\n".join(self.visit(child, tabs) for child in node.statements)
-        import1 = "from Simulation.environment import Environment"
-        import2 = "from Simulation.parameter import Parameter"
-        import3 = "from Simulation.activation_rule import ActivationRule"
-        import4 = "from Simulation.symptom import Symptom"
-        import5 = "from Simulation.intervention import Intervention"
-        return f"{import1}\n{import2}\n{import3}\n{import4}\n{import5}\n{statements}"
+        statements = "\n".join([self.visit(child, tabs) for child in node.statements])
+
+        return f"{statements}"
 
     @visitor.when(ClassNode)
     def visit(self, node, tabs=0):

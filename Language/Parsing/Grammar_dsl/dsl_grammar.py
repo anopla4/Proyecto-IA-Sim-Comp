@@ -191,13 +191,13 @@ def get_grammar():
     # <statement>
 
     p_1 = Production(statement, [def_class])
-    rules[p_1] = lambda _, s: [s[1]]
+    rules[p_1] = lambda _, s: s[1]
     p_2 = Production(statement, [def_func])
-    rules[p_2] = lambda _, s: [s[1]]
+    rules[p_2] = lambda _, s: s[1]
     p_75 = Production(statement, [def_agent])
-    rules[p_75] = lambda _, s: [s[1]]
+    rules[p_75] = lambda _, s: s[1]
     p_54 = Production(statement, [simple_statement])
-    rules[p_54] = lambda _, s: [s[1]]
+    rules[p_54] = lambda _, s: s[1]
     # p_3 = Production(statement, [epsilon])
     # rules[p_3] = lambda h, s: []
     productions[statement] = [p_54, p_2, p_1, p_75]
@@ -206,26 +206,26 @@ def get_grammar():
     # <simple-statement>
 
     p_51 = Production(simple_statement, [if_])
-    rules[p_51] = lambda _, s: [s[1]]
+    rules[p_51] = lambda _, s: s[1]
     p_52 = Production(simple_statement, [if_else])
-    rules[p_52] = lambda _, s: [s[1]]
+    rules[p_52] = lambda _, s: s[1]
     p_53 = Production(simple_statement, [for_])
-    rules[p_53] = lambda _, s: [s[1]]
+    rules[p_53] = lambda _, s: s[1]
     p_97 = Production(simple_statement, [func_call])
-    rules[p_97] = lambda _, s: [s[1]]
+    rules[p_97] = lambda _, s: s[1]
     p_56 = Production(simple_statement, [def_var])
-    rules[p_56] = lambda _, s: [s[1]]
+    rules[p_56] = lambda _, s: s[1]
     p_57 = Production(simple_statement, [assignment])
-    rules[p_57] = lambda _, s: [s[1]]
+    rules[p_57] = lambda _, s: s[1]
     productions[simple_statement] = [p_51, p_52, p_53, p_97, p_57, p_56]
     # productions[simple_statement] = [p_51, p_52, p_53, p_56, p_57]
 
     # <def_class>
 
     p_4 = Production(def_class, [class_, idx, ocur, statement, ccur])
-    rules[p_4] = lambda _, s: ClassNode(s[2], s[4])
+    rules[p_4] = lambda _, s: ClassNode(s[2].expression, s[4])
     p_5 = Production(def_class, [class_, idx, colon, idx, ocur, statement, ccur])
-    rules[p_5] = lambda _, s: ClassNode(s[2], s[3], s[4])
+    rules[p_5] = lambda _, s: ClassNode(s[2].expression, s[3], s[4])
     productions[def_class] = [p_4, p_5]
 
     # <def-agent>
@@ -256,7 +256,7 @@ def get_grammar():
             ccur,
         ],
     )
-    rules[p_76] = lambda _, s: AgentDefNode(s[1], s[2], s[7], s[11], s[15], s[19])
+    rules[p_76] = lambda _, s: AgentDefNode(s[1], s[2].expression, s[7], s[11], s[15], s[19].expression)
     p_109 = Production(
         def_agent,
         [
@@ -288,7 +288,7 @@ def get_grammar():
         ],
     )
     rules[p_109] = lambda _, s: AgentDefNode(
-        s[1], s[2], s[7], s[11], s[15], s[19], s[23]
+        s[1].expression, s[2].expression, s[7], s[11], s[15], s[19].expression, s[23]
     )
     productions[def_agent] = [p_76, p_109]
 
@@ -303,31 +303,31 @@ def get_grammar():
             param_list,
             cpar,
             arrow,
-            idx,
+            type_,
             ocur,
             body_statements,
             ccur,
         ],
     )
-    rules[p_9] = lambda _, s: FuncDeclarationNode(s[2], s[4], s[7], s[9])
+    rules[p_9] = lambda _, s: FuncDeclarationNode(s[2].expression, s[4], s[7].expression, s[9])
     productions[def_func] = [p_9]
 
     # <def-var>
 
     p_15 = Production(def_var, [type_, idx, equal, expr, semi])
-    rules[p_15] = lambda _, s: VarDeclarationNode(s[1], s[2], s[4])
+    rules[p_15] = lambda _, s: VarDeclarationNode(s[1].expression, s[2], s[4])
     productions[def_var] = [p_15]
 
     # <assignment>
 
     p_16 = Production(assignment, [idx, equal, expr, semi])
-    rules[p_16] = lambda _, s: AssignmentNode(s[1], s[3])
+    rules[p_16] = lambda _, s: AssignmentNode(s[1].expression, s[3])
     productions[assignment] = [p_16]
 
     # <param>
 
     p_10 = Production(param, [type_, idx])
-    rules[p_10] = lambda _, s: (s[1], s[2])
+    rules[p_10] = lambda _, s: (s[1].expression, s[2].expression)
     productions[param] = [p_10]
 
     # <param-list>
@@ -353,7 +353,7 @@ def get_grammar():
     p_63 = Production(expr, [instance])
     rules[p_63] = lambda _, s: s[1]
     p_88 = Production(expr, [def_rand_var])
-    rules[p_88] = lambda _, s: [s[1]]
+    rules[p_88] = lambda _, s: s[1]
     # productions[expr] = [p_64, p_14, p_17, p_18, p_63]
     productions[expr] = [p_64, p_63, p_17, p_18, p_88]
 
@@ -393,16 +393,16 @@ def get_grammar():
 
     # <idxs>
     p_113 = Production(idxs, [idx, idxs])
-    rules[p_113] = lambda _, s: [s[1]] + s[2]
+    rules[p_113] = lambda _, s: s[1].expression + s[2]
     p_114 = Production(idxs, [epsilon])
-    rules[p_114] = lambda _, s: []
+    rules[p_114] = lambda _, s: ""
     productions[idxs] = [p_113, p_114]
     # <atom>
 
     p_28 = Production(atom, [idx])
-    rules[p_28] = lambda _, s: VariableNode(s[1])
+    rules[p_28] = lambda _, s: VariableNode(s[1].expression)
     p_108 = Production(atom, [num])
-    rules[p_108] = lambda _, s: ConstantNumNode(s[1])
+    rules[p_108] = lambda _, s: ConstantNumNode(s[1].expression)
     p_112 = Production(atom, [string])
     rules[p_112] = lambda _, s: s[1]
     p_29 = Production(atom, [func_call])
@@ -463,17 +463,17 @@ def get_grammar():
     # <func-call>
 
     p_31 = Production(func_call, [idx, opar, arg_list, cpar])
-    rules[p_31] = lambda _, s: CallNode(s[1], s[3])
+    rules[p_31] = lambda _, s: CallNode(s[1].expression, s[3])
     p_32 = Production(func_call, [idx, dot, idx, opar, arg_list, cpar])
-    rules[p_32] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
+    rules[p_32] = lambda _, s: CallNode(s[3].expression, s[5], obj=s[1].expression)
     p_33 = Production(func_call, [func_call, dot, idx, opar, arg_list, cpar])
-    rules[p_33] = lambda _, s: CallNode(s[3], s[5], obj=s[1])
+    rules[p_33] = lambda _, s: CallNode(s[3].expression, s[5], obj=s[1])
     productions[func_call] = [p_31, p_32, p_33]
 
     # <instance>
 
     p_62 = Production(instance, [new_, type_, opar, arg_list, cpar])
-    rules[p_62] = lambda _, s: InstanceNode(s[2], s[4])
+    rules[p_62] = lambda _, s: InstanceNode(s[2].expression, s[4])
     productions[instance] = [p_62]
 
     # <arg-list>
@@ -502,14 +502,14 @@ def get_grammar():
 
     # <prob-func>
 
-    p_40 = Production(prob_func, [idx, arrow, def_effect])
-    rules[p_40] = lambda _, s: ProbFunctionValueNode(ConstantNumNode(s[1]), s[3])
+    p_40 = Production(prob_func, [num, arrow, def_effect])
+    rules[p_40] = lambda _, s: ProbFunctionValueNode(s[1], s[3])
     productions[prob_func] = [p_40]
 
     # <def-effect>
 
     p_41 = Production(def_effect, [effect, idx, idx, idx])
-    rules[p_41] = lambda _, s: EffectNode(s[2], s[3], s[4])
+    rules[p_41] = lambda _, s: EffectNode(s[2].expression, s[3].expression, s[4].expression)
     productions[def_effect] = [p_41]
 
     # <rule>
@@ -560,7 +560,7 @@ def get_grammar():
         for_,
         [for_kw, idx, in_, expr, ocur, body_statements, ccur],
     )
-    rules[p_45] = lambda _, s: ForNode(s[2], s[4], s[6])
+    rules[p_45] = lambda _, s: ForNode(s[2], s[4].expression, s[6])
     productions[for_] = [p_45]
 
     # <if>
@@ -625,7 +625,7 @@ def get_grammar():
             1,
         ),
         f"{num_}": (num, 1),
-        "RandVariableEffect|ActivationRule|Patient|Parameter|Intervention|Symptom|int|double|tuple": (
+        "RandVariableEffect|ActivationRule|Environment|Patient|Parameter|Agent|Intervention|Symptom|int|double|Tuple|Dict|List|void|bool": (
             type_,
             2,
         ),
