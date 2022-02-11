@@ -98,8 +98,6 @@ class ParserLR1(ShiftReduceParser):
         automaton = build_LR1_automaton(AugmentedG)
 
         for i, state in enumerate(automaton.states):
-            # if i == len(automaton.states) - 1:
-            #     print("end")
             for item in state.state:
                 if item.IsReduceItem or item.NextSymbol == G.epsilon:
                     if item.production.left_side == AugmentedG.start_symbol:
