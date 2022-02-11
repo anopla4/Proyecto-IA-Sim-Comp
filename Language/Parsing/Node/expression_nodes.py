@@ -1,53 +1,57 @@
 from ast import Num
 from dataclasses import is_dataclass
+
+from Language.Check.type import DictType
 from .node import Node
 
 
 class ExpressionNode(Node):
-    pass
+    def __init__(self, type) -> None:
+        super().__init__()
+        self.type = type
 
 
 class AtomicNode(ExpressionNode):
-    def __init__(self, lex) -> None:
-        super().__init__()
+    def __init__(self, lex, type=None) -> None:
+        super().__init__(type)
         self.lex = lex
 
 
 class ConstantNumNode(AtomicNode):
-    def __init__(self, lex) -> None:
-        super().__init__(lex)
+    def __init__(self, lex, type=None) -> None:
+        super().__init__(lex, type)
 
 
 class CallNode(AtomicNode):
-    def __init__(self, lex, argums, obj=None) -> None:
-        super().__init__(lex)
+    def __init__(self, lex, argums, obj=None, type=None) -> None:
+        super().__init__(lex, type)
         self.arguments = argums
         self.obj = obj
 
 
 class InstanceNode(AtomicNode):
-    def __init__(self, idc, argums) -> None:
-        super().__init__(idc)
+    def __init__(self, idc, argums, type=None) -> None:
+        super().__init__(idc, type)
         self.arguments = argums
 
 
 class VariableNode(AtomicNode):
-    def __init__(self, lex) -> None:
-        super().__init__(lex)
+    def __init__(self, lex, type=None) -> None:
+        super().__init__(lex, type)
 
 
 class StringNode(AtomicNode):
-    def __init__(self, lex) -> None:
-        super().__init__(lex)
+    def __init__(self, lex, type=None) -> None:
+        super().__init__(lex, DictType)
 
 
 class DictNode(ExpressionNode):
-    def __init__(self, items) -> None:
-        super().__init__()
+    def __init__(self, items, type=None) -> None:
+        super().__init__(type)
         self.items = items
 
 
-class ItemNode(ExpressionNode):
+class ItemNode(Node):
     def __init__(self, key, val) -> None:
         super().__init__()
         self.key = key
@@ -55,78 +59,88 @@ class ItemNode(ExpressionNode):
 
 
 class TupleNode(ExpressionNode):
-    def __init__(self, items) -> None:
-        super().__init__()
+    def __init__(self, items, type=None) -> None:
+        super().__init__(type)
         self.items = items
 
 
 class ListNode(ExpressionNode):
-    def __init__(self, items) -> None:
-        super().__init__()
+    def __init__(self, items, type=None) -> None:
+        super().__init__(type)
         self.items = items
 
 
 class BinaryNode(ExpressionNode):
-    def __init__(self, left, right, symbol) -> None:
-        super().__init__()
+    def __init__(self, left, right, symbol, type=None) -> None:
+        super().__init__(type)
         self.left = left
         self.right = right
         self.symbol = symbol
 
 
-class ByNode(BinaryNode):
+class NumericBinaryNode(BinaryNode):
+    def __init__(self, left, right, symbol, type=None) -> None:
+        super().__init__(left, right, symbol, type)
+
+
+class ByNode(NumericBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "*")
 
 
-class DivideNode(BinaryNode):
+class DivideNode(NumericBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "/")
 
 
-class PlusNode(BinaryNode):
+class PlusNode(NumericBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "+")
 
 
-class MinusNode(BinaryNode):
+class MinusNode(NumericBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "-")
 
 
-class EqualsNode(BinaryNode):
+class BooleanBinaryNode(BinaryNode):
+    def __init__(self, left, right, symbol, type=None) -> None:
+        super().__init__(left, right, symbol, type)
+
+
+class EqualsNode(BooleanBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "==")
 
 
-class NotEqualsNode(BinaryNode):
+class NotEqualsNode(BooleanBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "!=")
 
 
-class GreaterNode(BinaryNode):
+class GreaterNode(BooleanBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, ">")
 
 
-class LesserNode(BinaryNode):
+class LesserNode(BooleanBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "<")
 
 
-class AndNode(BinaryNode):
+class AndNode(BooleanBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "and")
 
 
-class OrNode(BinaryNode):
+class OrNode(BooleanBinaryNode):
     def __init__(self, left, right) -> None:
         super().__init__(left, right, "or")
 
 
 class UnaryNode(ExpressionNode):
-    def __init__(self, expr, symbol) -> None:
-        super().__init__()
+    def __init__(self, expr, symbol, type=None) -> None:
+        super().__init__(type)
         self.expr = expr
         self.symbol = symbol
 
@@ -137,14 +151,14 @@ class NotNode(UnaryNode):
 
 
 class RuleNode(ExpressionNode):
-    def __init__(self, condition, destination, then_var, then_val) -> None:
+    def __init__(self, condition, destination, then, type=None) -> None:
+        super().__init__(type)
         self.condition = condition
         self.destination = destination
-        self.then_var = then_var
-        self.then_val = then_val
+        self.then = then
 
 
-class ProbFunctionValueNode(ExpressionNode):
+class ProbFunctionValueNode(Node):
     def __init__(self, num, val) -> None:
         super().__init__()
         self.num = num
@@ -152,14 +166,14 @@ class ProbFunctionValueNode(ExpressionNode):
 
 
 class ProbabilityFunctionNode(ExpressionNode):
-    def __init__(self, values) -> None:
-        super().__init__()
+    def __init__(self, values, type=None) -> None:
+        super().__init__(type)
         self.values = values
 
 
 class EffectNode(ExpressionNode):
-    def __init__(self, par, env, e) -> None:
-        super().__init__()
+    def __init__(self, par, env, e, type=None) -> None:
+        super().__init__(type)
         self.par = par
         self.env = env
         self.e = e

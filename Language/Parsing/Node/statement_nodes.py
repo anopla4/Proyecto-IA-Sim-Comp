@@ -63,8 +63,7 @@ class IfNode(StatementNode):
         self.body = body
 
 
-class ConditonNode(StatementNode):
-    def __init__(self, param, value) -> None:
+class ReturnNode(StatementNode):
+    def __init__(self, expr) -> None:
         super().__init__()
-        self.param = param
-        self.value = value
+        self.expr = expr
