@@ -18,9 +18,10 @@ class Scope:
         self.children.append(child)
         return child
 
-    def define_variable(self, vname, vtype):
+    def define_variable(self, vtype, vname):
         info = Variable(vname, vtype)
         self.locals.append(info)
+        self.attributes.append(vname)
         return info
 
     def find_variable(self, vname, index=None):

@@ -1,3 +1,4 @@
+from Language.Parsing.Node.declaration_nodes import FuncDeclarationNode
 from .error import WRONG_SIGNATURE, SemanticError
 from .type import Type
 
@@ -34,17 +35,9 @@ class Context:
             raise SemanticError("Cyclic inheritance.")
         self.check_cyclic_inheritance(type, type.parent)
 
-    def get_function_to_override(self, method, t, name, base_type_name):
-        if t == None:
-            return
-        if name in t.functions:
-            m = t.functions[name]
-            if len(m.parameters) != len(method.parameters):
-                raise SemanticError(WRONG_SIGNATURE % (method.name, base_type_name))
-            for i, t in enumerate(method.parameters_types):
-                if not m.parameters_type[i] == t:
-                    self.errors.append(WRONG_SIGNATURE % (method.name, base_type_name))
-                    break
-            if not method.return_type == m.return_type:
-                self.errors.append(WRONG_SIGNATURE % (method.name, base_type_name))
-        self.get_function_to_override(t.parent, name)
+    def check_if_return_in_func(self, node):
+        if node is None:
+            raise False
+        if isinstance(node, FuncDeclarationNode):
+            return True
+        return self.check_if_return_in_func(node.parent)

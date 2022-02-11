@@ -36,6 +36,10 @@ class TypeCollector(object):
             self.context.types["Environment"]
         )
         self.context.types["RandVarEffect"] = RandVarEffectType(self.context["Main"])
+        self.context.types["ActivationRule"] = ActivationRuleType(self.context["Main"])
+        self.context.types["Dict"] = DictType(self.context["Main"])
+        self.context.types["List"] = ListType(self.context["Main"])
+        self.context.types["Tuple"] = TupleType(self.context["Main"])
         for dec in node.declarations:
             self.visit(dec)
 

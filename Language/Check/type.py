@@ -127,12 +127,30 @@ class MainType(Type):
         super().__init__("Main", parent)
 
 
-class IntType(Type):
-    def __init__(self, name, parent=None) -> None:
+class NumType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("num", parent)
+
+    def __eq__(self, other):
+        return other.name == self.name or isinstance(other, NumType)
+
+
+class IntType(NumType):
+    def __init__(self, parent=None) -> None:
         super().__init__("int", parent)
 
     def __eq__(self, other):
         return other.name == self.name or isinstance(other, IntType)
+
+
+class BoolType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("bool", parent)
+
+
+class StringType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("string", parent)
 
 
 class VoidType(Type):
@@ -187,6 +205,7 @@ class ActivationRuleType(Type):
 class ListType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("List", parent)
+        self.elements_type = None
 
 
 class DictType(Type):
