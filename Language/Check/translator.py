@@ -94,13 +94,13 @@ class Translator(object):
 
     @visitor.when(RuleNode)
     def visit(self, node, tabs=0):
-        condition = ",".join([self.visit(cond) for cond in node.condition])
+        condition = self.visit(node.condition)
         dest = self.visit(node.destination)
         then_var = self.visit(node.then_var)
         then_val = self.visit(node.then_val)
         return (
             "\t" * tabs
-            + f"Rule({{{condition}}}, destination={dest}, then=({then_var}, {then_val}))"
+            + f"Rule({condition}, destination={dest}, then=({then_var}, {then_val}))"
         )
 
     @visitor.when(ProbFunctionValueNode)
