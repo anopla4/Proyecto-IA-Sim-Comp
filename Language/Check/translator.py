@@ -200,3 +200,7 @@ class Translator(object):
     def visit(self, node, tabs=0):
         expr = self.visit(node.expr)
         return "\t" * tabs + f"return {expr}"
+
+    @visitor.when(BooleanNode)
+    def visit(self, node, tabs=0):
+        return "\t" * tabs + node.value

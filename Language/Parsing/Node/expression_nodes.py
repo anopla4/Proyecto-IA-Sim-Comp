@@ -184,3 +184,9 @@ class EffectRuleNode(ExpressionNode):
     def __init__(self, e) -> None:
         super().__init__()
         self.e = e
+
+
+class BooleanNode(ExpressionNode):
+    def __init__(self, value) -> None:
+        super().__init__()
+        self.value = value
