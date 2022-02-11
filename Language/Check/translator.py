@@ -127,7 +127,7 @@ class Translator(object):
         env = self.visit(node.env)
         element = self.visit(node.e)
         condition = "\t" * tabs + f"if {env}.get_parameter({param}):"
-        body = "\t" * (tabs + 1) + f"{env}.update_parameter({param}, {element})"
+        body = "\t" * (tabs + 1) + f"{env}.update_parameter({element}, {param})"
         return f"{condition}\n{body}"
 
     @visitor.when(EffectRuleNode)
@@ -195,3 +195,8 @@ class Translator(object):
     def visit(self, node, tabs=0):
         items = ", ".join([self.visit(i) for i in node.items])
         return "\t" * tabs + f"({items})"
+
+    @visitor.when(ReturnNode)
+    def visit(self, node, tabs=0):
+        expr = self.visit(node.expr)
+        return "\t" * tabs + f"return {expr}"
