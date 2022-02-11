@@ -30,8 +30,6 @@ def guide():
 
 st.set_page_config(page_title="T-Tree")
 
-st.set_page_config(page_title="TTreatment")
-
 st.sidebar.header("Treatment Tree, a medical treatment simulator")
 nav = st.sidebar.radio("", ["Code Editor", "Language Guide"])
 st.sidebar.markdown(""" \n \n""")
