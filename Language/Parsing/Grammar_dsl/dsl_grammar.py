@@ -478,7 +478,7 @@ def get_grammar():
 
     # # <def-effect>
 
-    # p_41 = Production(def_effect, [effect, idx, idx, idx])
+    # p_41 = Production(def_effect, [effect, idx, idx, atom])
     # rules[p_41] = lambda _, s: EffectNode(s[2], s[3], s[4])
     # p_42 = Production(def_effect, [rule])
     # rules[p_42] = lambda _, s: EffectRuleNode(s[1])
