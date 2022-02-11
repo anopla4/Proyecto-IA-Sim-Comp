@@ -245,6 +245,10 @@ class SemanticChecker(object):
     def visit(self, node, scope):
         node.type = TupleType()
 
+    @visitor.when(BooleanNode)
+    def visit(self, node, scope):
+        node.type = BoolType()
+
     @visitor.when(RuleNode)
     def visit(self, node, scope):
         then = node.then

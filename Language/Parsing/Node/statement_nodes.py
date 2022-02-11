@@ -72,9 +72,3 @@ class ReturnNode(StatementNode):
     def __init__(self, expr) -> None:
         super().__init__()
         self.expr = expr
-
-
-class BooleanNode(StatementNode):
-    def __init__(self, value) -> None:
-        super().__init__()
-        self.value = value
