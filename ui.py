@@ -9,7 +9,7 @@ def title():
 def code_editor():
     first, second = st.columns([11,1])
     with first:
-        code = st_ace()
+        code = st_ace(wrap=True)
     with second:
         st.write(code)
 
@@ -17,7 +17,7 @@ def guide():
     st.info("This page sould be a language syntax guide")
 
 st.set_page_config(
-        page_title="TTreatment")
+        page_title="T-Tree")
 
 st.sidebar.header('Treatment Tree, a medical treatment simulator')
 nav = st.sidebar.radio('',['Code Editor', 'Language Guide'])
