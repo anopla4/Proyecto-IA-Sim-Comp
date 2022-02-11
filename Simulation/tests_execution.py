@@ -19,7 +19,7 @@ def print_branch_data(nodes:list[Node]):
 
 #-----test numeical
 st = time()
-tree =  numerical_sim_test(main, 1, 240, 1000)
+tree =  numerical_sim_test(main, 1, 240, 5000)
 end = time()
 #-----
 
@@ -30,6 +30,6 @@ best_branch = tree.best_branch()
 print(best_branch[-1].get_average_final_state())
 print_branch_data(best_branch)
 
-#visualize_branch_pyvis(best_branch)
-#tree.prunning(max_childs=2)
-#visualize_graph_pyvis(tree.root, 140)
+#visualize_branch_pyvis(best_branch, show=False, path='Test/html_files/branch.html')
+tree.prunning(max_childs=2)
+#visualize_graph_pyvis(tree.root, -1, show=True, path="Test/html_files/graph.html")

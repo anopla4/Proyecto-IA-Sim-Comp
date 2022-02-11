@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 1000px;
+            height: 1000px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": -1, "label": "root", "level": 0, "shape": "circle", "title": "Time:0\u003cbr\u003e "}, {"id": 1, "label": "dipirona simple", "level": 1, "shape": "circle", "title": "Time:1\u003cbr\u003e dolor de cabeza:26.0\u003cbr\u003eplaqueta:18.0\u003cbr\u003etos:10.0\u003cbr\u003efiebre:36.5\u003cbr\u003e"}, {"id": 3, "label": "dipirona_doble", "level": 2, "shape": "circle", "title": "Time:2\u003cbr\u003e dolor de cabeza:26.0\u003cbr\u003eplaqueta:18.0\u003cbr\u003etos:10.0\u003cbr\u003efiebre:36.5\u003cbr\u003e"}, {"id": 4, "label": "jarabe", "level": 3, "shape": "circle", "title": "Time:24\u003cbr\u003e dolor de cabeza:9.04\u003cbr\u003eplaqueta:16.704\u003cbr\u003etos:10.8\u003cbr\u003efiebre:36.5\u003cbr\u003e"}, {"id": 7, "label": "calbamol", "level": 4, "shape": "circle", "title": "Time:33\u003cbr\u003e dolor de cabeza:3.674\u003cbr\u003eplaqueta:13.57\u003cbr\u003etos:11.6\u003cbr\u003efiebre:37.817\u003cbr\u003e"}, {"id": 9, "label": "dipirona_doble", "level": 5, "shape": "circle", "title": "Time:34\u003cbr\u003e dolor de cabeza:3.848\u003cbr\u003eplaqueta:13.605\u003cbr\u003etos:11.6\u003cbr\u003efiebre:37.808\u003cbr\u003e"}, {"id": 935, "label": "dipirona simple", "level": 6, "shape": "circle", "title": "Time:35\u003cbr\u003e dolor de cabeza:3.848\u003cbr\u003eplaqueta:13.605\u003cbr\u003etos:11.6\u003cbr\u003efiebre:37.808\u003cbr\u003e"}, {"id": 1545, "label": "plaquetol", "level": 7, "shape": "circle", "title": "Time:49\u003cbr\u003e dolor de cabeza:8.879\u003cbr\u003eplaqueta:9.09\u003cbr\u003etos:3.477\u003cbr\u003efiebre:38.318\u003cbr\u003e"}, {"id": 1555, "label": "antibiotico", "level": 8, "shape": "circle", "title": "Time:57\u003cbr\u003e dolor de cabeza:8.807\u003cbr\u003eplaqueta:6.714\u003cbr\u003etos:4.229\u003cbr\u003efiebre:37.571\u003cbr\u003e"}, {"id": 1556, "label": "dipirona simple", "level": 9, "shape": "circle", "title": "Time:65\u003cbr\u003e dolor de cabeza:9.4\u003cbr\u003eplaqueta:9.862\u003cbr\u003etos:2.7\u003cbr\u003efiebre:37.85\u003cbr\u003e"}, {"id": 1558, "label": "dipirona_doble", "level": 10, "shape": "circle", "title": "Time:66\u003cbr\u003e dolor de cabeza:9.4\u003cbr\u003eplaqueta:9.862\u003cbr\u003etos:2.7\u003cbr\u003efiebre:37.85\u003cbr\u003e"}, {"id": 1559, "label": "dipirona simple", "level": 11, "shape": "circle", "title": "Time:89\u003cbr\u003e dolor de cabeza:5.3\u003cbr\u003eplaqueta:18.95\u003cbr\u003etos:2.4\u003cbr\u003efiebre:37.5\u003cbr\u003e"}, {"id": 1561, "label": "dipirona_doble", "level": 12, "shape": "circle", "title": "Time:97\u003cbr\u003e dolor de cabeza:9.6\u003cbr\u003eplaqueta:17.6\u003cbr\u003etos:2.8\u003cbr\u003efiebre:37.2\u003cbr\u003e"}, {"id": 1562, "label": "calbamol", "level": 13, "shape": "circle", "title": "Time:109\u003cbr\u003e dolor de cabeza:17.1\u003cbr\u003eplaqueta:16.8\u003cbr\u003etos:3.2\u003cbr\u003efiebre:37.2\u003cbr\u003e"}, {"id": 1563, "label": "dipirona simple", "level": 14, "shape": "circle", "title": "Time:113\u003cbr\u003e dolor de cabeza:17.2\u003cbr\u003eplaqueta:16.0\u003cbr\u003etos:3.6\u003cbr\u003efiebre:36.2\u003cbr\u003e"}, {"id": 1564, "label": "dipirona_doble", "level": 15, "shape": "circle", "title": "Time:129\u003cbr\u003e dolor de cabeza:16.0\u003cbr\u003eplaqueta:14.2\u003cbr\u003etos:4.4\u003cbr\u003efiebre:37.9\u003cbr\u003e"}, {"id": 1566, "label": "dipirona_doble", "level": 16, "shape": "circle", "title": "Time:161\u003cbr\u003e dolor de cabeza:8.2\u003cbr\u003eplaqueta:8.9\u003cbr\u003etos:6.0\u003cbr\u003efiebre:37.7\u003cbr\u003e"}, {"id": 1571, "label": "plaquetol", "level": 17, "shape": "circle", "title": "Time:162\u003cbr\u003e dolor de cabeza:8.2\u003cbr\u003eplaqueta:8.9\u003cbr\u003etos:6.0\u003cbr\u003efiebre:37.7\u003cbr\u003e"}, {"id": 1572, "label": "dipirona simple", "level": 18, "shape": "circle", "title": "Time:163\u003cbr\u003e dolor de cabeza:8.2\u003cbr\u003eplaqueta:8.9\u003cbr\u003etos:6.0\u003cbr\u003efiebre:37.7\u003cbr\u003e"}, {"id": 1574, "label": "calbamol", "level": 19, "shape": "circle", "title": "Time:164\u003cbr\u003e dolor de cabeza:8.2\u003cbr\u003eplaqueta:8.9\u003cbr\u003etos:6.0\u003cbr\u003efiebre:37.7\u003cbr\u003e"}, {"id": 1575, "label": "antibiotico", "level": 20, "shape": "circle", "title": "Time:169\u003cbr\u003e dolor de cabeza:8.4\u003cbr\u003eplaqueta:6.9\u003cbr\u003etos:6.4\u003cbr\u003efiebre:37.2\u003cbr\u003e"}, {"id": 1576, "label": "dipirona simple", "level": 21, "shape": "circle", "title": "Time:193\u003cbr\u003e dolor de cabeza:3.2\u003cbr\u003eplaqueta:26.9\u003cbr\u003etos:-2.4\u003cbr\u003efiebre:37.9\u003cbr\u003e"}, {"id": 1578, "label": "dipirona_doble", "level": 22, "shape": "circle", "title": "Time:194\u003cbr\u003e dolor de cabeza:3.2\u003cbr\u003eplaqueta:29.9\u003cbr\u003etos:-2.4\u003cbr\u003efiebre:37.4\u003cbr\u003e"}, {"id": 1579, "label": "dipirona simple", "level": 23, "shape": "circle", "title": "Time:225\u003cbr\u003e dolor de cabeza:11.2\u003cbr\u003eplaqueta:26.7\u003cbr\u003etos:-1.2\u003cbr\u003efiebre:37.5\u003cbr\u003e"}, {"id": 1581, "label": "dipirona_doble", "level": 24, "shape": "circle", "title": "Time:226\u003cbr\u003e dolor de cabeza:7.5\u003cbr\u003eplaqueta:25.2\u003cbr\u003etos:-1.2\u003cbr\u003efiebre:36.0\u003cbr\u003e"}]);
+        edges = new vis.DataSet([{"from": 1, "title": "97.5", "to": -1}, {"from": 3, "title": "100.0", "to": 1}, {"from": 4, "title": "78.8", "to": 3}, {"from": 7, "title": "27.0", "to": 4}, {"from": 9, "title": "50.2", "to": 7}, {"from": 935, "title": "100.0", "to": 9}, {"from": 1545, "title": "37.5", "to": 935}, {"from": 1555, "title": "35.9", "to": 1545}, {"from": 1556, "title": "57.1", "to": 1555}, {"from": 1558, "title": "100.0", "to": 1556}, {"from": 1559, "title": "25.0", "to": 1558}, {"from": 1561, "title": "50.0", "to": 1559}, {"from": 1562, "title": "100.0", "to": 1561}, {"from": 1563, "title": "100.0", "to": 1562}, {"from": 1564, "title": "100.0", "to": 1563}, {"from": 1566, "title": "100.0", "to": 1564}, {"from": 1571, "title": "100.0", "to": 1566}, {"from": 1572, "title": "100.0", "to": 1571}, {"from": 1574, "title": "100.0", "to": 1572}, {"from": 1575, "title": "100.0", "to": 1574}, {"from": 1576, "title": "100.0", "to": 1575}, {"from": 1578, "title": "100.0", "to": 1576}, {"from": 1579, "title": "100.0", "to": 1578}, {"from": 1581, "title": "100.0", "to": 1579}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

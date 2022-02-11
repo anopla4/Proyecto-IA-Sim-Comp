@@ -88,13 +88,15 @@ class TreatmentTree(object):
             __calculate(childrens)
         __calculate(self.root._children)
 
-    def prunning(self, max_childs=3, acc_probability=75):
+    def prunning(self, max_childs=2, acc_probability=75, low_level_exclusion=30):
         '''
         Prune the tree keeping the maximum number of children specified by "max_childs" or 
-        those that accumulate the highest probability equal to "acc_probability"
+        those that accumulate the highest probability equal to "acc_probability".
+        Starting from the second level, prune among the children those that have a % lower 
+        than low_level_exclusion
         '''
         self.root.probability_value=100.0
-        def best_childs(node:Node, max_childs, acc_probability)->list[Node]:
+        def best_childs(node:Node, max_childs, acc_probability, make_exclusion, exclusion)->list[Node]:
             childs = []
             acc_p = 0
             for child in node._children:
@@ -105,12 +107,16 @@ class TreatmentTree(object):
             while acc_p < acc_probability and i < limit:
                 acc_p += childs[i].probability_value
                 i+=1
-            return childs[:i]
-        def prunning_rec(nodes:list[Node], max_childs, acc_p):
+            prunning_childs = []
+            if make_exclusion and i>=1:
+                prunning_childs = [childs[0]] 
+                prunning_childs.extend([n for n in childs[1:i] if n.probability_value>exclusion])
+            return prunning_childs if make_exclusion else childs[:i]
+        def prunning_rec(nodes:list[Node], max_childs, acc_p, make_exclusion, exclusion):
             if len(nodes) == 0:
                 return
             for node in nodes:
-                node._children = best_childs(node, max_childs, acc_p)
+                node._children = best_childs(node, max_childs, acc_p, make_exclusion, exclusion)
             for node in nodes:
-                prunning_rec(node._children, max_childs, acc_p)
-        prunning_rec([self.root], max_childs, acc_probability)
+                prunning_rec(node._children, max_childs, acc_p, True, exclusion)
+        prunning_rec([self.root], max_childs, acc_probability, False, low_level_exclusion)

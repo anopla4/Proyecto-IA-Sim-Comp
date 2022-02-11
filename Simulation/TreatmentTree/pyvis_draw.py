@@ -5,7 +5,7 @@ from .node import Node
 def __format_info(state:Dict[str,float])->str:
     s = ""
     for p, v in state.items():
-        s += f"{p}:{round(v,3)}\n"
+        s += f"{p}:{round(v,3)}<br>"
     return s
 
 def __create_branch(G:Network, nodes:list[Node]):
@@ -17,7 +17,7 @@ def __create_branch(G:Network, nodes:list[Node]):
             info = __format_info(nodes[i].get_average_final_state())
         else:
             info = __format_info(nodes[i].get_average_arrival_state())
-        title = f"Time:{nodes[i].created_time} \n\n {info}"
+        title = f"Time:{nodes[i].created_time}<br> {info}"
         G.add_node(n_id=id, label=label,shape='circle', title=title, level=i)
         if i > 0:
             G.add_edge(nodes[i]._id, nodes[i-1]._id, title=str(nodes[i].probability_value))
@@ -29,7 +29,7 @@ def __create_graph(G:Network,nodes:list[Node], n):
         if node is not None:
             label = f"{node.value}"
             id = node._id
-            title = f"Time:{node.created_time}\n\n{__format_info(node.get_average_arrival_state())}"
+            title = f"Time:{node.created_time}<br>{__format_info(node.get_average_arrival_state())}"
             color='cyan'
             if id==-1:
                 color='red'
@@ -46,14 +46,22 @@ def __create_graph(G:Network,nodes:list[Node], n):
             childrens.extend(node._children)
     __create_graph(G, childrens, n-1)
 
-def visualize_branch_pyvis(branch_nodes:list[Node]):
+def visualize_branch_pyvis(branch_nodes:list[Node], show=False, path=None):
     net = Network('1000px', '1000px')
     __create_branch(net, branch_nodes)
-    net.show('branch.html')
+    #net.show('branch.html')
+    if show:
+        net.show(path)
+    else:
+        net.save_graph(path)
 
-def visualize_graph_pyvis(root:Node, n):
+def visualize_graph_pyvis(root:Node, n, show=False, path=None):
     net = Network('1000px', '1000px')
     __create_graph(net, [root], n)
     net.repulsion(node_distance=100, spring_length=100)
-    net.show('graph.html')
+    if show:
+        net.show(path)
+    else:
+        net.save_graph(path)
+    
     #plt.show()
