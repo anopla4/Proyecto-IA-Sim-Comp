@@ -156,6 +156,7 @@ class RuleNode(ExpressionNode):
         self.condition = condition
         self.destination = destination
         self.then = then
+        self.type = type
 
 
 class ProbFunctionValueNode(Node):

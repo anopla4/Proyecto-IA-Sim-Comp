@@ -86,7 +86,6 @@ def tokenize_regex_automaton(c, _t):
                     tokens.append(Token(exp, t))
                 else:
                     raise Exception("La cadena no pertenece al lenguaje.")
-
         elif isinstance(st, FinalState):
             maximum = 0
             t = None
