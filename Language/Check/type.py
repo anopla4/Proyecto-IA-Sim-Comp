@@ -125,6 +125,19 @@ class ErrorType(Type):
 class MainType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("Main", parent)
+        self.functions = {
+            "simulate": Method(
+                "simulate",
+                TreeType,
+                ["env", "treatment", "disease", "tick", "end_time", "num_sim"],
+                [EnvironmentType, ListType, ListType, NumType, NumType, NumType],
+            )
+        }
+
+
+class TreeType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("tree", parent)
 
 
 class NumType(Type):
