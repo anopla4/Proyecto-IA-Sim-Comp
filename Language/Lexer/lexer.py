@@ -3,30 +3,10 @@ from .token import Token
 from Language.Automaton.nfa_to_dfa import transform_nfa_to_dfa
 from pprint import pprint
 from Language.Lexer.RegularExpression.regex_grammar import (
-    #     E,
-    #     X,
-    #     X1,
-    #     T,
-    #     Y,
-    #     Y1,
-    #     F,
-    #     Z,
-    #     Z1,
-    #     A,
-    #     _i,
-    #     _or,
-    #     _concat,
-    #     _star,
-    #     left_br,
-    #     right_br,
-    #     epsilon,
-    #     productions,
-    #     rules,
     regex_grammar,
 )
 from Language.Lexer.parser_ll import build_ll_table
 
-# from Language.Parsing.Grammar_dsl.dsl_grammar import _t
 from Language.Lexer.RegularExpression.automaton_builder import build_entire_automaton
 
 
