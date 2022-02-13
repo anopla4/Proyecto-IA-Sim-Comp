@@ -1,4 +1,4 @@
-from typing import OrderedDict
+from collections import OrderedDict
 from Language.Check.error import SemanticError
 from .attribute import Attribute
 from .method import Method
@@ -41,7 +41,11 @@ class Type:
 
     def get_function(self, name: str):
         try:
-            return next(self.functions[f] for f in self.functions if self.functions[f].name == name)
+            return next(
+                self.functions[f]
+                for f in self.functions
+                if self.functions[f].name == name
+            )
         except StopIteration:
             if self.parent is None:
                 raise SemanticError(f'Method "{name}" is not defined in {self.name}.')
@@ -80,8 +84,8 @@ class Type:
 
     def conforms_to(self, other):
         return (
-            isinstance(other, MainType) or
-            other.bypass()
+            isinstance(other, MainType)
+            or other.bypass()
             or self == other
             or self.parent is not None
             and self.parent.conforms_to(other)
@@ -110,7 +114,7 @@ class Type:
 class ErrorType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("<error>", parent)
-        
+
     def conforms_to(self, other):
         return True
 
@@ -123,18 +127,16 @@ class ErrorType(Type):
 
 class MainType(Type):
     def __init__(self, parent=None) -> None:
-        functions={
+        functions = {
             "simulate": Method(
                 "simulate",
                 "Tree",
                 ["env", "treatment", "disease", "tick", "end_time", "num_sim"],
                 ["Environment", "List", "List", "Num", "Num", "Num"],
             ),
-            "print": Method(
-                "print", "void", ["text"], ["Main"] )
+            "print": Method("print", "void", ["text"], ["Main"]),
         }
         super().__init__("Main", parent, functions)
-    
 
 
 class TreeType(Type):

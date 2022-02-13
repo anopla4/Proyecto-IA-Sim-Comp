@@ -61,6 +61,7 @@ def build_entire_automaton(ll_table, sym, expressions, word_type, types, rules=N
     for exp in expressions:
         t = tokenize(exp, word_type, types)
         ast = build_ast(ll_table, t, sym, rules)
+
         _aut = build_automaton_expression(ast.ast, expressions[exp])
         transition_function += list(_aut.transition_function.items())
         characters += _aut.characters

@@ -3,8 +3,6 @@ from Language.Parsing.epsilon import Epsilon
 from Language.Parsing.non_terminal import NonTerminal
 from Language.Parsing.terminal import Terminal
 
-# from .regex_grammar import rules
-
 
 class Node:
     def __init__(

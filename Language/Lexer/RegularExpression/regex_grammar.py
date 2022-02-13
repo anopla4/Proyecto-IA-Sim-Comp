@@ -33,7 +33,7 @@ def regex_grammar():
     non_terminals = [E, X, X1, T, Y, Y1, F, Z, Z1, A]
     _i = Terminal("i")
     _or = Terminal("|")
-    _concat = Terminal("U")
+    _concat = Terminal("+")
     _star = Terminal("*")
     left_br = Terminal("(")
     right_br = Terminal(")")
