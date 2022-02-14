@@ -257,7 +257,7 @@ def get_grammar():
         ],
     )
     rules[p_76] = lambda _, s: AgentDefNode(
-        s[1], s[2].expression, s[7], s[11], s[15], s[19].expression
+        s[1].expression, s[2].expression, s[7], s[11], s[15], s[19].expression
     )
     p_109 = Production(
         def_agent,

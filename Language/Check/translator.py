@@ -142,12 +142,13 @@ class Translator(object):
     @visitor.when(AgentDefNode)
     def visit(self, node, tabs=0):
         conditions = self.visit(node.conditions)
-        ans = (
-            "\t" * tabs
-            + f"{node.idt}({node.idn}, {conditions}, {node.t}, {node.rep}, f"
-        )
+        t = self.visit(node.t)
+        rep = self.visit(node.rep)
+        act = self.visit(node.act)
+        ans = "\t" * tabs + f"{node.idt}({node.idn}, {conditions}, {t}, {rep}, {act}"
         if node.supply != None:
-            ans += f"{node.supply})\n"
+            supply = self.visit(node.supply)
+            ans += f"{supply})\n"
         else:
             ans += ")\n"
         return ans

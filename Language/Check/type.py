@@ -241,3 +241,18 @@ class DictType(Type):
 class TupleType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("Tuple", parent)
+
+
+class MembresyFunctionType(Type):
+    def __init__(self, parent=None) -> None:
+        super().__init__("MembresyFunction", parent)
+
+
+class TriangularType(MembresyFunctionType):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+
+
+class TrapezoidalType(MembresyFunctionType):
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)

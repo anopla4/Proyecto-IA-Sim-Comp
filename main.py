@@ -41,7 +41,8 @@ def main(text):
     t = Translator()
     code = t.visit(ast)
 
-    print("==========", code)
+    print("==========")
+    print(code)
     print("=========")
 
     errors = type_c.errors + type_b.errors + checker.errors
@@ -53,4 +54,6 @@ def main(text):
 
 
 # print("uuuuuuuuu", BoolType().conforms_to(MainType()))
-main('function fiebre_action() -> void { print("ana") } \n Symptom fiebre = { activation_conditions : [new ActivationRule({parameters_conditions : {p_plaqueta : {-19,16}}, time_condition : {0,19}})]; effect_time : 72; repetition : 8; action : fiebre_action;} ')
+main(
+    'function fiebre_action() -> void { print("ana") } \n Symptom fiebre = { activation_conditions : [new ActivationRule({parameters_conditions : {p_plaqueta : {-19,16}}, time_condition : {0,19}})]; effect_time : 72; repetition : 8; action : fiebre_action;} '
+)

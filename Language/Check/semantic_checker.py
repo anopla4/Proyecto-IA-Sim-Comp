@@ -390,8 +390,10 @@ class SemanticChecker(object):
         self.visit(rep, scope)
         self.visit(act, scope)
 
-        if not self.context.types[conditions.type].conforms_to(BoolType()):
-            self.errors.append(INCOMPATIBLE_TYPES % (conditions.type, "ActivationRule"))
+        if not self.context.types[conditions.type].conforms_to(
+            self.context.types["List"]
+        ):
+            self.errors.append(INCOMPATIBLE_TYPES % (conditions.type, "List"))
         if not self.context.types[t.type].conforms_to(NumType()):
             self.errors.append(INCOMPATIBLE_TYPES % (t.type, "Num"))
         if not self.context.types[rep.type].conforms_to(NumType()):

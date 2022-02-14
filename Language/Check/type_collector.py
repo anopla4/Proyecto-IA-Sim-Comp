@@ -45,6 +45,15 @@ class TypeCollector(object):
         self.context.types["List"] = ListType(self.context.types["Main"])
         self.context.types["Tuple"] = TupleType(self.context.types["Main"])
         self.context.types["Bool"] = BoolType(self.context.types["Main"])
+        self.context.types["MembresyFunction"] = MembresyFunctionType(
+            self.context.types["Main"]
+        )
+        self.context.types["Triangular"] = TriangularType(
+            self.context.types["MembresyFunction"]
+        )
+        self.context.types["Trapezoidal"] = TrapezoidalType(
+            self.context.types["MembresyFunction"]
+        )
         for dec in node.statements:
             self.visit(dec)
 
