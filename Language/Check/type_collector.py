@@ -14,7 +14,6 @@ class TypeCollector(object):
         self.errors = errors
         self.context = context
 
-
     @visitor.on("node")
     def visit(self, node):
         pass
@@ -24,6 +23,8 @@ class TypeCollector(object):
         self.context.types["Main"] = MainType()
         self.context.types["Num"] = NumType(self.context.types["Main"])
         self.context.types["int"] = IntType(self.context.types["Num"])
+        self.context.types["double"] = DoubleType(self.context.types["Num"])
+        self.context.types["String"] = StringType(self.context.types["Main"])
         self.context.types["void"] = VoidType(self.context.types["Main"])
         self.context.types["error"] = ErrorType(self.context.types["Main"])
         self.context.types["Agent"] = AgentType(self.context.types["Main"])
@@ -33,11 +34,13 @@ class TypeCollector(object):
         )
         self.context.types["Parameter"] = ParameterType(self.context.types["Main"])
         self.context.types["Environment"] = EnvironmentType(self.context.types["Main"])
-        self.context.types["Patient"] = ParameterType(
-            self.context.types["Environment"]
+        self.context.types["Patient"] = ParameterType(self.context.types["Environment"])
+        self.context.types["RandVarEffect"] = RandVarEffectType(
+            self.context.types["Main"]
         )
-        self.context.types["RandVarEffect"] = RandVarEffectType(self.context.types["Main"])
-        self.context.types["ActivationRule"] = ActivationRuleType(self.context.types["Main"])
+        self.context.types["ActivationRule"] = ActivationRuleType(
+            self.context.types["Main"]
+        )
         self.context.types["Dict"] = DictType(self.context.types["Main"])
         self.context.types["List"] = ListType(self.context.types["Main"])
         self.context.types["Tuple"] = TupleType(self.context.types["Main"])

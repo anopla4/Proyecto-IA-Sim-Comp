@@ -59,7 +59,7 @@ class Type:
     ):
         if name in (self.functions[f].name for f in self.functions):
             raise SemanticError(f'Method "{name}" already defined in {self.name}')
-        method = Method(name, param_names, param_types, return_type)
+        method = Method(name, return_type, param_names, param_types)
         self.functions[name] = method
         return method
 
@@ -153,6 +153,14 @@ class NumType(Type):
 
 
 class IntType(NumType):
+    def __init__(self, parent=None) -> None:
+        super().__init__("int", parent)
+
+    def __eq__(self, other):
+        return other.name == self.name or isinstance(other, IntType)
+
+
+class DoubleType(NumType):
     def __init__(self, parent=None) -> None:
         super().__init__("int", parent)
 

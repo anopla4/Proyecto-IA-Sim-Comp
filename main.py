@@ -1,4 +1,3 @@
-
 from Language.Check.context import Context
 from Language.Check.semantic_checker import SemanticChecker
 from Language.Check.type import BoolType, MainType
@@ -15,6 +14,7 @@ from Simulation.Simulation.parameter import Parameter
 from Simulation.Simulation.activation_rule import ActivationRule
 from Simulation.Simulation.symptom import Symptom
 from Simulation.Simulation.intervention import Intervention
+
 
 def main(text):
     G, t = get_grammar()
@@ -50,5 +50,7 @@ def main(text):
         exec(code)
     except Exception as ex:
         print(ex)
+
+
 # print("uuuuuuuuu", BoolType().conforms_to(MainType()))
 main('function test(int a) -> void { print("ana") } \n test(1)')

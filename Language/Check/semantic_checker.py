@@ -92,7 +92,8 @@ class SemanticChecker(object):
                         % (expr.expr.type, self.current_method.return_type)
                     )
         if not types_returned and not isinstance(
-            self.current_method.return_type, VoidType
+            self.context.types[self.current_method.return_type],
+            VoidType,
         ):
             self.errors.append(
                 INCOMPATIBLE_TYPES % ("void", self.current_method.return_type)
@@ -141,10 +142,10 @@ class SemanticChecker(object):
             )
             var = scope.define_variable(node.id, node.expr.computed_type)
 
-        if not node.expr.type.conforms_to(var.type):
-            self.errors.append(
-                INCOMPATIBLE_TYPES % (node.expr.type.name, var.type.name)
-            )
+        if not self.context.types[node.expr.type].conforms_to(
+            self.context.types[var.type]
+        ):
+            self.errors.append(INCOMPATIBLE_TYPES % (node.expr.type, var.type))
 
         node.type = var.type
 
@@ -162,37 +163,35 @@ class SemanticChecker(object):
                 method = obj_type.get_function(node.lex)
             if not len(node.arguments) == len(method.parameters_types):
                 self.errors.append(INVALID_OPERATION % (method.name, obj_type.name))
-                node.type = ErrorType()
+                node.type = "error"
                 return
             for i, arg in enumerate(node.arguments):
                 self.visit(arg, scope)
-                if not arg.type.conforms_to(
+                if not self.context.types[arg.type].conforms_to(
                     self.context.types[method.parameters_types[i]]
                 ):
                     self.errors.append(
                         INCOMPATIBLE_TYPES
                         % (
-                            arg.type.name,
-                            self.context.types[method.parameters_types[i]].name,
+                            arg.type,
+                            method.parameters_types[i],
                         )
                     )
             node.type = method.return_type
         except SemanticError as ex:
             self.errors.append(ex.text)
-            node.type = ErrorType()
+            node.type = "error"
 
     @visitor.when(NumericBinaryNode)
     def visit(self, node, scope):
         self.visit(node.left, scope)
         self.visit(node.right, scope)
 
-        if not node.left.type.conforms_to(NumType()) or not node.right.type.conforms_to(
+        if not self.context.types[node.left.type].conforms_to(
             NumType()
-        ):
-            self.errors.append(
-                INVALID_OPERATION % (node.left.type.name, node.right.type.name)
-            )
-            node.type = ErrorType()
+        ) or not self.context.types[node.right.type].conforms_to(NumType()):
+            self.errors.append(INVALID_OPERATION % (node.left.type, node.right.type))
+            node.type = "error"
         else:
             node.type = "Num"
 
@@ -201,12 +200,10 @@ class SemanticChecker(object):
         self.visit(node.left, scope)
         self.visit(node.right, scope)
 
-        if not node.left.type.conforms_to(
+        if not self.context.types[node.left.type].conforms_to(
             BoolType()
-        ) or not node.right.type.conforms_to(BoolType()):
-            self.errors.append(
-                INVALID_OPERATION % (node.left.type.name, node.right.type.name)
-            )
+        ) or not self.context.types[node.right.type].conforms_to(BoolType()):
+            self.errors.append(INVALID_OPERATION % (node.left.type, node.right.type))
             node.type = "error"
         else:
             node.type = "Bool"
@@ -216,12 +213,10 @@ class SemanticChecker(object):
         self.visit(node.left, scope)
         self.visit(node.right, scope)
 
-        if not node.left.type.conforms_to(
+        if not self.context.types[node.left.type].conforms_to(
             BoolType()
-        ) or not node.right.type.conforms_to(BoolType()):
-            self.errors.append(
-                INVALID_OPERATION % (node.left.type.name, node.right.type.name)
-            )
+        ) or not self.context.types[node.right.type].conforms_to(BoolType()):
+            self.errors.append(INVALID_OPERATION % (node.left.type, node.right.type))
             node.type = "error"
         else:
             node.type = "Bool"
@@ -236,15 +231,19 @@ class SemanticChecker(object):
     def visit(self, node, scope):
         self.visit(node.expr, scope)
 
-        if not node.expr.type.conforms_to(BoolType()):
-            self.errors.append(INVALID_OPERATION_UNARY % (node.expr.type.name))
+        if not self.context.types[node.expr.type].conforms_to(BoolType()):
+            self.errors.append(INVALID_OPERATION_UNARY % (node.expr.type))
             node.type = "error"
         else:
             node.type = "Bool"
 
-    @visitor.when(ConstantNumNode)
+    @visitor.when(IntNode)
     def visit(self, node, scope):
-        node.type = "Num"
+        node.type = "int"
+
+    @visitor.when(DoubleNode)
+    def visit(self, node, scope):
+        node.type = "double"
 
     @visitor.when(VariableNode)
     def visit(self, node, scope):
@@ -260,7 +259,8 @@ class SemanticChecker(object):
     @visitor.when(InstanceNode)
     def visit(self, node, scope):
         try:
-            node.type = self.context.get_type(node.lex)
+            self.context.get_type(node.lex)
+            node.type = node.lexs
         except SemanticError as ex:
             self.errors.append(ex.text)
             node.type = "error"

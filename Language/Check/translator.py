@@ -34,14 +34,22 @@ class Translator(object):
 
     @visitor.when(VarDeclarationNode)
     def visit(self, node, tabs=0):
-        expr = self.visit(node.expr)
-        ans = "\t" * tabs + f"{node.id} = {expr}"
+        if isinstance(node.expr, RandomVariableNode):
+            expr = self.visit(node.expr, tabs + 1)
+            ans = "\t" * tabs + f"def {node.id}(time, env): \n {expr}"
+        else:
+            expr = self.visit(node.id)
+            ans = "\t" * tabs + f"{node.id} = {expr}"
         return ans
 
     @visitor.when(AssignmentNode)
     def visit(self, node, tabs=0):
-        expr = self.visit(node.expr)
-        ans = "\t" * tabs + f"{node.id} = {expr}"
+        if isinstance(node.expr, RandomVariableNode):
+            expr = self.visit(node.expr, tabs + 1)
+            ans = "\t" * tabs + f"def {node.id}(time, env): \n {expr}"
+        else:
+            expr = self.visit(node.expr)
+            ans = "\t" * tabs + f"{node.id} = {expr}"
         return ans
 
     @visitor.when(FuncDeclarationNode)
@@ -114,8 +122,9 @@ class Translator(object):
             acc += float(num)
             v.num = ConstantNumNode(str(acc))
             args.append(self.visit(v, tabs + 1))
-        args = "\n".join(args)
-        return "\t" * tabs + f"def f(p): \n  {args}"
+        rand = "\t" * tabs + "p = random()"
+        args = "\t" * tabs + "\n".join(args)
+        return f"{rand}\n{args}"
 
     @visitor.when(EffectNode)
     def visit(self, node, tabs=0):
@@ -145,7 +154,8 @@ class Translator(object):
 
     @visitor.when(RandomVariableNode)
     def visit(self, node, tabs=0):
-        pass
+        expr = self.visit(node.expr, tabs + 1)
+        return "\t" * tabs + f"{expr}"
 
     @visitor.when(ForNode)
     def visit(self, node, tabs=0):

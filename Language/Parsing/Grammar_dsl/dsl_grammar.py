@@ -139,7 +139,6 @@ def get_grammar():
         equal,
         gt,
         idx,
-        nums,
         for_kw,
         activation_condition,
         arrow,
@@ -172,6 +171,8 @@ def get_grammar():
         osquare_br,
         csquare_br,
         supply,
+        int_,
+        double_,
     ]
 
     rules = {}
@@ -402,7 +403,7 @@ def get_grammar():
     p_28 = Production(atom, [idx])
     rules[p_28] = lambda _, s: VariableNode(s[1].expression)
     p_108 = Production(atom, [nums])
-    rules[p_108] = lambda _, s: ConstantNumNode(s[1].expression)
+    rules[p_108] = lambda _, s: s[1]
     p_112 = Production(atom, [string])
     rules[p_112] = lambda _, s: s[1]
     p_29 = Production(atom, [func_call])
@@ -486,7 +487,7 @@ def get_grammar():
     # <def-rand-var>
 
     p_39 = Production(def_rand_var, [ocur, prob_func_list, ccur])
-    rules[p_39] = lambda _, s: RandomVariableNode(s[2])
+    rules[p_39] = lambda _, s: RandomVariableNode(s[1], s[3])
     productions[def_rand_var] = [p_39]
 
     # <prob-func-list>
@@ -602,7 +603,10 @@ def get_grammar():
     # <nums>
 
     p_111 = Production(nums, [int_])
+    rules[p_111] = lambda _, s: IntNode(s[1].expression)
     p_112 = Production(nums, [double_])
+    rules[p_112] = lambda _, s: DoubleNode(s[1].expression)
+    productions[nums] = [p_111, p_112]
 
     # all_terminals
     upper = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z"

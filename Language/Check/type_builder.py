@@ -47,22 +47,24 @@ class TypeBuilder(object):
         param_names = []
         param_types = []
         for param in node.params:
-            t, n = param
+            t_, n = param
             param_names.append(n)
             try:
-                t = self.context.get_type(t)
+                self.context.get_type(t_)
+                t = t_
             except SemanticError as ex:
                 self.errors.append(ex.text)
-                t = ErrorType()
+                t = "error"
             param_types.append(t)
         try:
-            rtype = self.context.get_type(node.return_type)
+            self.context.get_type(node.return_type)
+            rtype = node.return_type
         except SemanticError as ex:
             self.errors.append(ex.text)
-            rtype = ErrorType()
+            rtype = "error"
 
         try:
-            self.current_type.set_function(node.id, rtype, param_names, param_types)
+            self.current_type.set_function(node.id, param_names, param_types, rtype)
         except SemanticError as ex:
             self.errors.append(ex.text)
 

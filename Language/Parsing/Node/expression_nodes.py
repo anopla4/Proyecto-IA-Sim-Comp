@@ -22,6 +22,16 @@ class ConstantNumNode(AtomicNode):
         super().__init__(lex, type)
 
 
+class IntNode(ConstantNumNode):
+    def __init__(self, lex, type=None) -> None:
+        super().__init__(lex, type)
+
+
+class DoubleNode(ConstantNumNode):
+    def __init__(self, lex, type=None) -> None:
+        super().__init__(lex, type)
+
+
 class CallNode(AtomicNode):
     def __init__(self, lex, argums, obj=None, type=None) -> None:
         super().__init__(lex, type)
