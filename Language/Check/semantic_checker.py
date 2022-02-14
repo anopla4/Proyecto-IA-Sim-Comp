@@ -378,9 +378,9 @@ class SemanticChecker(object):
         idt = node.idt
         idn = node.idn
         conditions = node.conditions
-        t = self.t
-        rep = node.repetition
-        act = node.action
+        t = node.t
+        rep = node.rep
+        act = node.act
         supply = node.supply
 
         self.visit(idt, scope)

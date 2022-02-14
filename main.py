@@ -53,4 +53,4 @@ def main(text):
 
 
 # print("uuuuuuuuu", BoolType().conforms_to(MainType()))
-main('function test(int a) -> void { print("ana") } \n test(1)')
+main('function fiebre_action() -> void { print("ana") } \n Symptom fiebre = { activation_conditions : [new ActivationRule({parameters_conditions : {p_plaqueta : {-19,16}}, time_condition : {0,19}})]; effect_time : 72; repetition : 8; action : fiebre_action;} ')
