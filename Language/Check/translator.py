@@ -144,8 +144,10 @@ class Translator(object):
         conditions = self.visit(node.conditions)
         t = self.visit(node.t)
         rep = self.visit(node.rep)
-        act = self.visit(node.act)
-        ans = "\t" * tabs + f"{node.idt}({node.idn}, {conditions}, {t}, {rep}, {act}"
+        ans = (
+            "\t" * tabs
+            + f'{node.idn} = {node.idt}("{node.idn}", {conditions}, {t}, {rep}, {node.act}'
+        )
         if node.supply != None:
             supply = self.visit(node.supply)
             ans += f"{supply})\n"
@@ -190,6 +192,7 @@ class Translator(object):
 
     @visitor.when(DictNode)
     def visit(self, node, tabs=0):
+        print("hhhhhhhhhhh")
         items = ", ".join([self.visit(i) for i in node.items])
         return "\t" * tabs + f"{{{items}}}"
 

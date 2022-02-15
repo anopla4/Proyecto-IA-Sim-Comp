@@ -188,8 +188,10 @@ class SemanticChecker(object):
         self.visit(node.right, scope)
 
         if not self.context.types[node.left.type].conforms_to(
-            NumType()
-        ) or not self.context.types[node.right.type].conforms_to(NumType()):
+            self.context.types["Num"]
+        ) or not self.context.types[node.right.type].conforms_to(
+            self.context.types["Num"]
+        ):
             self.errors.append(INVALID_OPERATION % (node.left.type, node.right.type))
             node.type = "error"
         else:
@@ -201,8 +203,10 @@ class SemanticChecker(object):
         self.visit(node.right, scope)
 
         if not self.context.types[node.left.type].conforms_to(
-            BoolType()
-        ) or not self.context.types[node.right.type].conforms_to(BoolType()):
+            self.context.types["Bool"]
+        ) or not self.context.types[node.right.type].conforms_to(
+            self.context.types["Bool"]
+        ):
             self.errors.append(INVALID_OPERATION % (node.left.type, node.right.type))
             node.type = "error"
         else:
@@ -214,8 +218,10 @@ class SemanticChecker(object):
         self.visit(node.right, scope)
 
         if not self.context.types[node.left.type].conforms_to(
-            BoolType()
-        ) or not self.context.types[node.right.type].conforms_to(BoolType()):
+            self.context.types["Bool"]
+        ) or not self.context.types[node.right.type].conforms_to(
+            self.context.types["Bool"]
+        ):
             self.errors.append(INVALID_OPERATION % (node.left.type, node.right.type))
             node.type = "error"
         else:
@@ -231,7 +237,9 @@ class SemanticChecker(object):
     def visit(self, node, scope):
         self.visit(node.expr, scope)
 
-        if not self.context.types[node.expr.type].conforms_to(BoolType()):
+        if not self.context.types[node.expr.type].conforms_to(
+            self.context.types["Bool"]
+        ):
             self.errors.append(INVALID_OPERATION_UNARY % (node.expr.type))
             node.type = "error"
         else:
@@ -252,7 +260,7 @@ class SemanticChecker(object):
             self.errors.append(
                 VARIABLE_NOT_DEFINED % (node.lex, self.current_type[-1].name)
             )
-            var = scope.define_variable(node.lex, ErrorType())
+            var = scope.define_variable(node.lex, self.context.types["error"])
 
         node.type = var.type
 
@@ -300,13 +308,17 @@ class SemanticChecker(object):
                 VARIABLE_NOT_DEFINED % (destination.lex, self.current_type[-1].name)
             )
 
-        if not self.context.types[condition.type].conforms_to(DictType()):
+        if not self.context.types[condition.type].conforms_to(
+            self.context.types["Dict"]
+        ):
             self.errors.append(INCOMPATIBLE_TYPES % (condition.type, "Dict"))
 
-        if not self.context.types[then.type].conforms_to(TupleType()):
+        if not self.context.types[then.type].conforms_to(self.context.types["Tuple"]):
             self.errors.append(INCOMPATIBLE_TYPES % (then.type, "Tuple"))
 
-        if not self.context.types[destination.type].conforms_to(EnvironmentType()):
+        if not self.context.types[destination.type].conforms_to(
+            self.context.types["Environment"]
+        ):
             self.errors.append(INCOMPATIBLE_TYPES % (destination.type, "Environment"))
 
     @visitor.when(ProbFunctionValueNode)
@@ -327,10 +339,14 @@ class SemanticChecker(object):
         self.visit(env)
         self.visit(e)
 
-        if not self.context.types[par.type].conforms_to(ParameterType()):
+        if not self.context.types[par.type].conforms_to(
+            self.context.types["Parameter"]
+        ):
             self.errors.append(INCOMPATIBLE_TYPES % (par.type, "Dict"))
 
-        if not self.context.types[env.type].conforms_to(EnvironmentType()):
+        if not self.context.types[env.type].conforms_to(
+            self.context.types["Environment"]
+        ):
             self.errors.append(INCOMPATIBLE_TYPES % (env.type, "Tuple"))
 
     @visitor.when(ForNode)
@@ -344,7 +360,7 @@ class SemanticChecker(object):
         self.visit(var, nscope)
         self.visit(expr, scope)
 
-        if not self.context.types[expr.type].conforms_to(ListType()):
+        if not self.context.types[expr.type].conforms_to(self.context.types["List"]):
             self.errors.append(INCOMPATIBLE_TYPES % (expr.type, "List"))
 
     @visitor.when(IfNode)
@@ -355,7 +371,7 @@ class SemanticChecker(object):
         self.visit(expr, scope)
         self.visit(body, nscope)
 
-        if not self.context.types[expr.type].conforms_to(BoolType()):
+        if not self.context.types[expr.type].conforms_to(self.context.types["Bool"]):
             self.errors.append(INCOMPATIBLE_TYPES % (expr.type, "Bool"))
 
     @visitor.when(IfElseNode)
@@ -370,7 +386,9 @@ class SemanticChecker(object):
         self.visit(body_if, nscope)
         self.visit(body_else, nscope1)
 
-        if not self.context.types[condition_if.type].conforms_to(BoolType()):
+        if not self.context.types[condition_if.type].conforms_to(
+            self.context.types["Bool"]
+        ):
             self.errors.append(INCOMPATIBLE_TYPES % (condition_if.type, "Bool"))
 
     @visitor.when(AgentDefNode)
@@ -388,24 +406,28 @@ class SemanticChecker(object):
         self.visit(conditions, scope)
         self.visit(t, scope)
         self.visit(rep, scope)
-        self.visit(act, scope)
+        # self.visit(act, scope)
 
         if not self.context.types[conditions.type].conforms_to(
             self.context.types["List"]
         ):
             self.errors.append(INCOMPATIBLE_TYPES % (conditions.type, "List"))
-        if not self.context.types[t.type].conforms_to(NumType()):
+        if not self.context.types[t.type].conforms_to(self.context.types["Num"]):
             self.errors.append(INCOMPATIBLE_TYPES % (t.type, "Num"))
-        if not self.context.types[rep.type].conforms_to(NumType()):
+        if not self.context.types[rep.type].conforms_to(self.context.types["Num"]):
             self.errors.append(INCOMPATIBLE_TYPES % (rep.type, "Num"))
         try:
-            f = scope.find_func(act)
-            if not self.context.types[f.type].conforms_to(RandVarEffectType()):
-                self.errors.append(INCOMPATIBLE_TYPES % (f.type, "RandVarEffect"))
-        except:
-            self.errors.append(METHOD_NOT_DEFINED % (act))
+            f = self.context.types["Main"].get_function(act)
+            # if not self.context.types[f.type].conforms_to(
+            #     self.context.types["RandVarEffect"]
+            # ):
+            #     self.errors.append(INCOMPATIBLE_TYPES % (f.type, "RandVarEffect"))
+        except SemanticError as ex:
+            self.errors.append(ex.text)
 
         if supply != None:
             self.visit(supply)
-            if not self.context.types[supply.type].conforms_to(NumType()):
+            if not self.context.types[supply.type].conforms_to(
+                self.context.types["Num"]
+            ):
                 self.errors.append(INCOMPATIBLE_TYPES % (supply.type, "Num"))
