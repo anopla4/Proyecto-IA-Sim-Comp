@@ -1,4 +1,3 @@
-from pprint import pprint
 from .error import *
 from .method import Method
 from .variable import Variable
@@ -32,7 +31,7 @@ class Scope:
             return next(x for x in locals if x.name == vname)
         except StopIteration:
             return (
-                self.parent.find_variable(vname, self.index)
+                self.parent.find_variable(vname, index)
                 if self.parent is not None
                 else None
             )
@@ -49,7 +48,6 @@ class Scope:
 
     def find_func(self, func):
         try:
-            pprint(self.functions)
             return next(x for x in self.functions if x.name == func)
         except StopIteration:
             return self.parent.find_func(func) if self.parent is not None else None

@@ -268,10 +268,12 @@ class SemanticChecker(object):
     def visit(self, node, scope):
         try:
             self.context.get_type(node.lex)
-            node.type = node.lexs
+            node.type = node.lex
         except SemanticError as ex:
             self.errors.append(ex.text)
             node.type = "error"
+        for i in node.arguments:
+            self.visit(i, scope)
 
     @visitor.when(StringNode)
     def visit(self, node, scope):
@@ -280,14 +282,30 @@ class SemanticChecker(object):
     @visitor.when(DictNode)
     def visit(self, node, scope):
         node.type = "Dict"
+        for i in node.items:
+            self.visit(i, scope)
+
+    @visitor.when(ItemNode)
+    def visit(self, node, scope):
+        key = node.key
+        try:
+            scope.find_variable(key)
+        except:
+            self.errors.append(
+                VARIABLE_NOT_DEFINED % (key.lex, self.current_type[-1].name)
+            )
 
     @visitor.when(ListNode)
     def visit(self, node, scope):
         node.type = "List"
+        for i in node.items:
+            self.visit(i, scope)
 
     @visitor.when(TupleNode)
     def visit(self, node, scope):
         node.type = "Tuple"
+        for i in node.items:
+            self.visit(i, scope)
 
     @visitor.when(BooleanNode)
     def visit(self, node, scope):
@@ -406,7 +424,6 @@ class SemanticChecker(object):
         self.visit(conditions, scope)
         self.visit(t, scope)
         self.visit(rep, scope)
-        # self.visit(act, scope)
 
         if not self.context.types[conditions.type].conforms_to(
             self.context.types["List"]
@@ -417,11 +434,11 @@ class SemanticChecker(object):
         if not self.context.types[rep.type].conforms_to(self.context.types["Num"]):
             self.errors.append(INCOMPATIBLE_TYPES % (rep.type, "Num"))
         try:
-            f = self.context.types["Main"].get_function(act)
-            # if not self.context.types[f.type].conforms_to(
-            #     self.context.types["RandVarEffect"]
-            # ):
-            #     self.errors.append(INCOMPATIBLE_TYPES % (f.type, "RandVarEffect"))
+            f = scope.find_variable(act)
+            if f != None and not self.context.types[f.type].conforms_to(
+                self.context.types["RandVarEffect"]
+            ):
+                self.errors.append(INCOMPATIBLE_TYPES % (f.type, "RandVarEffect"))
         except SemanticError as ex:
             self.errors.append(ex.text)
 

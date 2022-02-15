@@ -38,7 +38,7 @@ class Translator(object):
             expr = self.visit(node.expr, tabs + 1)
             ans = "\t" * tabs + f"def {node.id}(time, env): \n {expr}"
         else:
-            expr = self.visit(node.id)
+            expr = self.visit(node.expr)
             ans = "\t" * tabs + f"{node.id} = {expr}"
         return ans
 
@@ -93,7 +93,7 @@ class Translator(object):
 
     @visitor.when(InstanceNode)
     def visit(self, node, tabs=0):
-        args = self.visit(node.arguments)
+        args = ", ".join([self.visit(arg) for arg in node.arguments])
         return "\t" * tabs + f"{node.lex}({args})"
 
     @visitor.when(RuleNode)
@@ -192,7 +192,6 @@ class Translator(object):
 
     @visitor.when(DictNode)
     def visit(self, node, tabs=0):
-        print("hhhhhhhhhhh")
         items = ", ".join([self.visit(i) for i in node.items])
         return "\t" * tabs + f"{{{items}}}"
 

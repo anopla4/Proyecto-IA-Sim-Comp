@@ -319,7 +319,9 @@ def get_grammar():
     # <def-var>
 
     p_15 = Production(def_var, [type_, idx, equal, expr, semi])
-    rules[p_15] = lambda _, s: VarDeclarationNode(s[1].expression, s[2], s[4])
+    rules[p_15] = lambda _, s: VarDeclarationNode(
+        s[1].expression, s[2].expression, s[4]
+    )
     productions[def_var] = [p_15]
 
     # <assignment>
@@ -624,7 +626,7 @@ def get_grammar():
         ),
         f"{num_int}": (int_, 1),
         f"{num_double}": (double_, 3),
-        "RandVariableEffect|ActivationRule|Environment|Patient|Parameter|Agent|Intervention|Symptom|int|double|Tuple|Dict|List|void|bool": (
+        "RandVarEffect|ActivationRule|Environment|Patient|Parameter|Agent|Intervention|Symptom|int|double|Tuple|Dict|List|void|bool": (
             type_,
             2,
         ),

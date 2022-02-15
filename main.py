@@ -54,5 +54,5 @@ def main(text):
 
 
 main(
-    'function fiebre_action() -> void { print("ana") } \n Symptom fiebre = { activation_conditions : [new ActivationRule({p_plaqueta : {-19,16}}, {0,19})]; effect_time : 72; repetition : 8; action : fiebre_action;} '
+    'RandVarEffect fiebre_action = "ana"; \n Symptom fiebre = { activation_conditions : [new ActivationRule({p_plaqueta : {-19,16}}, {0,19})]; effect_time : 72; repetition : 8; action : fiebre_action;} '
 )
