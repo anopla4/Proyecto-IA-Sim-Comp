@@ -34,7 +34,7 @@ class TypeCollector(object):
         )
         self.context.types["Parameter"] = ParameterType(self.context.types["Main"])
         self.context.types["Environment"] = EnvironmentType(self.context.types["Main"])
-        self.context.types["Patient"] = ParameterType(self.context.types["Environment"])
+        self.context.types["Patient"] = PatientType(self.context.types["Environment"])
         self.context.types["RandVarEffect"] = RandVarEffectType(
             self.context.types["Main"]
         )

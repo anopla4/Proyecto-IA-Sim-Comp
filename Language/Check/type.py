@@ -217,9 +217,14 @@ class ParameterType(Type):
 
 
 class EnvironmentType(Type):
-    def __init__(self, parent=None) -> None:
-        super().__init__("environment", parent)
+    def __init__(self, name, parent=None) -> None:
+        super().__init__(name, parent)
         self.parameters_types = ["List"]
+
+
+class PatientType(EnvironmentType):
+    def __init__(self, parent=None) -> None:
+        super().__init__("patient", parent)
 
 
 class RandVarEffectType(Type):
