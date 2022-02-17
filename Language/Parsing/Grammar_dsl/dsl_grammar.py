@@ -624,7 +624,7 @@ def get_grammar():
     num_ = f"0|{num_p}"
     num_n = f"-+({num_p})"
     num_int = f"({num_p})|({num_n})|0"
-    num_double = f"({num_int})+.+0*+({num_p})"
+    num_double = f"({num_int}|(-+0))+.+0*+({num_p})"
 
     _t = {
         f"{name}|simulate": (

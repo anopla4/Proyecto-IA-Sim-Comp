@@ -52,9 +52,16 @@ def main(text):
 
 
 main(
-    """Parameter p_plaqueta = new Parameter("plaqueta", 18, 25, 50, -20, 80); \n 
+    """Parameter p_plaqueta = new Parameter("plaqueta", 18, 25, 50, -20, 80); \n
+    Parameter p_tos= new Parameter("tos",10, 0, 5,-20,60);\n
+    Parameter p_dolorCabeza= new Parameter("dolor de cabeza",26, 0, 15,-20,100);\n
     Parameter fiebre = new Parameter("fiebre", 36.5, 35, 36.9, 34.5, 43); \n
     Patient p = new Patient([p_plaqueta]); \n 
-    RandVarEffect fiebre_action = { 0.3 -> effect fiebre p 1; 0.45 ->  effect fiebre p 1.4; 0.25 -> effect fiebre p 1.8}; \n 
-    Symptom fiebre = { activation_conditions : [new ActivationRule({p_plaqueta : {-19,16}}, {0,19})]; effect_time : 72; repetition : 8; action : fiebre_action;} """
+    RandVarEffect fiebre_action = { 0.3 -> effect fiebre p 1; 0.45 ->  effect fiebre p 1.4; 0.25 -> effect fiebre p 1.8}; \n
+    RandVarEffect tos_action = { 0.3 -> effect fiebre p 1; 0.45 ->  effect fiebre p 1.4; 0.25 -> effect fiebre p 1.8}; \n
+    RandVarEffect dc_action = { 0.3 -> effect fiebre p 1; 0.45 ->  effect fiebre p 1.4; 0.25 -> effect fiebre p 1.8}; \n
+    Symptom fiebre = { activation_conditions : [new ActivationRule({p_plaqueta : {-0.000000001,16}}, {0,100000000})]; effect_time : 72; repetition : 8; action : fiebre_action;}\n
+    Symptom tos = { activation_conditions : [new ActivationRule({p_plaqueta : {-0.000000001,22}}, {0,100000000})]; effect_time : 72; repetition : 8; action : tos_action;}\n
+    Symptom dolor_cabeza = { activation_conditions : [new ActivationRule({p_tos : {20,200}}, {0,100000000})]; effect_time : 72; repetition : 4; action : dc_action;}"""
 )
+""" """

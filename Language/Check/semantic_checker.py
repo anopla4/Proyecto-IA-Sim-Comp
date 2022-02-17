@@ -454,6 +454,8 @@ class SemanticChecker(object):
             self.errors.append(INCOMPATIBLE_TYPES % (rep.type, "Num"))
         try:
             f = scope.find_variable(act)
+            if f == None:
+                raise SemanticError(f"Name {act} is not defined.")
             if f != None and not self.context.types[f.type].conforms_to(
                 self.context.types["RandVarEffect"]
             ):
