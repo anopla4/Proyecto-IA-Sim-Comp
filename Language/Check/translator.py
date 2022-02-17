@@ -35,8 +35,8 @@ class Translator(object):
     @visitor.when(VarDeclarationNode)
     def visit(self, node, tabs=0):
         if isinstance(node.expr, ProbabilityFunctionNode):
-            expr = self.visit(node.expr, tabs + 1)
-            ans = "\t" * tabs + f"def {node.id}(time, env): \n {expr}"
+            expr = self.visit(node.expr, tabs+1)
+            ans = "\t" * tabs + f"def {node.id}(time, env):\n{expr}"
         else:
             expr = self.visit(node.expr)
             ans = "\t" * tabs + f"{node.id} = {expr}"
@@ -46,7 +46,7 @@ class Translator(object):
     def visit(self, node, tabs=0):
         if isinstance(node.expr, ProbabilityFunctionNode):
             expr = self.visit(node.expr, tabs + 1)
-            ans = "\t" * tabs + f"def {node.id}(time, env): \n {expr}"
+            ans = "\t" * tabs + f"def {node.id}(time, env):\n{expr}"
         else:
             expr = self.visit(node.expr)
             ans = "\t" * tabs + f"{node.id} = {expr}"
@@ -160,14 +160,14 @@ class Translator(object):
         stms = "\n".join([self.visit(arg, tabs + 1) for arg in node.body])
         var = self.visit(node.var)
         expr = self.visit(node.expr)
-        ans = "\t" * tabs + f"for {var} in {expr}: \n {stms}"
+        ans = "\t" * tabs + f"for {var} in {expr}:\n{stms}"
         return ans
 
     @visitor.when(IfNode)
     def visit(self, node, tabs=0):
         expr = self.visit(node.expr)
         stms = "\n".join([self.visit(arg, tabs + 1) for arg in node.body])
-        ans = "\t" * tabs + f"if {expr}: \n {stms}"
+        ans = "\t" * tabs + f"if {expr}:\n{stms}"
         return ans
 
     @visitor.when(IfElseNode)
@@ -175,8 +175,8 @@ class Translator(object):
         expr = self.visit(node.condition_if)
         stms_if = "\n".join([self.visit(arg, tabs + 1) for arg in node.body_if])
         stms_else = "\n".join([self.visit(arg, tabs + 1) for arg in node.body_else])
-        ans_if = "\t" * tabs + f"if {expr}: \n {stms_if}"
-        ans_else = "\t" * tabs + f"else: \n {stms_else}"
+        ans_if = "\t" * tabs + f"if {expr}:\n{stms_if}"
+        ans_else = "\t" * tabs + f"else:\n{stms_else}"
         return f"{ans_if}\n{ans_else}"
 
     @visitor.when(ItemNode)
