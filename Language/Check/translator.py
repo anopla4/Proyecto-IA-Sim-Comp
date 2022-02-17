@@ -115,7 +115,6 @@ class Translator(object):
 
     @visitor.when(ProbabilityFunctionNode)
     def visit(self, node, tabs=0):
-        print("aaaaaaaa")
         acc = 0
         args = []
         for v in node.values:

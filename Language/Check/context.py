@@ -50,5 +50,6 @@ class Context:
 
     def check_argument_type(self, node, index, type_name):
         t = self.types[type_name].parameters_types[index]
-        if t != node.type:
+        type_ = self.types[t]
+        if not self.types[node.type].conforms_to(type_):
             raise SemanticError(f"Cannot convert {t} into {node.type}.")

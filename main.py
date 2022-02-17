@@ -55,6 +55,6 @@ main(
     """Parameter p_plaqueta = new Parameter("plaqueta", 18, 25, 50, -20, 80); \n 
     Parameter fiebre = new Parameter("fiebre", 36.5, 35, 36.9, 34.5, 43); \n
     Patient p = new Patient([p_plaqueta]); \n 
-    RandVarEffect fiebre_action = { 0.3 -> effect fiebre p 1; 0.35 ->  effect fiebre p 1.4; 0.25 -> effect fiebre p 1.8}; \n 
+    RandVarEffect fiebre_action = { 0.3 -> effect fiebre p 1; 0.45 ->  effect fiebre p 1.4; 0.25 -> effect fiebre p 1.8}; \n 
     Symptom fiebre = { activation_conditions : [new ActivationRule({p_plaqueta : {-19,16}}, {0,19})]; effect_time : 72; repetition : 8; action : fiebre_action;} """
 )

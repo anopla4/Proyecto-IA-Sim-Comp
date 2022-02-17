@@ -23,7 +23,10 @@ class SemanticChecker(object):
     def visit(self, node, scope=None):
         scope = Scope()
         for declaration in node.statements:
-            self.visit(declaration, scope.create_child())
+            if not isinstance(declaration, ClassNode):
+                self.visit(declaration, scope)
+            else:
+                self.visit(declaration, scope.create_child())
         return scope
 
     @visitor.when(ClassNode)
@@ -123,7 +126,7 @@ class SemanticChecker(object):
         else:
             scope.define_variable(var_type, node.id)
 
-        self.visit(node.expr, scope.create_child())
+        self.visit(node.expr, scope)
         if not self.context.types[node.expr.type].conforms_to(
             self.context.types[var_type]
         ):
@@ -132,7 +135,7 @@ class SemanticChecker(object):
 
     @visitor.when(AssignmentNode)
     def visit(self, node, scope):
-        self.visit(node.expr, scope.create_child())
+        self.visit(node.expr, scope)
 
         var = scope.find_variable(node.id)
         if var is None:
@@ -255,14 +258,13 @@ class SemanticChecker(object):
     @visitor.when(VariableNode)
     def visit(self, node, scope):
         var = scope.find_variable(node.lex)
-        print(node.lex)
         if var is None:
             self.errors.append(
                 VARIABLE_NOT_DEFINED % (node.lex, self.current_type[-1].name)
             )
             var = scope.define_variable(self.context.types["error"], node.lex)
 
-        node.type = var.type.name
+        node.type = var.type
 
     @visitor.when(InstanceNode)
     def visit(self, node, scope):
@@ -359,7 +361,7 @@ class SemanticChecker(object):
         total = 0
         for i in node.values:
             self.visit(i, scope)
-            total += int(i.num)
+            total += float(i.num.lex)
         if total != 1:
             self.errors.append("The sum of probability function values is not 1.")
         node.type = "RandVarEffect"
