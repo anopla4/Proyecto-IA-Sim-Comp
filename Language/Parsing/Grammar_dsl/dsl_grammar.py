@@ -25,8 +25,8 @@ def get_grammar():
     def_agent = NonTerminal("<def-agent>")
     param, param_list = NonTerminal.get_non_terminals("<param> <param-list>")
     instance = NonTerminal("<instance>")
-    def_rand_var, def_effect = NonTerminal.get_non_terminals(
-        "<def-rand-var> <def-effect>"
+    def_rand_var, def_effect, def_effect_list = NonTerminal.get_non_terminals(
+        "<def-rand-var> <def-effect> <def-effect-list>"
     )
     expr, arith, term, factor, atom = NonTerminal.get_non_terminals(
         "<expr> <arith> <term> <factor> <atom>"
@@ -66,6 +66,7 @@ def get_grammar():
         instance,
         def_rand_var,
         def_effect,
+        def_effect_list,
         expr,
         arith,
         term,
@@ -352,13 +353,11 @@ def get_grammar():
     rules[p_64] = lambda _, s: s[1]
     p_17 = Production(expr, [rule])
     rules[p_17] = lambda _, s: s[1]
-    p_18 = Production(expr, [def_effect])
-    rules[p_18] = lambda _, s: s[1]
     p_63 = Production(expr, [instance])
     rules[p_63] = lambda _, s: s[1]
     p_88 = Production(expr, [def_rand_var])
     rules[p_88] = lambda _, s: s[1]
-    productions[expr] = [p_64, p_63, p_17, p_18, p_88]
+    productions[expr] = [p_64, p_63, p_17, p_88]
 
     # <arith>
 
@@ -489,28 +488,36 @@ def get_grammar():
     # <def-rand-var>
 
     p_39 = Production(def_rand_var, [ocur, prob_func_list, ccur])
-    rules[p_39] = lambda _, s: RandomVariableNode(s[1], s[3])
+    rules[p_39] = lambda _, s: ProbabilityFunctionNode(s[2])
     productions[def_rand_var] = [p_39]
 
     # <prob-func-list>
 
-    p_85 = Production(prob_func_list, [prob_func, prob_func_list])
-    rules[p_85] = lambda _, s: [s[1]] + s[2]
+    p_85 = Production(prob_func_list, [prob_func, semi, prob_func_list])
+    rules[p_85] = lambda _, s: [s[1]] + s[3]
     p_86 = Production(prob_func_list, [prob_func])
     rules[p_86] = lambda h, s: [s[1]]
     productions[prob_func_list] = [p_85, p_86]
 
     # <prob-func>
 
-    p_40 = Production(prob_func, [nums, arrow, def_effect])
+    p_40 = Production(prob_func, [nums, arrow, def_effect_list])
     rules[p_40] = lambda _, s: ProbFunctionValueNode(s[1], s[3])
     productions[prob_func] = [p_40]
 
+    # <def-effect-list>
+
+    p_18 = Production(def_effect_list, [def_effect, comma, def_effect_list])
+    rules[p_18] = lambda _, s: [s[1]] + s[3]
+    p_116 = Production(def_effect_list, [def_effect])
+    rules[p_116] = lambda _, s: [s[1]]
+    productions[def_effect_list] = [p_18, p_116]
+
     # <def-effect>
 
-    p_41 = Production(def_effect, [effect, idx, idx, idx])
+    p_41 = Production(def_effect, [effect, idx, idx, nums])
     rules[p_41] = lambda _, s: EffectNode(
-        s[2].expression, s[3].expression, s[4].expression
+        VariableNode(s[2].expression), VariableNode(s[3].expression), s[4]
     )
     productions[def_effect] = [p_41]
 

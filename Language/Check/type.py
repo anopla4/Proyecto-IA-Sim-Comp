@@ -7,10 +7,10 @@ from .method import Method
 class Type:
     def __init__(self, name, parent=None, functions=None) -> None:
         self.name = name
+        self.parameters_types = []
         self.parent = parent
         self.functions = {} if functions == None else functions
         self.attributes = {}
-        self.conforms_to_list = []
 
     def get_attribute(self, name: str):
         try:
@@ -195,36 +195,43 @@ class VoidType(Type):
 class AgentType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("Agent", parent)
+        self.parameters_types = ["List", "Num", "Num", "RandVarEffect", "Num"]
 
 
 class SymptomType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("Symptom", parent)
+        self.parameters_types = ["List", "Num", "Num", "RandVarEffect"]
 
 
 class InterventionType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("Intervention", parent)
+        self.parameters_types = ["List", "Num", "Num", "RandVarEffect", "Num"]
 
 
 class ParameterType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("Parameter", parent)
+        self.parameters_types = ["String", "Num", "Num", "Num", "Num", "Num"]
 
 
 class EnvironmentType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("environment", parent)
+        self.parameters_types = ["List"]
 
 
 class RandVarEffectType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("RandVarEffect", parent)
+        self.parameters_types = []
 
 
 class ActivationRuleType(Type):
     def __init__(self, parent=None) -> None:
         super().__init__("ActivationRule", parent)
+        self.parameters_types = ["Dict", "Tuple"]
 
 
 class ListType(Type):
@@ -251,8 +258,10 @@ class MembresyFunctionType(Type):
 class TriangularType(MembresyFunctionType):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self.parameters_types = ["Num", "Num", "Num"]
 
 
 class TrapezoidalType(MembresyFunctionType):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self.parameters_types = ["Num", "Num", "Num", "Num"]

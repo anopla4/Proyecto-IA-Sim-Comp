@@ -41,3 +41,14 @@ class Context:
         if isinstance(node, FuncDeclarationNode):
             return True
         return self.check_if_return_in_func(node.parent)
+
+    def check_type_instance(self, node, type_name):
+        if len(self.types[type_name].parameters_types) != len(node.arguments):
+            raise SemanticError(
+                f"Type {type_name} receives {len(self.types[type_name].parameters_types)} arguments."
+            )
+
+    def check_argument_type(self, node, index, type_name):
+        t = self.types[type_name].parameters_types[index]
+        if t != node.type:
+            raise SemanticError(f"Cannot convert {t} into {node.type}.")

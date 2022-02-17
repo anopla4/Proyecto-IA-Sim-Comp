@@ -32,7 +32,7 @@ class SemanticChecker(object):
         attributes = self.current_type.all_attributes()
         for values in attributes:
             attr, _ = values
-            scope.define_variable(attr.name, attr.type)
+            scope.define_variable(attr.type, attr.name)
 
         for st in node.statements:
             self.visit(st, scope)
@@ -102,7 +102,7 @@ class SemanticChecker(object):
 
     @visitor.when(ReturnNode)
     def visit(self, node, scope):
-        self.visit(node.expr)
+        self.visit(node.expr, scope)
         try:
             self.context.check_if_return_in_func(node)
         except SemanticError as ex:
@@ -116,13 +116,12 @@ class SemanticChecker(object):
         except SemanticError as ex:
             self.errors.append(ex.text)
             var_type = "error"
-
         if scope.is_defined(node.id):
             self.errors.append(
                 LOCAL_ALREADY_DEFINED % (node.id, self.current_method.name)
             )
         else:
-            scope.define_variable(node.id, var_type)
+            scope.define_variable(var_type, node.id)
 
         self.visit(node.expr, scope.create_child())
         if not self.context.types[node.expr.type].conforms_to(
@@ -140,7 +139,7 @@ class SemanticChecker(object):
             self.errors.append(
                 VARIABLE_NOT_DEFINED % (node.id, self.current_type[-1].name)
             )
-            var = scope.define_variable(node.id, node.expr.computed_type)
+            var = scope.define_variable(node.expr.type, node.id)
 
         if not self.context.types[node.expr.type].conforms_to(
             self.context.types[var.type]
@@ -256,13 +255,14 @@ class SemanticChecker(object):
     @visitor.when(VariableNode)
     def visit(self, node, scope):
         var = scope.find_variable(node.lex)
+        print(node.lex)
         if var is None:
             self.errors.append(
                 VARIABLE_NOT_DEFINED % (node.lex, self.current_type[-1].name)
             )
-            var = scope.define_variable(node.lex, self.context.types["error"])
+            var = scope.define_variable(self.context.types["error"], node.lex)
 
-        node.type = var.type
+        node.type = var.type.name
 
     @visitor.when(InstanceNode)
     def visit(self, node, scope):
@@ -272,8 +272,16 @@ class SemanticChecker(object):
         except SemanticError as ex:
             self.errors.append(ex.text)
             node.type = "error"
-        for i in node.arguments:
+        try:
+            self.context.check_type_instance(node, node.lex)
+        except SemanticError as ex:
+            self.errors.append(ex.text)
+        for index, i in enumerate(node.arguments):
             self.visit(i, scope)
+            try:
+                self.context.check_argument_type(i, index, node.lex)
+            except SemanticError as ex:
+                self.errors.append(ex.text)
 
     @visitor.when(StringNode)
     def visit(self, node, scope):
@@ -316,9 +324,9 @@ class SemanticChecker(object):
         then = node.then
         condition = node.condition
         destination = node.destination
-        self.visit(then)
-        self.visit(condition)
-        self.visit(destination)
+        self.visit(then, scope)
+        self.visit(condition, scope)
+        self.visit(destination, scope)
         try:
             scope.find_variable(destination.lex)
         except:
@@ -341,11 +349,20 @@ class SemanticChecker(object):
 
     @visitor.when(ProbFunctionValueNode)
     def visit(self, node, scope):
-        pass
+        for i in node.val:
+            if not isinstance(i, EffectNode):
+                self.errors.append("Wrong declaration of probability function values.")
+            self.visit(i, scope)
 
     @visitor.when(ProbabilityFunctionNode)
     def visit(self, node, scope):
-        pass
+        total = 0
+        for i in node.values:
+            self.visit(i, scope)
+            total += int(i.num)
+        if total != 1:
+            self.errors.append("The sum of probability function values is not 1.")
+        node.type = "RandVarEffect"
 
     @visitor.when(EffectNode)
     def visit(self, node, scope):
@@ -353,9 +370,9 @@ class SemanticChecker(object):
         env = node.env
         e = node.e
 
-        self.visit(par)
-        self.visit(env)
-        self.visit(e)
+        self.visit(par, scope)
+        self.visit(env, scope)
+        self.visit(e, scope)
 
         if not self.context.types[par.type].conforms_to(
             self.context.types["Parameter"]
@@ -443,7 +460,7 @@ class SemanticChecker(object):
             self.errors.append(ex.text)
 
         if supply != None:
-            self.visit(supply)
+            self.visit(supply, scope)
             if not self.context.types[supply.type].conforms_to(
                 self.context.types["Num"]
             ):

@@ -34,10 +34,10 @@ class AttrDeclarationNode(StatementNode):
 
 
 class RandomVariableNode(StatementNode):
-    def __init__(self, id, expr) -> None:
+    def __init__(self, expr) -> None:
         super().__init__()
-        self.id = id
         self.expr = expr
+        self.type = None
 
 
 class ForNode(StatementNode):

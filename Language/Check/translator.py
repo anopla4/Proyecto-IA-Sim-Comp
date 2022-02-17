@@ -110,11 +110,12 @@ class Translator(object):
     @visitor.when(ProbFunctionValueNode)
     def visit(self, node, tabs=0):
         num = "\t" * tabs + f"if p <= {self.visit(node.num)}:"
-        value = "\t" * (tabs + 1) + f"return {self.visit(node.val)}"
+        value = "\n".join([self.visit(i, tabs + 1) for i in node.val])
         return f"{num}\n{value}"
 
     @visitor.when(ProbabilityFunctionNode)
     def visit(self, node, tabs=0):
+        print("aaaaaaaa")
         acc = 0
         args = []
         for v in node.values:
@@ -154,11 +155,6 @@ class Translator(object):
         else:
             ans += ")\n"
         return ans
-
-    @visitor.when(RandomVariableNode)
-    def visit(self, node, tabs=0):
-        expr = self.visit(node.expr, tabs + 1)
-        return "\t" * tabs + f"{expr}"
 
     @visitor.when(ForNode)
     def visit(self, node, tabs=0):
