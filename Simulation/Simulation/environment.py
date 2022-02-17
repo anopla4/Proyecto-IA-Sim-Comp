@@ -79,3 +79,7 @@ class Environment:
         for p in self._parameters:
             representation += str(p) + "\n"
         return representation
+
+class Patient(Environment):
+    def __init__(self, parameters: List[Parameter]):
+        super(Patient, self).__init__(parameters)

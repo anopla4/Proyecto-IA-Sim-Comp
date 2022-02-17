@@ -10,5 +10,6 @@ class Symptom(Agent):
         activation_rules: List[ActivationRule],
         efect_time: int,
         repetition: int,
+        action = None
     ) -> None:
-        super().__init__(name, activation_rules, efect_time, repetition)
+        super().__init__(name, activation_rules, efect_time, repetition, action)

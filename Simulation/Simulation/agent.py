@@ -11,6 +11,7 @@ class Agent(ABC):
         activation_rules: List[ActivationRule],
         efect_time: int,
         repetition: int,
+        action = None
     ) -> None:
         self._name = name
         self._active: bool = False
@@ -19,7 +20,7 @@ class Agent(ABC):
         self._current_action_time = 0  # increse rep by rep if take action
         self._efect_time = self.__calculate_efect_time(efect_time, repetition)
         self._repetition = repetition
-        self._action = None  # function
+        self._action = action  # function
 
     def __calculate_efect_time(self, efect_time, repetition):
         times = efect_time // repetition

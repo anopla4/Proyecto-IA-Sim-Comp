@@ -9,7 +9,7 @@ from Language.Lexer.lexer import tokenize_regex_automaton
 from Language.Parsing.build_ast_shift_reduce_parser import build_ast
 from Language.Parsing.parserLR1 import ParserLR1
 from Language.Check.translator import Translator
-from Simulation.Simulation.environment import Environment
+from Simulation.Simulation.environment import Environment, Patient
 from Simulation.Simulation.parameter import Parameter
 from Simulation.Simulation.activation_rule import ActivationRule
 from Simulation.Simulation.symptom import Symptom
