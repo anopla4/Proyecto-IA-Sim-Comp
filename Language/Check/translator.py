@@ -34,7 +34,7 @@ class Translator(object):
 
     @visitor.when(VarDeclarationNode)
     def visit(self, node, tabs=0):
-        if isinstance(node.expr, RandomVariableNode):
+        if isinstance(node.expr, ProbabilityFunctionNode):
             expr = self.visit(node.expr, tabs + 1)
             ans = "\t" * tabs + f"def {node.id}(time, env): \n {expr}"
         else:
@@ -44,7 +44,7 @@ class Translator(object):
 
     @visitor.when(AssignmentNode)
     def visit(self, node, tabs=0):
-        if isinstance(node.expr, RandomVariableNode):
+        if isinstance(node.expr, ProbabilityFunctionNode):
             expr = self.visit(node.expr, tabs + 1)
             ans = "\t" * tabs + f"def {node.id}(time, env): \n {expr}"
         else:
@@ -121,9 +121,9 @@ class Translator(object):
             num = self.visit(v.num)
             acc += float(num)
             v.num = ConstantNumNode(str(acc))
-            args.append(self.visit(v, tabs + 1))
+            args.append(self.visit(v, tabs))
         rand = "\t" * tabs + "p = random()"
-        args = "\t" * tabs + "\n".join(args)
+        args = "\n".join(args)
         return f"{rand}\n{args}"
 
     @visitor.when(EffectNode)
