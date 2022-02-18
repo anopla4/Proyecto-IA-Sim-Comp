@@ -1,3 +1,4 @@
+from numpy import string_
 from ..non_terminal import NonTerminal
 from ..terminal import Terminal
 from ..production import Production
@@ -515,9 +516,9 @@ def get_grammar():
 
     # <def-effect>
 
-    p_41 = Production(def_effect, [effect, idx, idx, nums])
+    p_41 = Production(def_effect, [effect, string, idx, nums])
     rules[p_41] = lambda _, s: EffectNode(
-        VariableNode(s[2].expression), VariableNode(s[3].expression), s[4]
+        s[2], VariableNode(s[3].expression), s[4]
     )
     productions[def_effect] = [p_41]
 

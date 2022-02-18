@@ -36,7 +36,7 @@ class Translator(object):
     def visit(self, node, tabs=0):
         if isinstance(node.expr, ProbabilityFunctionNode):
             expr = self.visit(node.expr, tabs + 1)
-            ans = "\t" * tabs + f"def {node.id}(time, env):\n{expr}"
+            ans = "\t" * tabs + f"def {node.id}(time, p):\n{expr}" + "\n" + "\t" * (tabs + 1) + "return p"
         else:
             expr = self.visit(node.expr)
             ans = "\t" * tabs + f"{node.id} = {expr}"
@@ -109,7 +109,7 @@ class Translator(object):
 
     @visitor.when(ProbFunctionValueNode)
     def visit(self, node, tabs=0):
-        num = "\t" * tabs + f"if p <= {self.visit(node.num)}:"
+        num = "\t" * tabs + f"if pr <= {self.visit(node.num)}:"
         value = "\n".join([self.visit(i, tabs + 1) for i in node.val])
         return f"{num}\n{value}"
 
@@ -122,7 +122,7 @@ class Translator(object):
             acc += float(num)
             v.num = ConstantNumNode(str(acc))
             args.append(self.visit(v, tabs))
-        rand = "\t" * tabs + "p = random()"
+        rand = "\t" * tabs + "pr = random()"
         args = "\n".join(args)
         return f"{rand}\n{args}"
 

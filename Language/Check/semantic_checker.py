@@ -376,10 +376,10 @@ class SemanticChecker(object):
         self.visit(env, scope)
         self.visit(e, scope)
 
-        if not self.context.types[par.type].conforms_to(
-            self.context.types["Parameter"]
-        ):
-            self.errors.append(INCOMPATIBLE_TYPES % (par.type, "Dict"))
+        # if not self.context.types[par.type].conforms_to(
+        #     self.context.types["Parameter"]
+        # ):
+        #     self.errors.append(INCOMPATIBLE_TYPES % (par.type, "Dict"))
 
         if not self.context.types[env.type].conforms_to(
             self.context.types["Environment"]
