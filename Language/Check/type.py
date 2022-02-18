@@ -135,6 +135,12 @@ class MainType(Type):
                 ["Environment", "List", "List", "Num", "Num", "Num"],
             ),
             "print": Method("print", "void", ["text"], ["Main"]),
+            "visualize_graph_pyvis": Method(
+                "visualize_graph_pyvis", "void", ["graph"], ["Tree"]
+            ),
+            "visualize_branch_pyvis": Method(
+                "visualize_branch_pyvis", "void", ["graph"], ["Tree"]
+            ),
         }
         super().__init__("Main", parent, functions)
 

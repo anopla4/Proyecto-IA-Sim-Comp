@@ -15,6 +15,11 @@ from Simulation.Simulation.activation_rule import ActivationRule
 from Simulation.Simulation.symptom import Symptom
 from Simulation.Simulation.intervention import Intervention
 from Simulation.main import simulate
+from Simulation.TreatmentTree.pyvis_draw import (
+    visualize_branch_pyvis,
+    visualize_graph_pyvis,
+)
+
 
 def main(text):
     G, t = get_grammar()
