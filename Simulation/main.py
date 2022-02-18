@@ -8,9 +8,10 @@ from Simulation.TreatmentTree.treatmentTree import *
 from Simulation.FuzzyEngine.fuzzy_engine import FuzzyEngine
 
 
-def simulate(env:Environment, treatment:set[Intervention], disease:set[Symptom],
+def simulate(env:Environment, treatment:list[Intervention], disease:list[Symptom],
     tick:int, end_time:int, simulations:int, fuzzy_engine:FuzzyEngine = None):
-
+    treatment = set(treatment)
+    disease = set(treatment)
     _t_tree = TreatmentTree("root")
     for _ in range(simulations):
         _simulation = None
