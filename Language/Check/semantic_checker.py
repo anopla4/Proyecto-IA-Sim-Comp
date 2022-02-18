@@ -113,8 +113,6 @@ class SemanticChecker(object):
 
     @visitor.when(VarDeclarationNode)
     def visit(self, node, scope):
-        print("++++++++++++")
-        print(node.id)
         try:
             self.context.get_type(node.type)
             var_type = node.type
@@ -445,6 +443,11 @@ class SemanticChecker(object):
         self.visit(conditions, scope)
         self.visit(t, scope)
         self.visit(rep, scope)
+
+        if scope.is_defined(idn):
+            self.errors.append(LOCAL_ALREADY_DEFINED % (idn, self.current_method.name))
+        else:
+            scope.define_variable("RandVarEffect", idn)
 
         if not self.context.types[conditions.type].conforms_to(
             self.context.types["List"]
