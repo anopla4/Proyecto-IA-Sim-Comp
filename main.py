@@ -75,5 +75,5 @@ main(
     Intervention calbamol = { activation_conditions : [new ActivationRule({p_fiebre : {37.5, 100}, p_plaqueta : {-1000000000, 30}}, {0, 1000000000}), new ActivationRule({p_dolorCabeza : {15, 1000000000}}, {48, 1000000000}), new ActivationRule({p_plaqueta : {-1000000000, 10}}, {24, 1000000000})]; effect_time : 48; repetition : 6; action : calbamol_action; supply : 8; }\n
     Intervention plaquetol = { activation_conditions : [new ActivationRule({p_plaqueta : {-1000000000, 10}}, {24, 1000000000})]; effect_time : 24; repetition : 12; action : plaquetol_action; supply : 10; }\n
     Intervention jarabe = { activation_conditions : [new ActivationRule({p_tos : {10, 1000000000}}, {24, 1000000000})]; effect_time : 48; repetition : 12; action : jarabe_action; supply : 5; }\n
-    simulate(p,[antibiotico, jarabe, dipirona_simple, dipirona_doble, calbamol, plaquetol], [tos, fiebre, dolor_cabeza], 1, 168, 5000)"""
+    Tree treatment_tree = simulate(p,[antibiotico, jarabe, dipirona_simple, dipirona_doble, calbamol, plaquetol], [tos, fiebre, dolor_cabeza], 1, 168, 5000);"""
 )

@@ -633,7 +633,7 @@ def get_grammar():
         ),
         f"{num_int}": (int_, 1),
         f"{num_double}": (double_, 3),
-        "RandVarEffect|ActivationRule|Environment|Patient|Parameter|Agent|Intervention|Symptom|int|double|Tuple|Dict|List|void|bool": (
+        "Tree|RandVarEffect|ActivationRule|Environment|Patient|Parameter|Agent|Intervention|Symptom|int|double|Tuple|Dict|List|void|bool": (
             type_,
             2,
         ),

@@ -45,6 +45,7 @@ class TypeCollector(object):
         self.context.types["List"] = ListType(self.context.types["Main"])
         self.context.types["Tuple"] = TupleType(self.context.types["Main"])
         self.context.types["Bool"] = BoolType(self.context.types["Main"])
+        self.context.types["Tree"] = TreeType(self.context.types["Main"])
         self.context.types["MembresyFunction"] = MembresyFunctionType(
             self.context.types["Main"]
         )
