@@ -35,7 +35,7 @@ class Translator(object):
     @visitor.when(VarDeclarationNode)
     def visit(self, node, tabs=0):
         if isinstance(node.expr, ProbabilityFunctionNode):
-            expr = self.visit(node.expr, tabs+1)
+            expr = self.visit(node.expr, tabs + 1)
             ans = "\t" * tabs + f"def {node.id}(time, env):\n{expr}"
         else:
             expr = self.visit(node.expr)
@@ -150,7 +150,7 @@ class Translator(object):
         )
         if node.supply != None:
             supply = self.visit(node.supply)
-            ans += f"{supply})\n"
+            ans += f", {supply})\n"
         else:
             ans += ")\n"
         return ans

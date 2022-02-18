@@ -113,6 +113,8 @@ class SemanticChecker(object):
 
     @visitor.when(VarDeclarationNode)
     def visit(self, node, scope):
+        print("++++++++++++")
+        print(node.id)
         try:
             self.context.get_type(node.type)
             var_type = node.type
