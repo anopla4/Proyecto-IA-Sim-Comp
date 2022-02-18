@@ -1,4 +1,4 @@
-from Simulation.environment import Environment
+from ...Simulation.environment import Environment
 from random import random
 
 

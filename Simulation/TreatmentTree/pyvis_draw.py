@@ -55,6 +55,10 @@ def visualize_branch_pyvis(branch_nodes:list[Node], show=False, path=None):
     else:
         net.save_graph(path)
 
+def visualize_best_branch_pyvis(tree, show=False, path="Statics/branch.html"):
+    best_branch = tree.best_branch()
+    visualize_branch_pyvis(best_branch, show=show, path=path)
+
 def visualize_graph_pyvis(root:Node, n, show=False, path=None):
     net = Network('1000px', '1000px')
     __create_graph(net, [root], n)

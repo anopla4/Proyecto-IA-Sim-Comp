@@ -22,7 +22,7 @@ if st.button('Run the default test'):
     end = time()
     st.info(f"Time execution: {round(end-start,4)}s")
     
-    tree.calculate_probability()
+    ##tree.calculate_probability()
     best_branch = tree.best_branch()
     st.write('Best branch average final state')
     st.write(best_branch[-1].get_average_final_state())
