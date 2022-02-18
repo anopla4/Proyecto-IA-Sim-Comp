@@ -10,9 +10,10 @@ class Intervention(Agent):
         activation_rules: List[ActivationRule],
         efect_time: int,
         repetition: int,
+        action,
         supply: int,
     ) -> None:
-        super().__init__(name, activation_rules, efect_time, repetition)
+        super().__init__(name, activation_rules, efect_time, repetition, action)
         self._supply = supply
 
     @property
