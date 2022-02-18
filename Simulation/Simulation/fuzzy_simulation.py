@@ -4,8 +4,8 @@ from .simulation import Simulation
 from .environment import Environment
 from .symptom import Symptom
 from .intervention import Intervention
-from FuzzyEngine.fuzzy_engine import FuzzyEngine
-from FuzzyEngine.rule import Rule
+from Simulation.FuzzyEngine.fuzzy_engine import FuzzyEngine
+from Simulation.FuzzyEngine.rule import Rule
 
 class FuzzySimulation(Simulation):
 

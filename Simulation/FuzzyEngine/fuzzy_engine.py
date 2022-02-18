@@ -1,7 +1,7 @@
 from typing import Dict
 from .rule import Rule
-from Simulation.parameter import Parameter
-from Simulation.environment import Environment
+from Simulation.Simulation.parameter import Parameter
+from Simulation.Simulation.environment import Environment
 from scipy.integrate import quad
 
 

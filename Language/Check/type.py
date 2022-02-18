@@ -128,8 +128,8 @@ class ErrorType(Type):
 class MainType(Type):
     def __init__(self, parent=None) -> None:
         functions = {
-            "main": Method(
-                "main",
+            "simulate": Method(
+                "simulate",
                 "Tree",
                 ["env", "treatment", "disease", "tick", "end_time", "num_sim"],
                 ["Environment", "List", "List", "Num", "Num", "Num"],

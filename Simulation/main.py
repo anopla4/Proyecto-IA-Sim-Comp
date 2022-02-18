@@ -1,14 +1,14 @@
 from sympy import fu
-from Simulation.intervention import Intervention
-from Simulation.environment import Environment
-from Simulation.simulation import Simulation
-from Simulation.fuzzy_simulation import FuzzySimulation
-from Simulation.symptom import Symptom
-from TreatmentTree.treatmentTree import *
-from FuzzyEngine.fuzzy_engine import FuzzyEngine
+from Simulation.Simulation.intervention import Intervention
+from Simulation.Simulation.environment import Environment
+from Simulation.Simulation.simulation import Simulation
+from Simulation.Simulation.fuzzy_simulation import FuzzySimulation
+from Simulation.Simulation.symptom import Symptom
+from Simulation.TreatmentTree.treatmentTree import *
+from Simulation.FuzzyEngine.fuzzy_engine import FuzzyEngine
 
 
-def main(env:Environment, treatment:set[Intervention], disease:set[Symptom],
+def simulate(env:Environment, treatment:set[Intervention], disease:set[Symptom],
     tick:int, end_time:int, simulations:int, fuzzy_engine:FuzzyEngine = None):
 
     _t_tree = TreatmentTree("root")
