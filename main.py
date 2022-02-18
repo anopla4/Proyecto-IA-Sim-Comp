@@ -57,9 +57,9 @@ main(
     Parameter p_dolorCabeza= new Parameter("dolor de cabeza",26, 0, 15,-20,100);\n
     Parameter p_fiebre = new Parameter("fiebre", 36.5, 35, 36.9, 34.5, 43); \n
     Patient p = new Patient([p_plaqueta]); \n 
-    RandVarEffect fiebre_action = { 0.3 -> effect p_fiebre p 1; 0.45 ->  effect p_fiebre p 1.4; 0.25 -> effect p_fiebre p 1.8}; \n
-    RandVarEffect tos_action = { 0.3 -> effect p_fiebre p 1; 0.45 ->  effect p_fiebre p 1.4; 0.25 -> effect p_fiebre p 1.8}; \n
-    RandVarEffect dc_action = { 0.3 -> effect p_fiebre p 1; 0.45 ->  effect p_fiebre p 1.4; 0.25 -> effect p_fiebre p 1.8}; \n
+    RandVarEffect fiebre_action = { 0.3 -> effect p_fiebre p 1, effect p_plaqueta p -1.5; 0.45 -> effect p_fiebre p 1.4, effect p_plaqueta p -1.5; 0.25 -> effect p_fiebre p 1.8, effect p_plaqueta p -2, effect p_dolorCabeza p 3}; \n
+    RandVarEffect tos_action = { 0.5 -> effect p_tos p 0.4, effect p_plaqueta p -0.5; 0.5 -> effect p_tos p 0.4, effect p_plaqueta p -0.8}; \n
+    RandVarEffect dc_action = { 0.75 -> effect p_dolorCabeza p 2.5; 0.25 -> effect p_dolorCabeza p 4.5}; \n
     Symptom fiebre = { activation_conditions : [new ActivationRule({p_plaqueta : {-0.000000001,16}}, {0,100000000})]; effect_time : 72; repetition : 8; action : fiebre_action;}\n
     Symptom tos = { activation_conditions : [new ActivationRule({p_plaqueta : {-0.000000001,22}}, {0,100000000})]; effect_time : 72; repetition : 8; action : tos_action;}\n
     RandVarEffect dipirona_simple_action = { 0.7 -> effect p_dolorCabeza p -4.4, p_fiebre p -1; 0.3 -> effect p_fiebre p 0 }\n
@@ -76,4 +76,3 @@ main(
     Intervention jarabe = { activation_conditions : [new ActivationRule({p_tos : {10, 1000000000}}, {24, 1000000000})]; effect_time : 48; repetition : 12; action : jarabe_action; supply : 5; }\n
     Symptom dolor_cabeza = { activation_conditions : [new ActivationRule({p_tos : {20,200}}, {0,100000000})]; effect_time : 72; repetition : 4; action : dc_action;}"""
 )
-
