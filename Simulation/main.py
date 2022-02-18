@@ -9,15 +9,15 @@ from Simulation.FuzzyEngine.fuzzy_engine import FuzzyEngine
 
 def simulate(
     env: Environment,
-    treatment: List[Intervention],
-    disease: List[Symptom],
+    treatment: list[Intervention],
+    disease: list[Symptom],
     tick: int,
     end_time: int,
     simulations: int,
     fuzzy_engine: FuzzyEngine = None,
 ):
     treatment = set(treatment)
-    disease = set(treatment)
+    disease = set(disease)
     _t_tree = TreatmentTree("root")
     for _ in range(simulations):
         _simulation = None
@@ -45,4 +45,5 @@ def simulate(
                 _simulation.add_intervention(new_tratment.value)
         _t_tree._current.update_final_state(_simulation.environment_state())
         _t_tree.back_propagation(_simulation.evaluate_environment())
+    _t_tree.calculate_probability()
     return _t_tree
