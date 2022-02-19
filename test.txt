@@ -1,52 +1,26 @@
-Parameter p_plaqueta= new Parameter('plaqueta',18, 25, 50,-20,80)
-Parameter p_tos= new Parameter('tos',10, 0, 5,-20,60)
-Parameter p_dolorCabeza= new Parameter('dolor de cabeza',26, 0, 15,-20,100)
-Parameter p_fiebre= new Parameter('fiebre',36.5, 35, 36.9,34.5,43)
-
-
-Environment env= new Environment(p_dolorCabeza, p_plaqueta, p_tos, p_fiebre)
-
-Symptom tos = { activation_conditions : [new ActivationRule(parameters_conditions : {p_plaqueta : {-1e9,22}}, time_condition : {0,1e9})];
-effect_time : 72; repetition : 8; action : tos_action; 
-    }
-
-Symptom dolor_cabeza = { activation_conditions : [new ActivationRule(parameters_conditions : {p_to : {20, 200}}, time_condition : {0,1e9})];
-effect_time : 72; repetition : 4; action : dc_action;} 
-
-Symptom fiebre = { activation_conditions : [new ActivationRule(parameters_conditions : {p_plaqueta : {-1e9,16}}, time_condition : {0,1e9})];
-effect_time : 72; repetition : 8; action : fiebre_action;} 
-
-
-Intervention antibiotico={ activation_conditions : [new ActivationRule(parameters_conditions : {p_fiebre:{38, 100}}, time_condition : {72,1e9})
-,new ActivationRule(parameters_conditions : {p_plaqueta:{-1e9, 8}}, time_condition : {24,1e9})];
-effect_time : 36; repetition : 12; action : antibiotico_action; supply:7;}
-
-Intervention dipirona_simple={ activation_conditions : [new ActivationRule(parameters_conditions : {p_dolorCabeza:{10, 1000}}, time_condition : {0,1e9})
-,new ActivationRule(parameters_conditions : {p_fiebre:{37, 100}}, time_condition : {0,1e9})];
-effect_time : 24; repetition : 8; action : dipirona_simple_action; supply:10;}
-
-
-Intervention dipirona_doble={ activation_conditions : [new ActivationRule(parameters_conditions : {p_dolorCabeza:{25, 1e9}}, time_condition : {0,1e9})
-,new ActivationRule(parameters_conditions : {p_fiebre:{37, 100}}, time_condition : {0,1e9})];
-effect_time : 24; repetition : 8; action : dipirona_doble_action; supply:10;}
-
-
-
-Intervention calbamol={ activation_conditions : 
-    [
-    new ActivationRule(parameters_conditions:{p_fiebre:{37.5, 100},p_plaqueta:{-1e9, 30}}, 
-        time_condition:{0,1e9}, time_condition : {0,1e9}),
-    new ActivationRule(parameters_conditions:{p_dolorCabeza:{15, 1e9}}, time_condition:{48,1e9}),
-    new ActivationRule(parameters_conditions:{p_plaqueta:{-1e9, 10}}, time_condition:{24,1e9})];
-effect_time : 48; repetition : 6; action : calbamol_action; supply:8;}
-
-
-Intervention plaquetol={ activation_conditions : [new ActivationRule(parameters_conditions : {p_plaqueta:{-1e9, 10}}, time_condition : {24,1e9})];
-effect_time : 24; repetition : 12; action : plaquetol_action; supply:8;}
-
-Intervention jarabe={ activation_conditions : [new ActivationRule(parameters_conditions : {p_tos:{10, 1e9}}, time_condition : {24,1e9})];
-effect_time : 48; repetition : 12; action : jarabe_action; supply:5;}
-
-
-main(env,[antibiotico, jarabe, dipirona_simple, dipirona_doble, calbamol, plaquetol], [tos, fiebre, dolor_cabeza],1, 168, 5000)
-          
+Parameter p_plaqueta = new Parameter("plaqueta", 18, 25, 50, -20, 80);
+Parameter p_tos= new Parameter("tos",10, 0, 5,-20,60);
+Parameter p_dolorCabeza= new Parameter("dolor de cabeza",26, 0, 15,-20,100);
+Parameter p_fiebre = new Parameter("fiebre", 36.5, 35, 36.9, 34.5, 43);
+Patient p = new Patient([p_plaqueta, p_tos, p_dolorCabeza, p_fiebre]);
+RandVarEffect fiebre_action = { 0.3 -> effect "fiebre" p 1, effect "plaqueta" p -1.5; 0.45 -> effect "fiebre" p 1.4, effect "plaqueta" p -1.5; 0.25 -> effect "fiebre" p 1.8, effect "plaqueta" p -2, effect "dolo de cabeza" p 3};
+RandVarEffect tos_action = { 0.5 -> effect "tos" p 0.4, effect "plaqueta" p -0.5; 0.5 -> effect "tos" p 0.4, effect "plaqueta" p -0.8};
+RandVarEffect dc_action = { 0.75 -> effect "dolo de cabeza" p 2.5; 0.25 -> effect "dolo de cabeza" p 4.5};
+Symptom fiebre = { activation_conditions : [new ActivationRule({p_plaqueta : {-0.000000001,16}}, {0,100000000})]; effect_time : 72; repetition : 8; action : fiebre_action;}
+Symptom tos = { activation_conditions : [new ActivationRule({p_plaqueta : {-0.000000001,22}}, {0,100000000})]; effect_time : 72; repetition : 8; action : tos_action;}
+Symptom dolor_cabeza = { activation_conditions : [new ActivationRule({p_tos : {20,200}}, {0,100000000})]; effect_time : 72; repetition : 4; action : dc_action;}
+RandVarEffect dipirona_simple_action = { 0.7 -> effect "dolo de cabeza" p -4.4, effect "fiebre" p -1; 0.3 -> effect "fiebre" p 0 };
+RandVarEffect dipirona_doble_action = { 0.82 -> effect "dolo de cabeza" p -6.8, effect "fiebre" p -1.5; 0.18 -> effect "fiebre" p 0 };
+RandVarEffect calbamol_action = { 0.4 -> effect "dolo de cabeza" p -2, effect "fiebre" p -0.5, effect "plaqueta" p 3; 0.4 -> effect "dolo de cabeza" p -3, effect "fiebre" p -0.5; 0.2 -> effect "fiebre" p 0 };
+RandVarEffect jarabe_action = { 0.75 -> effect "tos" p -6; 0.25 -> effect "tos" p 0 };
+RandVarEffect antibiotico_action = { 0.5 -> effect "fiebre" p -1.6, effect "tos" p -10, effect "plaqueta" p 2.4; 0.3 -> effect "fiebre" p -1.4, effect "tos" p -6; 0.2 -> effect "fiebre" p -1, effect "plaqueta" p 6};
+RandVarEffect plaquetol_action = { 0.5 -> effect "plaqueta" p 2; 0.3 -> effect "plaqueta" p 5; 0.2 -> effect "plaqueta" p 0 };
+Intervention antibiotico = { activation_conditions : [new ActivationRule({p_fiebre : {38, 100}}, {72, 1000000000}), new ActivationRule({p_plaqueta : {-1000000000, 8}}, {24, 1000000000})]; effect_time : 36; repetition : 12; action : antibiotico_action; supply : 7; }
+Intervention dipirona_simple = { activation_conditions : [new ActivationRule({p_fiebre : {37, 100}}, {0, 1000000000}), new ActivationRule({p_dolorCabeza : {10, 1000}}, {0, 1000000000})]; effect_time : 24; repetition : 8; action : dipirona_simple_action; supply : 10; }
+Intervention dipirona_doble = { activation_conditions : [new ActivationRule({p_fiebre : {37, 100}}, {0, 1000000000}), new ActivationRule({p_dolorCabeza : {25, 1000000000}}, {0, 1000000000})]; effect_time : 24; repetition : 8; action : dipirona_doble_action; supply : 10; }
+Intervention calbamol = { activation_conditions : [new ActivationRule({p_fiebre : {37.5, 100}, p_plaqueta : {-1000000000, 30}}, {0, 1000000000}), new ActivationRule({p_dolorCabeza : {15, 1000000000}}, {48, 1000000000}), new ActivationRule({p_plaqueta : {-1000000000, 10}}, {24, 1000000000})]; effect_time : 48; repetition : 6; action : calbamol_action; supply : 8; }
+Intervention plaquetol = { activation_conditions : [new ActivationRule({p_plaqueta : {-1000000000, 10}}, {24, 1000000000})]; effect_time : 24; repetition : 12; action : plaquetol_action; supply : 10; }
+Intervention jarabe = { activation_conditions : [new ActivationRule({p_tos : {10, 1000000000}}, {24, 1000000000})]; effect_time : 48; repetition : 12; action : jarabe_action; supply : 5; }
+Tree treatment_tree = simulate(p,[antibiotico, jarabe, dipirona_simple, dipirona_doble, calbamol, plaquetol], [tos, fiebre, dolor_cabeza], 1, 168, 5000);
+plot_graph(treatment_tree)
+visualize_best_branch_pyvis(treatment_tree)
