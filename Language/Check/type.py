@@ -141,6 +141,13 @@ class MainType(Type):
             "visualize_branch_pyvis": Method(
                 "visualize_branch_pyvis", "void", ["graph"], ["Tree"]
             ),
+            "visualize_best_branch_pyvis": Method(
+                "visualize_best_branch_pyvis", "void", ["graph"], ["Tree"]
+            ),
+            "plot_graph": Method(
+                "plot_graph", "void", ["graph"], ["Tree"]
+            ),
+
         }
         super().__init__("Main", parent, functions)
 

@@ -132,7 +132,7 @@ class Translator(object):
         env = self.visit(node.env)
         element = self.visit(node.e)
         condition = "\t" * tabs + f"if {env}.get_parameter({param}):"
-        body = "\t" * (tabs + 1) + f"{env}.update_parameter({element}, {param})"
+        body = "\t" * (tabs + 1) + f"{env}.update_parameter({param}, {element})"
         return f"{condition}\n{body}"
 
     @visitor.when(EffectRuleNode)

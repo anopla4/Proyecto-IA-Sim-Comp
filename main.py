@@ -17,8 +17,8 @@ from Simulation.Simulation.intervention import Intervention
 from Simulation.main import simulate
 from random import random
 from Simulation.TreatmentTree.pyvis_draw import (
-    visualize_branch_pyvis,
-    visualize_graph_pyvis,
+    visualize_best_branch_pyvis,
+    plot_graph,
 )
 
 
@@ -82,5 +82,6 @@ main(
     Intervention plaquetol = { activation_conditions : [new ActivationRule({p_plaqueta : {-1000000000, 10}}, {24, 1000000000})]; effect_time : 24; repetition : 12; action : plaquetol_action; supply : 10; }\n
     Intervention jarabe = { activation_conditions : [new ActivationRule({p_tos : {10, 1000000000}}, {24, 1000000000})]; effect_time : 48; repetition : 12; action : jarabe_action; supply : 5; }\n
     Tree treatment_tree = simulate(p,[antibiotico, jarabe, dipirona_simple, dipirona_doble, calbamol, plaquetol], [tos, fiebre, dolor_cabeza], 1, 168, 5000);
-    visualize_branch_pyvis(treatment_tree)"""
+    plot_graph(treatment_tree)\n
+    visualize_best_branch_pyvis(treatment_tree)"""
 )
