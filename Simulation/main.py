@@ -9,8 +9,8 @@ from Simulation.FuzzyEngine.fuzzy_engine import FuzzyEngine
 
 def simulate(
     env: Environment,
-    treatment: list[Intervention],
-    disease: list[Symptom],
+    treatment: List[Intervention],
+    disease: List[Symptom],
     tick: int,
     end_time: int,
     simulations: int,
