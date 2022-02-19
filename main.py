@@ -30,7 +30,11 @@ def main(text):
     tokens = tokenize_regex_automaton(text, t)
     tokens.append(Token("$", (G.EOF, 0)))
     l = [i.type[0] for i in tokens]
-    result, actions = parser.parse(l)
+    p_ = parser.parse(l)
+    if p_ == None:
+        raise Exception("Sintax error")
+    result, actions = p_
+    
     # print()
     ast = build_ast(actions, result, tokens, G)
     context = Context()
@@ -56,6 +60,7 @@ def main(text):
         exec(code)
     except Exception as ex:
         print(ex)
+    return errors
 
 
 # main(

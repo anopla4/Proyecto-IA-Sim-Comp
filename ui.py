@@ -15,7 +15,12 @@ def code_editor():
     with first:
         code = st_ace(wrap=True)
         if code:
-            main(code)
+            try:
+                e = main(code)
+                if len(e)>0:
+                    st.write(e)
+            except Exception as ex:
+                st.write(ex)
             # st.write(code)
     # with second:
     #     main()
