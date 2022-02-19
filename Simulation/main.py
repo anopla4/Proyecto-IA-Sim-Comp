@@ -46,4 +46,5 @@ def simulate(
         _t_tree._current.update_final_state(_simulation.environment_state())
         _t_tree.back_propagation(_simulation.evaluate_environment())
     _t_tree.calculate_probability()
+    _t_tree.prunning()
     return _t_tree

@@ -67,5 +67,7 @@ def visualize_graph_pyvis(root:Node, n, show=False, path=None):
         net.show(path)
     else:
         net.save_graph(path)
-    
+
+def plot_graph(tree, show=False, path="Statics/graph.html"):
+    visualize_graph_pyvis(tree.root, show, path)
     #plt.show()
