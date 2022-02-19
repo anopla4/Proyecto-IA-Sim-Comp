@@ -46,9 +46,9 @@ def main(text):
     t = Translator()
     code = t.visit(ast)
 
-    print("==========")
-    print(code)
-    print("=========")
+    # print("==========")
+    # print(code)
+    # print("=========")
 
     errors = type_c.errors + type_b.errors + checker.errors
     print(errors)
