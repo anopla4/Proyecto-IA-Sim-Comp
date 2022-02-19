@@ -23,6 +23,7 @@ from Simulation.TreatmentTree.pyvis_draw import (
 
 
 def main(text):
+    print(text)
     G, t = get_grammar()
     parser = ParserLR1(G)
 

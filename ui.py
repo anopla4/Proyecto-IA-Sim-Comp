@@ -2,8 +2,6 @@ from textwrap import wrap
 import streamlit as st
 from main import main
 from streamlit_ace import st_ace
-from .main import main
-
 
 def title():
     st.markdown(
